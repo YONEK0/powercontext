@@ -38,10 +38,12 @@ from powercontext.builtin.artifacts.handoff import (
 from powercontext.builtin.artifacts.memory import (
     CandidatePipeline,
     DefaultMemoryEvidenceProjector,
+    EmbeddingProfile,
     MemoryCapabilities,
     MemoryCapacityBudget,
     MemoryCompactionPolicy,
     MemoryHit,
+    MemoryQueryEmbedding,
     MemoryRerankDecision,
     MemoryReranker,
     MemoryWriteGate,
@@ -55,8 +57,13 @@ from powercontext.builtin.artifacts.profile.service import (
 from powercontext.builtin.artifacts.prompt import PromptRegistry
 from powercontext.builtin.artifacts.prompt.builtin import builtin_prompt_definitions
 from powercontext.builtin.artifacts.prompt.service import DemonstrationGenerator
+from powercontext.builtin.artifacts.search import AdmissionFloor
 from powercontext.builtin.artifacts.skill import AgentSkillProvider, ExternalSkillProvider, SkillGenerator
-from powercontext.builtin.artifacts.topic_memory import TOPIC_MEMORY_SOURCE_WINDOW_BINDING
+from powercontext.builtin.artifacts.topic_memory import (
+    TOPIC_MEMORY_SOURCE_WINDOW_BINDING,
+    TopicMemorySearchMode,
+    TopicMemorySearchResult,
+)
 from powercontext.builtin.artifacts.topic_memory.generation import (
     TopicMemoryGenerationError,
     topic_memory_stage_budget,
@@ -119,6 +126,7 @@ from powercontext.builtin.runtime.application import (
     RecallEffortSink,
     ScheduledExperienceRunner,
     ScheduledSourceRunner,
+    TopicMemorySearch,
 )
 from powercontext.builtin.runtime.artifact_processing import (
     ArtifactProcessingBinding,
@@ -156,6 +164,7 @@ from powercontext.builtin.runtime.readiness import (
 )
 from powercontext.builtin.runtime.recall_sufficiency import RecallSufficiencyPolicy
 from powercontext.builtin.runtime.relational import RelationalContexts
+from powercontext.builtin.runtime.source_lifecycle import SourceLifecycleStore
 from powercontext.builtin.runtime.topic_memory_processing import (
     TopicMemoryWorkerSpec,
     run_topic_memory_worker,
@@ -507,6 +516,15 @@ async def open_builtin_runtime(
         )
         contexts.profiles.generator = generated_profile if profile_generator is None else profile_generator
         contexts.profiles.max_sources = config.runtime.profile_max_sources_per_window
+        source_lifecycle_store = SourceLifecycleStore(
+            contexts.database,
+            contexts.repositories.sources,
+            contexts.repositories.artifacts,
+        )
+        configured_topic_memory_search = _lifecycle_aware_topic_search(
+            contexts.search_topic_memories,
+            source_lifecycle_store,
+        )
         if scheduled_profile_runner is not None:
 
             async def run_profile(scope_id, high):
@@ -627,7 +645,7 @@ async def open_builtin_runtime(
                 skill_package_uploader=contexts.upload_skill_package,
                 skill_usage_recorder=contexts.record_skill_usage,
                 experience_incubator=contexts.incubate_experience if contexts.experience_incubation else None,
-                topic_memory_search=contexts.search_topic_memories,
+                topic_memory_search=configured_topic_memory_search,
                 topic_memory_get=contexts.get_topic_memory,
                 topic_memory_browse=contexts.browse_topic_memories,
                 topic_memory_flush=contexts.request_topic_memory_flush,
@@ -646,6 +664,7 @@ async def open_builtin_runtime(
                 decision_model=configured_decision,
                 publication_application=contexts.publications,
                 scope_application=contexts.scopes,
+                source_lifecycle=source_lifecycle_store,
                 readiness=RuntimeReadinessChecks(readiness_probes),
                 tracing=tracing,
                 scheduled_source_runner=scheduled_source_runner,
@@ -666,6 +685,50 @@ async def open_builtin_runtime(
             raise BuiltinConfigurationError("memory-reranker")
         _require_decision_backend(config.runtime, configured_decision)
         yield runtime
+
+
+def _lifecycle_aware_topic_search(
+    delegate: TopicMemorySearch,
+    store: SourceLifecycleStore,
+) -> TopicMemorySearch:
+    """Hide unsupported Topic projections from native search and Prepared Context.
+
+    The Topic artifact itself is never rewritten: an unsupported projection is only
+    filtered out of recall, so the original ArtifactRef stays exactly readable and a
+    restored Topic reappears without a new revision.
+    """
+
+    async def search(
+        scope_id: str,
+        query: str,
+        /,
+        *,
+        limit: int,
+        mode: TopicMemorySearchMode = "auto",
+        query_vector: tuple[float, ...] | None = None,
+        embedding_profile: EmbeddingProfile | None = None,
+        admission: AdmissionFloor | None = None,
+        query_embedding: MemoryQueryEmbedding | None = None,
+    ) -> TopicMemorySearchResult:
+        result = await delegate(
+            scope_id,
+            query,
+            limit=limit,
+            mode=mode,
+            query_vector=query_vector,
+            embedding_profile=embedding_profile,
+            admission=admission,
+            query_embedding=query_embedding,
+        )
+        unsupported = await store.unsupported_topic_artifacts(scope_id)
+        if not unsupported:
+            return result
+        hits = tuple(hit for hit in result.hits if hit.artifact_ref.artifact_id not in unsupported)
+        if len(hits) == len(result.hits):
+            return result
+        return result.model_copy(update={"hits": hits})
+
+    return search
 
 
 def _validate_processing_source_registry(
