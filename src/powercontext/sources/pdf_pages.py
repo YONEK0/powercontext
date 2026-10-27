@@ -313,7 +313,8 @@ async def search_pdf_pages(memory: Any, question: str, limit: int = 10) -> tuple
 
 
 def _page_section(text: str) -> str | None:
-    heading = text[:600].lower()
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    heading = " | ".join(lines[:4]).lower()
     if "consolidated statement of income" in heading:
         return "income"
     if "consolidated statement of cash flows" in heading:
