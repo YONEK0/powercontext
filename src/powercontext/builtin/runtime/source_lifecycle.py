@@ -286,7 +286,11 @@ class ScopedSourceLifecycle:
                 if event.sequence < latest.sequence:
                     raise SourceLifecycleError("lifecycle event sequence moved backwards")
                 if event.sequence == latest.sequence:
-                    if latest.revision != event.revision or latest.available != event.available:
+                    if (
+                        latest.revision != event.revision
+                        or latest.available != event.available
+                        or latest.reason != event.reason
+                    ):
                         raise SourceLifecycleError("lifecycle event sequence reused with different content")
                     # Replaying an applied event stays idempotent, yet it still runs the
                     # propagation diff so an interrupted event completes on retry.
