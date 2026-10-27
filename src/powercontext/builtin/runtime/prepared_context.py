@@ -17,6 +17,8 @@
 from __future__ import annotations
 
 import json
+import math
+import re
 from collections.abc import Sequence
 from dataclasses import dataclass, replace
 from itertools import chain
@@ -100,12 +102,16 @@ class PreparedContextBuild:
     **not** a field here: ``ScopedContextApplication._prepare`` returns ``build.context`` and
     discards the rest, so such a field would have no production observer. The trace is
     delivered through the Runtime's optional ``RecallEffortSink`` instead.
+
+    ``fragments`` is filled only by evidence selection, and lists exactly the literal
+    spans the delivered ``items`` were cut from, in the same order as ``origins``.
     """
 
     context: PreparedContext
     origins: tuple[PreparedContextOrigin, ...]
     omissions: PreparedContextOmissions = PreparedContextOmissions()
     code_origins: tuple[CodeEvidenceRef, ...] = ()
+    fragments: tuple[PreparedEvidenceFragment, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -115,6 +121,28 @@ class MemoryEntryAddress:
     memory: ArtifactAddress
     entry_id: str
     entry_version_id: str
+
+
+@dataclass(frozen=True)
+class PreparedEvidenceFragment:
+    """One literal span of one Memory entry, with its exact citation and coordinates.
+
+    ``text`` is always the untouched ``entry.text[start:end]`` slice: selection changes which
+    characters travel, never what they say. Offsets are half-open Python character indices
+    into the original entry body, so a caller can re-read the same characters from the
+    Memory citation this address carries.
+    """
+
+    address: MemoryEntryAddress
+    start: int
+    end: int
+    text: str
+
+    def __post_init__(self) -> None:
+        if type(self.start) is not int or type(self.end) is not int:
+            raise PreparedContextInvariantError("fragment-offset-type")
+        if not 0 <= self.start < self.end:
+            raise PreparedContextInvariantError("fragment-offset-range")
 
 
 PreparedContextOrigin = MemoryCitation | ArtifactRef | MemoryEntryAddress | ArtifactAddress
@@ -211,6 +239,12 @@ class PreparedContextBuilder:
         profile_candidates: Sequence[PreparedProfileCandidate] = (),
         code_candidates: Sequence[PreparedCodeCandidate] = (),
     ) -> PreparedContextBuild:
+        if request.evidence_selection:
+            return self._select_evidence_result(
+                request=request,
+                memory_candidates=memory_candidates,
+            )
+
         if request.include_code:
 
             def historical(history_request: PrepareContextRequest, entries: int) -> PreparedContextBuild:
@@ -254,6 +288,58 @@ class PreparedContextBuilder:
             context=PreparedContext(status="ready", content=content, content_bytes=content_bytes),
             origins=origins,
             omissions=omissions,
+        )
+
+    def _select_evidence_result(
+        self,
+        *,
+        request: PrepareContextRequest,
+        memory_candidates: Sequence[PreparedMemoryCandidates],
+    ) -> PreparedContextBuild:
+        """Deliver query-relevant literal spans of the recalled Memory entries.
+
+        Selection is deliberately pure: it reads only the query, the candidates, and the byte
+        budget. Nothing about the corpus is assumed, so a different query over the same
+        candidates selects different evidence, including evidence late in an entry.
+
+        The budget covers the *rendered* output — trust policy, envelope markers, JSON, every
+        citation, and the literal text — because that is what the caller actually pays for.
+        """
+
+        if sum(len(candidates.hits) for candidates in memory_candidates) > self.memory_candidate_limit:
+            raise PreparedContextInvariantError("memory-candidate-limit")
+        spans = _evidence_spans(memory_candidates)
+        if not spans:
+            return PreparedContextBuild(context=self.empty(), origins=())
+        query_terms = _evidence_terms(request.query)
+        ranked = _rank_evidence_spans(spans, query_terms)
+        # Greedy by relevance: every whole span that still fits is kept, so the budget fills
+        # with the best remaining evidence rather than with whichever entry was recalled first.
+        selected: list[_EvidenceSpan] = []
+        remaining: list[_EvidenceSpan] = []
+        for span in ranked:
+            trial = _merge_evidence_spans((*selected, span))
+            if _render_evidence_bytes(trial) <= request.max_bytes:
+                selected = list(trial)
+            else:
+                remaining.append(span)
+        if not selected and remaining:
+            # Not even the best whole span fits: deliver its longest fitting prefix so a
+            # small budget still yields the leading evidence instead of an empty result.
+            prefix = _fit_evidence_prefix(remaining[0], request.max_bytes)
+            if prefix is not None:
+                selected = [prefix]
+        if not selected:
+            return PreparedContextBuild(context=self.empty(), origins=())
+        fragments = _evidence_fragments(selected)
+        content = _render_evidence(fragments)
+        content_bytes = len(content.encode("utf-8"))
+        if content_bytes > request.max_bytes:
+            raise PreparedContextInvariantError("output-budget")
+        return PreparedContextBuild(
+            context=PreparedContext(status="ready", content=content, content_bytes=content_bytes),
+            origins=tuple(fragment.address for fragment in fragments),
+            fragments=fragments,
         )
 
     def probe_budget(
@@ -728,3 +814,267 @@ def _truncate_utf8(text: str, byte_budget: int) -> str:
     prefix_budget = byte_budget - len(_ELLIPSIS.encode("utf-8"))
     encoded_prefix = text.encode("utf-8")[:prefix_budget]
     return f"{encoded_prefix.decode('utf-8', errors='ignore')}{_ELLIPSIS}"
+
+
+@dataclass(frozen=True)
+class _EvidenceSpan:
+    """One candidate slice of one Memory entry, before any budget decision."""
+
+    address: MemoryEntryAddress
+    text: str
+    start: int
+    end: int
+    entry_index: int
+    span_index: int
+
+    @property
+    def literal(self) -> str:
+        return self.text[self.start : self.end]
+
+
+# Sentence boundaries for span selection. Latin and CJK terminators are both honoured so a
+# multi-sentence body is never delivered as one indivisible block.
+_SENTENCE_ENDINGS = frozenset(".!?。！？")
+_CLOSING_QUOTES = frozenset("\"')]}”’")
+_MAX_EVIDENCE_SPAN_CHARS = 480
+_MAX_EVIDENCE_JOIN_GAP = 2
+_EVIDENCE_TOKEN = re.compile(r"[a-z]+|\d+")
+
+
+def _evidence_terms(text: str) -> list[str]:
+    """Tokenize for relevance scoring exactly as the literal text reads."""
+
+    return _EVIDENCE_TOKEN.findall(text.lower())
+
+
+def _evidence_spans(
+    memory_candidates: Sequence[PreparedMemoryCandidates],
+) -> tuple[_EvidenceSpan, ...]:
+    """Cut every recalled entry into sentence-like spans that keep exact coordinates."""
+
+    spans: list[_EvidenceSpan] = []
+    seen: set[tuple[str, str, int, str, str]] = set()
+    entry_index = 0
+    for group in memory_candidates:
+        memory_ref = group.memory_ref
+        for hit in group.hits:
+            if memory_ref is None or hit.memory_ref != memory_ref:
+                raise PreparedContextInvariantError("memory-ref-mismatch")
+            if not hit.entry_id.strip() or not hit.entry_version_id.strip() or not hit.text.strip():
+                continue
+            identity = (
+                group.scope_id,
+                hit.memory_ref.artifact_id,
+                hit.memory_ref.revision,
+                hit.entry_id,
+                hit.entry_version_id,
+            )
+            if identity in seen:
+                continue
+            seen.add(identity)
+            address = MemoryEntryAddress(
+                memory=ArtifactAddress(scope_id=group.scope_id, artifact=hit.memory_ref),
+                entry_id=hit.entry_id,
+                entry_version_id=hit.entry_version_id,
+            )
+            for span_index, (start, end) in enumerate(_split_evidence_spans(hit.text)):
+                spans.append(
+                    _EvidenceSpan(
+                        address=address,
+                        text=hit.text,
+                        start=start,
+                        end=end,
+                        entry_index=entry_index,
+                        span_index=span_index,
+                    )
+                )
+            entry_index += 1
+    return tuple(spans)
+
+
+def _split_evidence_spans(text: str) -> list[tuple[int, int]]:
+    """Return non-blank sentence spans covering ``text`` without rewriting it."""
+
+    spans: list[tuple[int, int]] = []
+    length = len(text)
+    start = _skip_whitespace(text, 0)
+    index = start
+    while index < length:
+        character = text[index]
+        boundary = character == "\n"
+        if character in _SENTENCE_ENDINGS:
+            follow = index + 1
+            while follow < length and text[follow] in _CLOSING_QUOTES:
+                follow += 1
+            boundary = follow >= length or text[follow].isspace()
+        if not boundary:
+            index += 1
+            continue
+        _append_evidence_span(spans, text, start, index + 1)
+        start = _skip_whitespace(text, index + 1)
+        index = start
+    _append_evidence_span(spans, text, start, length)
+    return _bounded_evidence_spans(text, spans)
+
+
+def _skip_whitespace(text: str, index: int) -> int:
+    while index < len(text) and text[index].isspace():
+        index += 1
+    return index
+
+
+def _append_evidence_span(spans: list[tuple[int, int]], text: str, start: int, end: int) -> None:
+    trimmed_end = end
+    while trimmed_end > start and text[trimmed_end - 1].isspace():
+        trimmed_end -= 1
+    if trimmed_end > start:
+        spans.append((start, trimmed_end))
+
+
+def _bounded_evidence_spans(text: str, spans: Sequence[tuple[int, int]]) -> list[tuple[int, int]]:
+    """Split spans longer than the cap at word boundaries so no single span monopolizes the budget."""
+
+    bounded: list[tuple[int, int]] = []
+    for start, end in spans:
+        cursor = start
+        while end - cursor > _MAX_EVIDENCE_SPAN_CHARS:
+            limit = cursor + _MAX_EVIDENCE_SPAN_CHARS
+            split = text.rfind(" ", cursor + 1, limit)
+            if split <= cursor:
+                split = limit
+            bounded.append((cursor, split))
+            cursor = _skip_whitespace(text, split)
+            if cursor >= end:
+                break
+        if cursor < end:
+            bounded.append((cursor, end))
+    return bounded
+
+
+def _rank_evidence_spans(
+    spans: Sequence[_EvidenceSpan],
+    query_terms: Sequence[str],
+) -> tuple[_EvidenceSpan, ...]:
+    """Order spans by inverse-document-frequency query overlap, best evidence first.
+
+    IDF is computed over the recalled spans themselves, so a term that distinguishes one
+    abstract from its neighbours outranks a term every abstract shares. Ties fall back to
+    the longer span: it carries more of the entry for the same citation overhead.
+    """
+
+    terms = tuple(dict.fromkeys(query_terms))
+    totals = [set(_evidence_terms(span.literal)) for span in spans]
+    document_frequency: dict[str, int] = {}
+    for present in totals:
+        for term in terms:
+            if term in present:
+                document_frequency[term] = document_frequency.get(term, 0) + 1
+    population = max(1, len(spans))
+    idf = {
+        term: math.log((population + 1) / (document_frequency.get(term, 0) + 1)) + 1.0
+        for term in terms
+    }
+    matched = [tuple(idf[term] for term in terms if term in present) for present in totals]
+    # The rarest matched term leads the sort: it is the best available anchor for what the
+    # claim is about, while the summed weight still rewards spans covering more of the query.
+    order = sorted(
+        range(len(spans)),
+        key=lambda index: (
+            -max(matched[index], default=0.0),
+            -sum(matched[index]),
+            -(spans[index].end - spans[index].start),
+            spans[index].entry_index,
+            spans[index].start,
+        ),
+    )
+    return tuple(spans[index] for index in order)
+
+
+def _merge_evidence_spans(spans: Sequence[_EvidenceSpan]) -> tuple[_EvidenceSpan, ...]:
+    """Union selected spans per entry so adjacent sentences share one citation.
+
+    The union is only taken where the original text between the two spans is whitespace, so
+    a merged fragment is still one literal contiguous slice of the entry body.
+    """
+
+    if not spans:
+        return ()
+    ordered = sorted(spans, key=lambda span: (span.entry_index, span.start, span.end))
+    merged: list[_EvidenceSpan] = [ordered[0]]
+    for span in ordered[1:]:
+        current = merged[-1]
+        if span.entry_index != current.entry_index:
+            merged.append(span)
+            continue
+        gap = current.text[current.end : span.start]
+        if span.start <= current.end or (len(gap) <= _MAX_EVIDENCE_JOIN_GAP and not gap.strip()):
+            merged[-1] = replace(current, end=max(current.end, span.end))
+        else:
+            merged.append(span)
+    return tuple(merged)
+
+
+def _evidence_fragments(spans: Sequence[_EvidenceSpan]) -> tuple[PreparedEvidenceFragment, ...]:
+    """Project merged spans into final fragments in reading order."""
+
+    ordered = sorted(spans, key=lambda span: (span.entry_index, span.start))
+    return tuple(
+        PreparedEvidenceFragment(
+            address=span.address,
+            start=span.start,
+            end=span.end,
+            text=span.text[span.start : span.end],
+        )
+        for span in ordered
+    )
+
+
+def _render_evidence(fragments: Sequence[PreparedEvidenceFragment]) -> str:
+    envelope = {
+        "trust": "untrusted_history",
+        "items": [_render_evidence_item(fragment) for fragment in fragments],
+    }
+    encoded = json.dumps(envelope, ensure_ascii=False, separators=(",", ":"))
+    return "\n\n".join((TRUST_POLICY, f"{_BEGIN_MARKER}\n{encoded}\n{_END_MARKER}"))
+
+
+def _render_evidence_item(fragment: PreparedEvidenceFragment) -> dict[str, object]:
+    address = fragment.address
+    return {
+        "citation": {
+            "scope_id": address.memory.scope_id,
+            "memory_ref": address.memory.artifact.model_dump(mode="json"),
+            "entry_id": address.entry_id,
+            "entry_version_id": address.entry_version_id,
+        },
+        "content": fragment.text,
+        "start": fragment.start,
+        "end": fragment.end,
+    }
+
+
+def _render_evidence_bytes(spans: Sequence[_EvidenceSpan]) -> int:
+    return len(_render_evidence(_evidence_fragments(spans)).encode("utf-8"))
+
+
+def _fit_evidence_prefix(span: _EvidenceSpan, max_bytes: int) -> _EvidenceSpan | None:
+    """Return the longest leading slice of ``span`` whose rendering fits, or ``None``."""
+
+    low, high = 1, span.end - span.start
+    best: _EvidenceSpan | None = None
+    while low <= high:
+        middle = (low + high) // 2
+        candidate = replace(span, end=span.start + middle)
+        if _render_evidence_bytes((candidate,)) <= max_bytes:
+            best = candidate
+            low = middle + 1
+        else:
+            high = middle - 1
+    if best is None:
+        return None
+    cut = best.text.rfind(" ", span.start + 1, best.end)
+    if cut > span.start:
+        retrimmed = replace(best, end=cut)
+        if retrimmed.end > retrimmed.start:
+            return retrimmed
+    return best
