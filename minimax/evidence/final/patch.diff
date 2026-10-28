@@ -1,9 +1,7 @@
 diff --git a/demo_app/app.py b/demo_app/app.py
 --- a/demo_app/app.py
 +++ b/demo_app/app.py
-@@ -36,6 +36,10 @@ def list_books(
-             for book in items
-             if needle in book["title"].casefold() or needle in book["author"].casefold()
+@@ -36,4 +36,8 @@ def list_books(
          ]
      if category:
          items = [book for book in items if book["category"].casefold() == category.casefold()]

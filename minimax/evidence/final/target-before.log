@@ -2,7 +2,7 @@ $ /tmp/mmvenv/bin/python -m pytest -q demo_app/tests/test_books.py::test_price_f
 cwd: /mnt/e/develop/project_files/project/oceanbase/minimax
 exit_code: 1
 code_version: 04aa56a4c188
-started_at: 2026-10-28T08:46:38Z
+started_at: 2026-10-28T09:02:57Z
 F                                                                        [100%]
 =================================== FAILURES ===================================
 ________________ test_price_filter_is_inclusive_and_keeps_order ________________
@@ -15,7 +15,7 @@ ________________ test_price_filter_is_inclusive_and_keeps_order ________________
         prices = [book["price"] for book in items]
 >       assert all(10 <= price <= 20 for price in prices)
 E       assert False
-E        +  where False = all(<generator object test_price_filter_is_inclusive_and_keeps_order.<locals>.<genexpr> at 0x7e8b7e48f100>)
+E        +  where False = all(<generator object test_price_filter_is_inclusive_and_keeps_order.<locals>.<genexpr> at 0x7a370527f100>)
 
 demo_app/tests/test_books.py:16: AssertionError
 =========================== short test summary info ============================

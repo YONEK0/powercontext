@@ -2,7 +2,7 @@ $ /tmp/mmvenv/bin/python -m pytest -q demo_app/tests/test_books.py::test_unfilte
 cwd: /mnt/e/develop/project_files/project/oceanbase/minimax
 exit_code: 0
 code_version: ab68418b1573
-started_at: 2026-10-28T08:46:58Z
+started_at: 2026-10-28T09:03:42Z
 ...                                                                      [100%]
-3 passed in 1.47s
+3 passed in 1.45s
 
