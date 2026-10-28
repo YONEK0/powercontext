@@ -1,0 +1,8 @@
+[
+  {"id": "b-001", "title": "Database Systems", "author": "Ada Chen", "category": "technology", "price": 18.0},
+  {"id": "b-002", "title": "Query Optimization", "author": "Bo Lin", "category": "technology", "price": 12.0},
+  {"id": "b-003", "title": "The Long River", "author": "Mei Zhao", "category": "fiction", "price": 9.0},
+  {"id": "b-004", "title": "Systems at Scale", "author": "Ada Chen", "category": "technology", "price": 25.0},
+  {"id": "b-005", "title": "Paper Moon", "author": "Kai Sun", "category": "fiction", "price": 8.0},
+  {"id": "b-006", "title": "Distributed Data", "author": "Bo Lin", "category": "technology", "price": 30.0}
+]

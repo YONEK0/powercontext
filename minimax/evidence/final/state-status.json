@@ -1,0 +1,252 @@
+{
+  "completed": [
+    "context",
+    "minimax-patch",
+    "tests"
+  ],
+  "created_at": "2026-10-28T08:46:31Z",
+  "history": [
+    {
+      "at": "2026-10-28T08:46:34Z",
+      "change": "add-price-filter",
+      "event": "context-selected"
+    },
+    {
+      "at": "2026-10-28T08:46:42Z",
+      "event": "tests-run",
+      "exit_codes": {
+        "target": 1
+      }
+    },
+    {
+      "applied": true,
+      "applied_by": "git",
+      "at": "2026-10-28T08:46:51Z",
+      "change": "add-price-filter",
+      "event": "patch-generated",
+      "mode": "replay"
+    },
+    {
+      "at": "2026-10-28T08:47:01Z",
+      "event": "tests-run",
+      "exit_codes": {
+        "regression": 0,
+        "target": 0
+      }
+    }
+  ],
+  "patch": {
+    "applied": true,
+    "applied_by": "git",
+    "mode": "replay",
+    "path": "evidence/minimax/last.patch"
+  },
+  "regression_tests": [
+    "demo_app/tests/test_books.py::test_unfiltered_list_is_unchanged",
+    "demo_app/tests/test_books.py::test_query_filter_still_works",
+    "demo_app/tests/test_books.py::test_category_filter_still_works"
+  ],
+  "schema": "minimax.sdd-state.v2",
+  "selected_sources": {
+    "code": [
+      "code:demo_app/app.py",
+      "code:demo_app/app.py#list_books",
+      "code:demo_app/__init__.py"
+    ],
+    "spec": [
+      "spec:openspec/changes/add-price-filter/proposal.md",
+      "spec:openspec/changes/add-price-filter/design.md",
+      "spec:openspec/specs/book-search/spec.md",
+      "spec:openspec/changes/add-price-filter/specs/book-search/spec.md"
+    ],
+    "test": [
+      "test:demo_app/tests/test_books.py",
+      "test:demo_app/tests/test_books.py#test_price_filter_is_inclusive_and_keeps_order",
+      "test:demo_app/tests/test_books.py#test_unfiltered_list_is_unchanged",
+      "test:demo_app/tests/test_books.py#test_query_filter_still_works",
+      "test:demo_app/tests/test_books.py#test_category_filter_still_works"
+    ]
+  },
+  "status": "verified",
+  "target_files": [
+    "demo_app/app.py",
+    "demo_app/__init__.py"
+  ],
+  "target_tests": [
+    "demo_app/tests/test_books.py::test_price_filter_is_inclusive_and_keeps_order"
+  ],
+  "task": "Add inclusive `min_price` and `max_price` query parameters to `GET /books`.; Apply the price bounds after the existing `q` and `category` filters.; Keep the existing result order and the unfiltered result unchanged.; Add a target test and keep the existing tests as the regression gate. — The book catalog currently supports free-text and category filters, but a",
+  "terms": [
+    "books",
+    "inclusive",
+    "category",
+    "result",
+    "query",
+    "free",
+    "tests",
+    "currently",
+    "get",
+    "order",
+    "catalog",
+    "min",
+    "test",
+    "existing",
+    "after",
+    "bounds",
+    "regression",
+    "target",
+    "min_price",
+    "text",
+    "parameters",
+    "unchanged",
+    "max_price",
+    "filters",
+    "add",
+    "apply",
+    "gate",
+    "keep",
+    "unfiltered",
+    "max",
+    "book",
+    "supports",
+    "price",
+    "afterwards",
+    "results",
+    "testable",
+    "testclient",
+    "test_books",
+    "test_category_filter_still_works",
+    "test_price_filter_is_inclusive_and_keeps_order",
+    "test_query_filter_still_works",
+    "test_unfiltered_list_is_unchanged",
+    "behavior",
+    "change",
+    "caller",
+    "validation",
+    "demo_app",
+    "range",
+    "app",
+    "demo",
+    "list",
+    "persistence",
+    "pagination",
+    "preserves",
+    "filtered",
+    "initial",
+    "ranges",
+    "goals",
+    "both",
+    "non",
+    "implementation",
+    "requirement",
+    "sorting",
+    "every",
+    "lower",
+    "upper",
+    "file",
+    "one",
+    "original",
+    "search",
+    "task",
+    "sdd",
+    "list_books",
+    "authentication",
+    "dependencies",
+    "capabilities",
+    "construction",
+    "deliberately",
+    "comparisons",
+    "preserving",
+    "observable",
+    "documented",
+    "filtering",
+    "migration",
+    "decisions",
+    "rejecting",
+    "semantics",
+    "signature",
+    "modified",
+    "openspec",
+    "evidence",
+    "explicit",
+    "protects",
+    "inverted",
+    "invalid",
+    "changes",
+    "combine",
+    "provide",
+    "contain",
+    "purpose",
+    "bundled",
+    "against",
+    "returns",
+    "compose",
+    "outside",
+    "enforce",
+    "expects",
+    "current",
+    "already",
+    "exposes",
+    "impact",
+    "cannot",
+    "expose",
+    "sorted",
+    "rather",
+    "sample",
+    "needs",
+    "specs",
+    "logic",
+    "_none",
+    "other",
+    "gates",
+    "match",
+    "error",
+    "local",
+    "empty",
+    "risks",
+    "trade",
+    "fixed"
+  ],
+  "todo": [],
+  "updated_at": "2026-10-28T08:47:01Z",
+  "verification": {
+    "regression": {
+      "code_version": "ab68418b1573",
+      "command": [
+        "/tmp/mmvenv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "demo_app/tests/test_books.py::test_unfiltered_list_is_unchanged",
+        "demo_app/tests/test_books.py::test_query_filter_still_works",
+        "demo_app/tests/test_books.py::test_category_filter_still_works"
+      ],
+      "exit_code": 0,
+      "label": "regression",
+      "log": "evidence/tests/1793177218-regression.log",
+      "selectors": [
+        "demo_app/tests/test_books.py::test_unfiltered_list_is_unchanged",
+        "demo_app/tests/test_books.py::test_query_filter_still_works",
+        "demo_app/tests/test_books.py::test_category_filter_still_works"
+      ],
+      "started_at": "2026-10-28T08:46:58Z"
+    },
+    "target": {
+      "code_version": "ab68418b1573",
+      "command": [
+        "/tmp/mmvenv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "demo_app/tests/test_books.py::test_price_filter_is_inclusive_and_keeps_order"
+      ],
+      "exit_code": 0,
+      "label": "target",
+      "log": "evidence/tests/1793177216-target.log",
+      "selectors": [
+        "demo_app/tests/test_books.py::test_price_filter_is_inclusive_and_keeps_order"
+      ],
+      "started_at": "2026-10-28T08:46:56Z"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+$ /tmp/mmvenv/bin/python -m pytest -q demo_app/tests/test_books.py::test_unfiltered_list_is_unchanged demo_app/tests/test_books.py::test_query_filter_still_works demo_app/tests/test_books.py::test_category_filter_still_works
+cwd: /mnt/e/develop/project_files/project/oceanbase/minimax
+exit_code: 0
+code_version: ab68418b1573
+started_at: 2026-10-28T08:46:58Z
+...                                                                      [100%]
+3 passed in 1.47s
+

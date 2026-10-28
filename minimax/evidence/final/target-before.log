@@ -1,0 +1,24 @@
+$ /tmp/mmvenv/bin/python -m pytest -q demo_app/tests/test_books.py::test_price_filter_is_inclusive_and_keeps_order
+cwd: /mnt/e/develop/project_files/project/oceanbase/minimax
+exit_code: 1
+code_version: 04aa56a4c188
+started_at: 2026-10-28T08:46:38Z
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________________ test_price_filter_is_inclusive_and_keeps_order ________________
+
+    def test_price_filter_is_inclusive_and_keeps_order() -> None:
+        response = client.get("/books", params={"min_price": 10, "max_price": 20})
+        assert response.status_code == 200
+        items = response.json()["items"]
+        assert items, "the demo data contains books in the inclusive 10..20 range"
+        prices = [book["price"] for book in items]
+>       assert all(10 <= price <= 20 for price in prices)
+E       assert False
+E        +  where False = all(<generator object test_price_filter_is_inclusive_and_keeps_order.<locals>.<genexpr> at 0x7e8b7e48f100>)
+
+demo_app/tests/test_books.py:16: AssertionError
+=========================== short test summary info ============================
+FAILED demo_app/tests/test_books.py::test_price_filter_is_inclusive_and_keeps_order
+1 failed in 1.54s
+
