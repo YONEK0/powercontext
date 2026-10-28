@@ -67,6 +67,13 @@ _QUERY_EXPANSIONS = {
     "capex": ("capital", "expenditure", "expenditures", "property", "plant", "equipment"),
     "margin": ("revenue", "revenues", "sales", "percentage"),
     "unadjusted": ("operating", "income", "profit"),
+    "capital": ("capex", "expenditure", "expenditures", "property", "plant", "equipment", "depreciation"),
+    "intensive": ("capital", "capex", "property", "plant", "equipment"),
+    "mergers": ("merger", "acquisition", "acquisitions", "divestiture", "divestitures"),
+    "acquisitions": ("acquisition", "merger", "mergers", "divestiture", "divestitures"),
+    "segment": ("segments", "business", "reportable"),
+    "segments": ("segment", "business", "reportable"),
+    "growth": ("sales", "revenue", "increase", "decrease"),
 }
 
 
@@ -228,6 +235,7 @@ def _terms(text: str) -> list[str]:
 def _query_terms(question: str) -> list[str]:
     seen: set[str] = set()
     terms: list[str] = []
+    question = re.sub(r"m\s*&\s*a", "mergers acquisitions", question, flags=re.IGNORECASE)
     for token in _terms(question):
         if len(token) < 2 or token in seen:
             continue
@@ -391,6 +399,18 @@ async def search_pdf_pages(memory: Any, question: str, limit: int = 10) -> tuple
     if not candidates:
         return ()
 
+    for section, hits in section_hits.items():
+        matching = [hit for hit in hits if _page_section(hit.text) == section]
+        if not matching:
+            continue
+        scored = _bm25(weighted_terms, {hit.entry_version_id: hit.text for hit in matching})
+        ordered: list[Any] = [next(hit for hit in matching if hit.entry_version_id == key) for key, _ in scored]
+        seen = {hit.entry_version_id for hit in ordered}
+        ordered.extend(hit for hit in matching if hit.entry_version_id not in seen)
+        matching_ids = {hit.entry_version_id for hit in matching}
+        ordered.extend(hit for hit in hits if hit.entry_version_id not in matching_ids)
+        section_hits[section] = ordered
+
     page_items: dict[str, tuple[MemoryCitation, tuple[str, int], str] | None] = {}
 
     async def page_item(hit: Any) -> tuple[MemoryCitation, tuple[str, int], str] | None:
@@ -427,8 +447,10 @@ async def search_pdf_pages(memory: Any, question: str, limit: int = 10) -> tuple
     selected: list[tuple[MemoryCitation, tuple[str, int], str]] = []
     selected_locations: set[tuple[str, int]] = set()
     # Preserve evidence from every explicitly requested financial statement/note section.
+    section_count = max(1, len(requested_sections))
+    base_quota = max(1, limit // section_count)
     for section in requested_sections:
-        quota = _SECTION_QUOTAS.get(section, 2)
+        quota = min(_SECTION_QUOTAS.get(section, 2), base_quota)
         taken = 0
         for hit in section_hits.get(section, ()):
             item = await page_item(hit)
@@ -477,6 +499,8 @@ def _requested_sections(question: str) -> tuple[str, ...]:
         term in lowered
         for term in (
             "balance sheet",
+            "financial position",
+            "financial condition",
             "liquidity",
             "quick ratio",
             "current ratio",
@@ -499,6 +523,8 @@ def _requested_sections(question: str) -> tuple[str, ...]:
         for term in (
             "income statement",
             "statement of operations",
+            "statement of earnings",
+            "results of operations",
             "operating income",
             "operating margin",
             "gross margin",
@@ -513,6 +539,10 @@ def _requested_sections(question: str) -> tuple[str, ...]:
         )
     ):
         sections.append("income")
+    if any(term in lowered for term in ("capital intensive", "capital-intensive", "capex", "capital expenditure")):
+        sections.extend(("balance-sheet", "cash-flow", "income"))
+    if any(term in lowered for term in ("m&a", "merger", "mergers", "acquisition", "acquisitions")):
+        sections.extend(("segment", "business"))
     if any(term in lowered for term in ("drove", "change", "margin", "revenue", "operating income")):
         sections.append("md&a")
     if any(term in lowered for term in ("risk", "cyclical", "uncertain", "exposure")):
@@ -530,21 +560,47 @@ def _requested_sections(question: str) -> tuple[str, ...]:
 # Section heading queries make the exact statement/note page a candidate even when
 # the question paraphrases it and shares few lexical terms with the page body.
 _SECTION_QUERIES: dict[str, tuple[str, ...]] = {
-    "tax": ("income tax provision", "effective tax rate"),
+    "tax": ("income tax provision", "effective tax rate", "provision for income taxes", "income taxes"),
     "legal": ("legal proceedings", "litigation"),
-    "geographic": ("geographic operations", "geographic regions", "geographic information"),
-    "segment": ("summary of business segment data", "segment information", "reportable segments"),
+    "geographic": ("geographic operations", "geographic regions", "geographic information", "geographic areas"),
+    "segment": (
+        "summary of business segment data",
+        "segment information",
+        "reportable segments",
+        "business segment",
+        "business segments",
+        "segment results",
+        "sales and operating income by business segment",
+    ),
     "customers": ("major customers", "customer concentration"),
-    "balance-sheet": ("consolidated balance sheets", "balance sheets"),
-    "cash-flow": ("consolidated statements of cash flows", "statements of cash flows"),
+    "balance-sheet": (
+        "consolidated balance sheets",
+        "consolidated balance sheet",
+        "consolidated statements of financial position",
+        "statements of financial condition",
+        "balance sheets",
+    ),
+    "cash-flow": (
+        "capital expenditures",
+        "property plant equipment",
+        "consolidated statements of cash flows",
+        "consolidated statements of cash flow",
+        "statements of cash flows",
+        "statement of cash flows",
+    ),
     "income": (
         "consolidated statements of income",
         "consolidated statements of operations",
+        "consolidated statements of earnings",
+        "consolidated statement of earnings",
+        "statements of consolidated income",
+        "consolidated results of operations",
+        "results of operations",
         "selected income statement data",
     ),
     "md&a": ("management discussion analysis", "management's discussion and analysis"),
     "risk": ("risk factors",),
-    "business": ("item 1 business", "products and services", "business environment"),
+    "business": ("item 1 business", "description of business", "products and services", "business environment"),
 }
 
 _SECTION_QUOTAS: dict[str, int] = {
