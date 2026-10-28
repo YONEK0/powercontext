@@ -36,8 +36,4 @@ def list_books(
         ]
     if category:
         items = [book for book in items if book["category"].casefold() == category.casefold()]
-    if min_price is not None:
-        items = [book for book in items if book["price"] >= min_price]
-    if max_price is not None:
-        items = [book for book in items if book["price"] <= max_price]
     return {"items": items, "count": len(items)}

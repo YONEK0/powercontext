@@ -89,3 +89,22 @@ def test_committed_fixture_data_exists() -> None:
     # Guards against .gitignore swallowing the fixture data again.
     assert (ROOT / "demo_app" / "data" / "books.json").is_file()
     assert (ROOT / "fixtures" / "inventory" / "stock" / "stock.json").is_file()
+
+
+def test_committed_code_is_the_unimplemented_initial_state() -> None:
+    """The repository must ship the *before* code.
+
+    If the fixed version is committed, a judge cloning the repo finds the
+    acceptance test already green and "fails before the change" is no longer
+    reproducible.
+    """
+
+    shipped = (ROOT / "demo_app" / "app.py").read_text(encoding="utf-8")
+    before = (ROOT / "evidence" / "before" / "app.py").read_text(encoding="utf-8")
+    after = (ROOT / "evidence" / "after" / "app.py").read_text(encoding="utf-8")
+
+    assert shipped == before, "demo_app/app.py must match evidence/before/app.py"
+    assert shipped != after
+    assert "min_price is not None" not in shipped
+    assert "min_price is not None" in after
+

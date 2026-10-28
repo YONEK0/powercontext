@@ -41,10 +41,15 @@
 | `test_category_filter_still_works` | `/books?category=fiction` 仍返回两本小说 |
 | `test_unfiltered_list_is_unchanged` | `/books` 仍返回 6 本、顺序不变 |
 
-## 初始数据
+## 初始数据与初始代码状态
 
 `demo_app/data/books.json`，6 本，价格 18/12/9/25/8/30。10–20 区间内
 按原始顺序为 `[18.0, 12.0]`，这是验收测试断言的值。
+
+**仓库提交的 `demo_app/app.py` 是初始状态**（`min_price`/`max_price` 在签名
+里但未应用），与 `evidence/before/app.py` 完全一致。已验证的修改后代码在
+`evidence/after/app.py`。所以从 clone 开始直接跑第 3 步就会看到真实失败，
+不需要额外还原操作；`restore before` / `restore after` 用于反复演示。
 
 ## 操作步骤与预期结果
 

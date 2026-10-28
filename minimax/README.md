@@ -88,6 +88,11 @@ WSL 注意：seekdb 无法在 `/mnt/e` 上打开数据库目录，请把
 `--task` / `--change` 是**全局**选项，必须写在子命令之前；不写则自动从
 `openspec/changes/` 读取。
 
+**提交的就是初始状态**：仓库里的 `demo_app/app.py` 尚未实现价格过滤，
+`evidence/after/app.py` 是已验证的修改后快照。因此第 3 步的失败是真实的，
+第 4 步应用补丁后即可复现第 5 步的通过。想反复演示时用
+`restore before` / `restore after` 在两个快照间切换。
+
 ```bash
 export PYTHONPATH=src
 
@@ -97,7 +102,7 @@ python -m minimax_context.cli init
 # 2. 构造上下文（会实跑候选测试，确定验收测试与回归门）
 python -m minimax_context.cli context
 
-# 3. 确认目标测试在改前失败
+# 3. 确认目标测试在改前失败（仓库初始状态即如此）
 python -m minimax_context.cli restore before
 python -m minimax_context.cli test --target     # 期望 exit 1
 
