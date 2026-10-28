@@ -493,6 +493,7 @@ class ScopedSourceApplication:
                             span.set_attributes({_MEMORY_CAPTURE_SOURCE_COUNT: 1})
             except BaseValueConflictError as error:
                 raise SourceConflictError("identity", error.identity) from None
+            self._runtime._wake_artifact_processing()
             return SourceReceipt(
                 source_ref=SourceRef(source_type=record.source_type, source_id=record.source_id),
                 sequence=record.position,
@@ -509,6 +510,7 @@ class ScopedSourceApplication:
                 )
                 if span is not None:
                     span.set_attributes({_MEMORY_CAPTURE_SOURCE_COUNT: 1})
+            self._runtime._wake_artifact_processing()
             return SourceReceipt(source_ref=context.sources.catalog.as_ref(source), sequence=sequence)
 
 
@@ -568,7 +570,10 @@ class ScopedRecordApplication:
         /,
     ) -> ArtifactCreated:
         async with self._runtime._scope_operation(self.scope_id), self._runtime._locked(self.scope_id):
-            return await self._runtime._records().create_artifact(self.scope_id, family, write)
+            created = await self._runtime._records().create_artifact(self.scope_id, family, write)
+        # The lineage-only Source this create published is a journal identity too.
+        self._runtime._wake_artifact_processing()
+        return created
 
     async def get_artifact(self, family: str, artifact_id: str, /) -> ArtifactRecord:
         async with self._runtime._scope_operation(self.scope_id):
@@ -3421,6 +3426,31 @@ class BuiltinRuntime:
         finally:
             if acquired:
                 lock.release()
+
+    def _wake_artifact_processing(self) -> None:
+        """Let count-based admission observe new journal identities immediately.
+
+        The commit has already published the input, so a failed wake only delays
+        processing until the next Supervisor tick; it never loses the Source.
+        """
+
+        supervisor = self.artifact_processing_supervisor
+        if supervisor is None:
+            return
+        try:
+            supervisor.wake()
+        except Exception as error:
+            log_safely(
+                logger,
+                logging.WARNING,
+                "Artifact processing wake failed after a Source commit",
+                exc_info=error,
+                extra={
+                    "event": "artifact_processing.wake_failed",
+                    "outcome": "accepted",
+                    "unit": "source",
+                },
+            )
 
     def _stage(
         self,

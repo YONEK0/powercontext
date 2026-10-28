@@ -48,7 +48,12 @@ async def enabled_profile_scopes(connection: AsyncConnection, scope_ids: tuple[s
 class SourceProcessingPendingProvider:
     """Inspect journal metadata, never Source bodies, prompts, or models."""
 
-    def __init__(self, database: AsyncDatabase, binding_name: str, artifact_family: str) -> None:
+    def __init__(
+        self,
+        database: AsyncDatabase,
+        binding_name: str,
+        artifact_family: str,
+    ) -> None:
         self._database = database
         self._binding = binding_name
         self._family = artifact_family
@@ -68,7 +73,8 @@ class SourceProcessingPendingProvider:
             cursors = SourceCursorRepository()
             for scope, high in rows:
                 cursor = await cursors.load(connection, scope, self._binding)
-                if int(high) <= (0 if cursor is None else cursor.cursor.sequence):
+                pending = int(high) - (0 if cursor is None else cursor.cursor.sequence)
+                if pending <= 0:
                     continue
                 intent = await intents.load(connection, scope, self._binding, for_update=True)
                 if intent is None or intent.dirty_generation == intent.clean_generation:

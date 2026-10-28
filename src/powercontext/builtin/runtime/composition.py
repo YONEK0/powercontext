@@ -204,6 +204,7 @@ class BuiltinConfigurationError(RuntimeError):
             "scheduled-experience-pipeline": "scheduled Experience incubation requires a candidate pipeline",
             "scheduled-pipeline": "scheduled Source processing requires a candidate pipeline",
             "scheduled-profile-generation": "scheduled Profile processing requires reconstructible generation",
+            "source-count-threshold": "a Source count threshold requires the corresponding processing Family",
             "topic-memory-child-resources": (
                 "Topic Memory processing requires child-reconstructible inference resources"
             ),
@@ -800,6 +801,23 @@ def _artifact_processing_bindings(  # noqa: C901 - validate and assemble one reg
             raise BuiltinConfigurationError(issue)
     if config.runtime.artifact_processing_role == "api":
         return tuple(configured)
+    # A count threshold only decides when an already-configured Family starts,
+    # so it needs the same executable Family as any other automatic admission.
+    for family, threshold in (
+        ("memory", config.runtime.memory_source_count_threshold),
+        ("topic-memory", config.runtime.topic_memory_source_count_threshold),
+    ):
+        if threshold is None or family in declared | registered:
+            continue
+        if (
+            family == "topic-memory"
+            and config.runtime.artifact_processing_families is None
+            and config.inference.generation_model is not None
+        ):
+            validate_topic_memory_provider_settings(config.inference)
+        raise BuiltinConfigurationError(
+            "topic-memory-generation" if family == "topic-memory" else "source-count-threshold"
+        )
     _validate_processing_source_registry(config, configured, source_registry)
     injected_pipelines = injected_pipelines or {}
     for family in capabilities:
@@ -843,6 +861,7 @@ def _artifact_processing_bindings(  # noqa: C901 - validate and assemble one reg
                 max_workers=getattr(config.runtime, f"{prefix}_max_workers"),
                 worker_timeout_seconds=getattr(config.runtime, f"{prefix}_worker_timeout_seconds"),
                 automatic_processing_interval=None if interval is None else timedelta(seconds=float(interval)),
+                source_count_threshold=getattr(config.runtime, f"{prefix}_source_count_threshold", None),
                 cron=config.runtime.profile_cron
                 if family == "profile" and config.runtime.profile_schedule_enabled
                 else None,
