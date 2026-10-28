@@ -22,6 +22,7 @@ import math
 import re
 from collections import Counter
 from typing import Any
+from urllib.parse import quote, unquote
 
 from pydantic import BaseModel, model_validator
 from pypdf import PdfReader
@@ -108,7 +109,7 @@ class _PasswordRequired(Exception):
 def pdf_page_source_id(document_id: str, document_sha256: str, page_number: int) -> str:
     """Return the stable identity of one page in one document revision."""
 
-    source_id = f"pdf:{document_id}:{document_sha256[:16]}:{page_number}"
+    source_id = f"pdf:{quote(document_id, safe='')}:{document_sha256[:16]}:{page_number}"
     if len(source_id) > MAX_SOURCE_ID_LENGTH:
         digest = hashlib.sha256(f"{document_id}\x00{document_sha256}".encode()).hexdigest()
         source_id = f"pdf:{digest}:{page_number}"
@@ -143,7 +144,7 @@ def parse_pdf_document(value: PDFDocumentInput) -> tuple[PDFPageInput, ...]:
         )
     except _PasswordRequired as error:
         raise ValueError("PDF requires a user password") from error
-    except (PdfReadError, ValueError, OSError, KeyError, TypeError, AttributeError) as error:
+    except Exception as error:  # noqa: BLE001 - any page failure must abort the whole document
         raise ValueError("PDF content could not be parsed completely") from error
     if not pages:
         raise ValueError("PDF must contain at least one page")  # noqa: TRY003
@@ -158,10 +159,7 @@ def _unlock_without_password(reader: PdfReader) -> bool:
 
 
 def _page_text(page: Any) -> str:
-    try:
-        extracted = page.extract_text()
-    except (PdfReadError, ValueError, KeyError, TypeError, AttributeError):
-        return ""
+    extracted = page.extract_text()
     return extracted if isinstance(extracted, str) else ""
 
 
@@ -601,7 +599,7 @@ def _page_location(source: Any) -> tuple[str, int] | None:
         page_number = int(parts[2])
     except ValueError:
         return None
-    return parts[0].removeprefix("pdf:"), page_number
+    return unquote(parts[0].removeprefix("pdf:")), page_number
 
 
 def _bm25(terms: dict[str, float], documents: dict[str, str]) -> list[tuple[str, float]]:
