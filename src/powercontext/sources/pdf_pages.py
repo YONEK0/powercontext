@@ -247,6 +247,117 @@ def _expanded_query_terms(question_terms: list[str]) -> dict[str, float]:
     return weights
 
 
+_COMPANY_ALIASES: dict[str, str] = {
+    "amex": "americanexpress",
+    "axp": "americanexpress",
+    "jpm": "jpmorgan",
+    "gs": "goldmansachs",
+    "ms": "morganstanley",
+    "ba": "boeing",
+    "pep": "pepsico",
+    "aapl": "apple",
+    "msft": "microsoft",
+    "ko": "cocacola",
+    "pg": "proctergamble",
+    "jnj": "johnsonjohnson",
+    "wmt": "walmart",
+    "vz": "verizon",
+    "intc": "intel",
+    "nvda": "nvidia",
+    "amzn": "amazon",
+    "tsla": "tesla",
+    "xom": "exxonmobil",
+    "cvx": "chevron",
+    "pfe": "pfizer",
+    "mrk": "merck",
+    "abbv": "abbvie",
+    "lly": "elililly",
+    "unh": "unitedhealth",
+    "hd": "homedepot",
+    "mcd": "mcdonalds",
+    "nke": "nike",
+    "dis": "disney",
+}
+
+
+def _compact_identity(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "", value.lower())
+
+
+def _company_key(document_id: str) -> str:
+    return re.sub(r"(19|20)\d{2}.*$", "", _compact_identity(document_id))
+
+
+async def _target_documents(memory: Any, question: str, question_terms: Sequence[str]) -> frozenset[str]:
+    """Infer which reports a question is about, when several share one scope.
+
+    A FinanceBench question normally names its company.  Document identity is a
+    stronger signal than lexical overlap: match the stable document id first, and
+    only fall back to document-level query-term coverage for abbreviations such as
+    "AMEX" that do not appear in the id ``AMERICANEXPRESS_2022_10K``.
+    """
+
+    try:
+        listing = await memory.list()
+    except Exception:  # noqa: BLE001 - the optional discovery path must not break retrieval
+        return frozenset()
+    documents: dict[str, set[str]] = {}
+    for record in listing.entries:
+        for source in record.entry.sources:
+            location = _page_location(source)
+            if location is not None:
+                documents.setdefault(location[0], set()).update(_terms(record.entry.text))
+    if not documents:
+        return frozenset()
+
+    compact_question = _compact_identity(question)
+    lowered_question = question.lower()
+    aliases = {
+        canonical
+        for alias, canonical in _COMPANY_ALIASES.items()
+        if re.search(rf"(?<![a-z0-9]){re.escape(alias)}(?![a-z0-9])", lowered_question)
+    }
+    matched = {
+        document_id
+        for document_id in documents
+        if (key := _company_key(document_id))
+        and len(key) >= 2
+        and (
+            key in compact_question
+            or _compact_identity(document_id) in compact_question
+            or key in aliases
+        )
+    }
+    if matched:
+        year = next((token for token in _TOKEN_PATTERN.findall(question.lower()) if re.fullmatch(r"(19|20)\d{2}", token)), None)
+        if year is not None:
+            narrowed = {document_id for document_id in matched if year in _compact_identity(document_id)}
+            if narrowed:
+                matched = narrowed
+        return frozenset(matched)
+
+    terms = tuple(dict.fromkeys(question_terms))
+    if not terms:
+        return frozenset()
+    document_frequency = Counter(
+        term for present in documents.values() for term in terms if term in present
+    )
+    population = max(1, len(documents))
+    idf = {
+        term: math.log((population + 1) / (document_frequency.get(term, 0) + 1)) + 1.0
+        for term in terms
+    }
+    scores = {
+        document_id: sum(idf[term] for term in terms if term in present)
+        for document_id, present in documents.items()
+    }
+    best = max(scores.values(), default=0.0)
+    if best <= 0:
+        return frozenset()
+    # Keep the best report, plus any report tied closely enough to be ambiguous.
+    return frozenset(document_id for document_id, score in scores.items() if score >= best * 0.9)
+
+
 async def search_pdf_pages(memory: Any, question: str, limit: int = 10) -> tuple[Any, ...]:
     """Return distinct exact page citations ranked for one natural-language question."""
 
@@ -258,6 +369,7 @@ async def search_pdf_pages(memory: Any, question: str, limit: int = 10) -> tuple
     question_terms = _query_terms(question)
     if not question_terms:
         return ()
+    target_documents = await _target_documents(memory, question, question_terms)
 
     # Memory FTS is conjunctive, so recall comes from original and expanded term candidates.
     weighted_terms = _expanded_query_terms(question_terms)
@@ -309,6 +421,8 @@ async def search_pdf_pages(memory: Any, question: str, limit: int = 10) -> tuple
         item = await page_item(candidates[key])
         if item is None or item[1] in seen_pages:
             continue
+        if target_documents and item[1][0] not in target_documents:
+            continue
         seen_pages.add(item[1])
         ranked_pages.append(item)
 
@@ -321,6 +435,8 @@ async def search_pdf_pages(memory: Any, question: str, limit: int = 10) -> tuple
         for hit in section_hits.get(section, ()):
             item = await page_item(hit)
             if item is None or item[1] in selected_locations:
+                continue
+            if target_documents and item[1][0] not in target_documents:
                 continue
             selected.append(item)
             selected_locations.add(item[1])
