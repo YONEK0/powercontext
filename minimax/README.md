@@ -2,9 +2,16 @@
 
 **规有所依——面向软件持续演进的 SDD 上下文管理系统**
 
-本目录是 MiniMax 赛道的完整提交资产。最终提交仓库是官方
-`powercontext` 的 `2026-competition-ecosystem` 分支，本目录即其中的
-`minimax/` 目录。seekdb 只是存储/检索依赖，不是提交仓库。
+本目录是 MiniMax 赛道的完整提交资产。按赛题《比赛仓库地址》：
+
+| 项 | 值 |
+|---|---|
+| 仓库 | `YONEK0/powercontext`（官方 `oceanbase/powercontext` 的公开 fork，等价于「导入私有 repo」） |
+| 分支 | `2026-competition-ecosystem` |
+| 文件夹 | `minimax/` |
+| 基线 | 官方 `2026-competition-ecosystem` 的 `d647275`（本分支为其直接后代） |
+
+seekdb 只是存储/检索依赖，不是提交仓库。
 
 ## 模块做什么
 
