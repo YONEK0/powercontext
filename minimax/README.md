@@ -1,64 +1,233 @@
-# MiniMax × OceanBase —— 规有所依：面向软件持续演进的 SDD 上下文模块
+# MiniMax × OceanBase — SDD 上下文模块
 
-为 AI 开发助手实现一个**工程上下文模块**：根据开发任务找到适用的规格、相关代码和测试，
-保存任务进展，并通过一次真实的代码修改验证模块的作用。
+**规有所依——面向软件持续演进的 SDD 上下文管理系统**
 
-三项技术各自承担明确的职责：
+本目录是 MiniMax 赛道的完整提交资产。按赛题《比赛仓库地址》：
 
-| 技术 | 角色 | 落点 |
-| --- | --- | --- |
-| **seekdb / OceanBase** | 存储并检索工程资料（规格 / 代码 / 测试） | `sdctx/seekdb_store.py`、`sdctx/retrieve.py` |
-| **MiniMax** | 参与本次任务的代码生成与修改 | `sdctx/minimax_client.py`、`sdctx/agent.py` |
-| **PowerContext** | 保存任务进展与验证结果，并在后续运行中读取复用 | `sdctx/state.py`、`sdctx/powercontext_client.py` |
+| 项 | 值 |
+|---|---|
+| 仓库 | `YONEK0/powercontext`（官方 `oceanbase/powercontext` 的公开 fork，等价于「导入私有 repo」） |
+| 分支 | `2026-competition-ecosystem` |
+| 文件夹 | `minimax/` |
+| 基线 | 官方 `2026-competition-ecosystem` 的 `d647275`（本分支为其直接后代） |
 
-## 快速开始
+seekdb 只是存储/检索依赖，不是提交仓库。
 
-```bash
-cd minimax
-bash scripts/setup_env.sh && source .venv/bin/activate
-export MINIMAX_API_KEY=replace-with-your-minimax-api-key
+## 模块做什么
 
-bash scripts/start_powercontext.sh &     # 任务状态服务
-bash scripts/run_validation.sh           # 跑完整验证样例，产物写入 evidence/
+给定一个开发任务，模块从工程资料中选出**适用的规格、需要改的代码、用于验证的测试**，
+把这组带出处（路径、行号、版本、内容 hash）的上下文交给 MiniMax 生成补丁，
+再用测试证明改对了，并把任务状态存进 PowerContext、重启后读回。
+
+```
+openspec/ + 业务代码 + 测试
+        │  ingest
+        ▼
+     seekdb（文档表 + 倒排词项表）
+        │  任务文本 → 分词/扩展/跨语言桥接 → SQL 检索 → 打分排序
+        ▼
+   开发上下文（spec/code/test + 出处 + 分数 + 命中词）
+        │          │
+        │          └── 探针：实跑候选测试，失败者=验收测试，通过者=回归门
+        ▼
+   MiniMax（OpenAI 兼容）→ unified diff → 归一化 → 应用
+        │
+        ▼
+   目标测试 + 回归测试 → PowerContext 状态 → 重启读回
 ```
 
-详见 [`docs/01-运行说明.md`](docs/01-运行说明.md)。
+## 三个必须参与的技术怎么分工
 
-## 命令行入口
+| 技术 | 承担的作用 | 代码位置 |
+|---|---|---|
+| **MiniMax** `cn:minimax-m3.1-flash` | 根据上下文生成实际代码修改（unified diff） | `agent.py` |
+| **seekdb** `pylibseekdb==1.4.0.post2` | 保存工程资料与倒排索引；检索结果**就是**上下文的唯一来源 | `db.py` / `ingest.py` |
+| **PowerContext** `powercontext[server]==1.2.0` | 保存任务进展与验证结果；新进程读回并继续使用 | `state.py` |
 
-```bash
-python -m sdctx init                    # 建表 + 全文索引 + 创建/复用 PowerContext Scope
-python -m sdctx ingest                  # 导入规格 / 代码 / 测试到 seekdb
-python -m sdctx context --task "..."    # 检索并组装开发上下文
-python -m sdctx state save --task "..." # 保存任务状态到 PowerContext
-python -m sdctx state load --task-id .. # 新进程读回任务状态
-python -m sdctx patch   --task "..."    # 用 MiniMax 生成并落地代码修改（自带测试回环）
-python -m sdctx search  --query "..."   # 直接在 seekdb 里检索
-python -m sdctx sql     --query "..."   # 直接执行只读 SQL
-python -m sdctx doctor                  # 环境体检
-```
+接入方式：seekdb 用 Python 绑定直连（嵌入式）；MiniMax 用 OpenAI 兼容
+`/chat/completions` HTTP；PowerContext 用 `builtin` Runtime + SQLite。
 
 ## 目录
 
-| 路径 | 说明 |
-| --- | --- |
-| `sdctx/` | 上下文模块源码 |
-| `business_project/` | 被修改的业务工程（schedule 1.2.2，MIT）与规格、测试 |
-| `tests/test_sdctx.py` | 上下文模块自身的单元测试 |
-| `scripts/` | `setup_env.sh` / `start_powercontext.sh` / `reset_demo.sh` / `run_validation.sh` |
-| `docs/01-运行说明.md` | 依赖、配置步骤、调用入口、测试命令、已知限制 |
-| `docs/02-验证样例.md` | 任务描述、有效规格、初始数据、操作步骤、预期结果、重置方法 |
-| `docs/03-技术使用记录.md` | MiniMax 开发记录、数据库查询记录、PowerContext 状态写入与复用记录 |
-| `docs/04-一页技术说明.md` | 模块结构、上下文选择方式、各项技术的分工 |
-| `evidence/` | 全部运行证据（测试日志、代码差异、模型调用记录、数据库查询、状态记录） |
+```text
+minimax/
+  src/minimax_context/
+    config.py     配置与 .env（占位值安全回退）
+    db.py         seekdb 建表/批量导入/倒排检索/查询日志
+    ingest.py     发现工程目录，切分 spec/code/test，写 seekdb
+    retrieve.py   分词、IDF/BM25 打分、跨语言桥接、角色配额
+    context.py    组装上下文并落盘
+    task.py       从 OpenSpec change 解析任务（不写死题目）
+    agent.py      MiniMax 调用、patch 提取/归一化/应用
+    verify.py     探针分类、目标/回归测试执行与日志
+    state.py      PowerContext 状态读写
+    cli.py        命令行入口
+  demo_app/       验证样例业务工程（FastAPI 图书检索）+ 数据 + 测试
+  openspec/       生效规格 + add-price-filter 变更
+  fixtures/inventory/   第二套对照工程（库存），用于证明泛化
+  patches/recorded.patch  已录制的 MiniMax 补丁（无 Key 也能复现）
+  evidence/final/ 最终一次完整运行的证据
+  scripts/        init/reset/restore/run_demo
+  tests/          框架自身测试
+```
 
-## 验收对照
+## 环境
 
-| 必做项 | 本作品的做法 | 证据 |
-| --- | --- | --- |
-| 能够运行 | `scripts/run_validation.sh` 从零跑通全流程 | `evidence/00-环境体检.json` |
-| MiniMax 实际参与 | 模型产出符号替换块并真实落盘，调用全过程留档 | `evidence/06-*.json`、`evidence/12-*.json` |
-| 上下文正确输出 | 规格条目 / 代码符号 / 测试用例均带真实来源；规格升级后输出随之变化 | `evidence/03-*.json`、`evidence/10-*.json` |
-| 数据库实际参与 | 资料存进 seekdb，检索 SQL 的返回行直接构成上下文 | `evidence/04-seekdb-查询记录.txt` |
-| 状态能够复用 | 状态写进 PowerContext；新进程读回并注入上下文 | `evidence/05-powercontext-状态记录.txt` |
-| 代码修改有效 | 同一组目标测试修改前 5 失败 / 修改后 5 通过，回归测试全通过 | `evidence/01`、`02`、`08`、`09`、`13` |
+- Python 3.12
+- Linux x86_64（seekdb 嵌入式库只有 Linux/macOS wheel）
+
+```bash
+python3.12 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env          # 不含真实 Key；留空即用默认值
+```
+
+`.env` 全部可留空：`MINIMAX_TEST_PYTHON` 留空则复用当前解释器，
+`MINIMAX_CHANGE` 留空则在只有一个 change 时自动选中，`MINIMAX_API_KEY`
+留空则 `--live` 会明确报错、`--replay` 正常工作。
+
+WSL 注意：seekdb 无法在 `/mnt/e` 上打开数据库目录，请把
+`MINIMAX_SEAKDB_PATH` 指到 ext4 路径（如 `/tmp/minimax-seekdb`）。
+
+## 一次完整验证（6 步）
+
+`--task` / `--change` 是**全局**选项，必须写在子命令之前；不写则自动从
+`openspec/changes/` 读取。
+
+**提交的就是初始状态**：仓库里的 `demo_app/app.py` 尚未实现价格过滤，
+`evidence/after/app.py` 是已验证的修改后快照。因此第 3 步的失败是真实的，
+第 4 步应用补丁后即可复现第 5 步的通过。想反复演示时用
+`restore before` / `restore after` 在两个快照间切换。
+
+```bash
+export PYTHONPATH=src
+
+# 1. 建库并导入规格/代码/测试
+python -m minimax_context.cli init
+
+# 2. 构造上下文（会实跑候选测试，确定验收测试与回归门）
+python -m minimax_context.cli context
+
+# 3. 确认目标测试在改前失败（仓库初始状态即如此）
+python -m minimax_context.cli restore before
+python -m minimax_context.cli test --target     # 期望 exit 1
+
+# 4. 让 MiniMax 生成并应用补丁；无 Key 时用录制补丁
+python -m minimax_context.cli agent --replay --apply
+# 有 Key 时：python -m minimax_context.cli agent --live --apply
+
+# 5. 目标测试 + 回归测试
+python -m minimax_context.cli test --target --regression   # 期望 exit 0
+
+# 6. 新进程读回持久化状态
+python -m minimax_context.cli status
+```
+
+预期：第 3 步 `exit_code: 1`（价格过滤未实现），第 5 步两项均 0，
+第 6 步 `status: verified` 且含 `target_tests`、`regression_tests`、
+两次测试的退出码与日志路径。
+
+重置：`bash scripts/reset.sh`（清本地 seekdb/PowerContext 与生成物）。
+
+### 一条命令重跑整条链路
+
+```bash
+bash scripts/validate.sh --live     # 真实调用 MiniMax
+bash scripts/validate.sh            # 无 Key 时回放已录制的补丁
+```
+
+脚本从空状态开始走完 init → context → 改前测试 → 应用补丁 → 改后测试 →
+读回状态，把产物收集到 `evidence/final/`，并把工作区代码还原为初始状态。
+`evidence/final/` 里的所有文件都来自同一次运行。
+
+### 测试命令
+
+```bash
+# 业务工程的全部测试（初始状态下验收测试必然失败，这是预期）
+python -m pytest demo_app/tests -q
+
+# 只跑验收测试与三个回归测试
+python -m pytest -q \
+  demo_app/tests/test_books.py::test_price_filter_is_inclusive_and_keeps_order \
+  demo_app/tests/test_books.py::test_query_filter_still_works \
+  demo_app/tests/test_books.py::test_category_filter_still_works \
+  demo_app/tests/test_books.py::test_unfiltered_list_is_unchanged
+
+# 上下文模块自身的测试（离线部分无需 seekdb）
+python -m pytest tests/test_offline.py -q
+
+# 上下文模块的检索测试（需要 seekdb 与 Linux）
+MINIMAX_SEAKDB_PATH=/tmp/minimax-seekdb python -m pytest tests/test_retrieval.py -q
+```
+
+`pyproject.toml` 已配置 `pythonpath` 与 `testpaths`，在 `minimax/` 下直接
+运行 `python -m pytest` 即可执行全部测试。
+
+## 上下文模块的调用入口与输入输出
+
+入口是 CLI，也可作为库调用：
+
+```python
+from minimax_context.config import Settings
+from minimax_context.db import SeekDB
+from minimax_context.context import build_context
+
+settings = Settings.load(".")
+db = SeekDB(settings.seekdb_path)
+ctx = build_context(settings, db, "add an inclusive price filter")
+```
+
+输入：任务文本（或 OpenSpec change 名）。
+输出：`schema=minimax.sdd-context.v2`，含
+
+- `terms`：本任务实际使用的检索词
+- `groups.spec/code/test`：每组条目带 `path`、`symbol`、`line_start/end`、
+  `version`、`content_hash`、`score`、`matched_terms`
+- `target_files`：需要修改的代码文件
+- `target_tests` / `regression_tests`：验收测试与回归门
+- `probe`：确定验收测试所依据的实跑结果（命令、退出码、失败/通过列表）
+- `required`：三组的 source id，便于评审核对
+
+所有来源都真实存在于工程中；改写规格并 `cli ingest` 后，同一路径的
+`version` 会变化，输出随之使用新内容（`tests/test_retrieval.py` 覆盖）。
+
+## 泛化能力
+
+这不是为一道题硬编码的流水线。以下三点都能在 `tests/` 里找到对照测试：
+
+1. **分词不依赖领域词表。** 标识符按 `_`/驼峰拆分（`min_price` 可从
+   `price` 命中），中文按 bigram 索引，因此中英文任务都能检索。
+2. **跨语言桥接。** 任务先命中规格，再从这些规格里提取真实字段名做第二
+   轮检索，所以「预约数量不能超过可用量」能命中 `reserve`/`free_quantity`。
+3. **验收测试是测出来的，不是猜的。** 探针在改前代码上实跑候选测试，
+   失败者为验收测试、通过者为回归门；改完后测试不再失败，所以选择结果
+   存进状态复用，而不是重算。
+
+`fixtures/inventory/` 是一套与图书检索无关的工程（不同领域、不同包名、
+中文 proposal）。把它当作工程根直接运行，同一份代码会读出它自己的变更、
+选中 `stock/service.py` 与对应测试，无需修改任何源码。
+
+## 依赖版本（已知限制见 `TECH_NOTE.md`）
+
+```text
+powercontext[server]==1.2.0     # 冻结基线；1.4.1 的 Runtime 接口不同
+alembic>=1.16,<2
+pylibseekdb==1.4.0.post2
+fastapi / uvicorn / httpx / pytest
+```
+
+## 安全
+
+仓库不含真实 API Key、不含 `.env`。Key 只经环境变量传入。
+
+## 复用与来源
+
+- **OpenSpec**（Fission-AI，MIT）：仅使用其**目录约定与文档格式**
+  （`openspec/specs/`、`openspec/changes/<name>/{proposal,design,tasks}.md`、
+  `specs/<capability>/spec.md`），规格内容全部为本项目原创，未复制其代码。
+- **PowerContext**（OceanBase，Apache-2.0）：以 `powercontext[server]==1.2.0`
+  的公开包使用其 `builtin` Runtime 与 Memory 能力，未修改其源码。
+- **seekdb**（OceanBase，Apache-2.0）：以 `pylibseekdb==1.4.0.post2` 的公开
+  Python 绑定使用其嵌入式存储能力。
+- `demo_app/`、`fixtures/inventory/` 的业务代码与测试数据均为本项目原创。

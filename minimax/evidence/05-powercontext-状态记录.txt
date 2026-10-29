@@ -1,1 +1,0 @@
-# PowerContext 状态写入 / 读取记录
