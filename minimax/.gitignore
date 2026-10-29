@@ -1,0 +1,12 @@
+# 本地运行数据
+.sdctx/
+.venv/
+.pytest_cache/
+__pycache__/
+*.pyc
+
+# 凭据
+.env
+
+# 业务工程的运行产物
+business_project/**/__pycache__/
