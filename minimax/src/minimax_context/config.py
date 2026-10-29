@@ -44,6 +44,19 @@ def resolve_python(value: str | None) -> str:
     return found or sys.executable
 
 
+def _resolve_path(root: Path, value: str | None, default: str) -> Path:
+    """Resolve a configured path against the project root.
+
+    An absolute value is used as-is; ``pathlib`` would otherwise glue it onto
+    the root and turn ``/tmp/run/seekdb`` into ``<root>/tmp/run/seekdb``.
+    """
+
+    candidate = Path(value or default)
+    if candidate.is_absolute():
+        return candidate
+    return root / candidate
+
+
 @dataclass(frozen=True)
 class Settings:
     root: Path
@@ -82,8 +95,8 @@ class Settings:
         evidence.mkdir(parents=True, exist_ok=True)
         return cls(
             root=resolved,
-            seekdb_path=resolved / os.getenv("MINIMAX_SEAKDB_PATH", "data/seekdb"),
-            powercontext_db=resolved / os.getenv("POWERCONTEXT_DB", "data/powercontext.db"),
+            seekdb_path=_resolve_path(resolved, os.getenv("MINIMAX_SEEKDB_PATH"), "data/seekdb"),
+            powercontext_db=_resolve_path(resolved, os.getenv("POWERCONTEXT_DB"), "data/powercontext.db"),
             evidence_dir=evidence,
             minimax_base_url=os.getenv("MINIMAX_BASE_URL", "http://127.0.0.1:7863/v1").rstrip("/"),
             minimax_api_key=os.getenv("MINIMAX_API_KEY") or None,

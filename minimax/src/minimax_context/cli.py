@@ -169,7 +169,7 @@ def cmd_reset(settings: Settings, args: argparse.Namespace) -> int:
         print("refusing to reset without --yes", file=sys.stderr)
         return 2
     for path in (settings.seekdb_path, settings.powercontext_db):
-        target = settings.root / path if not path.is_absolute() else path
+        target = path if path.is_absolute() else settings.root / path
         if target.is_dir():
             shutil.rmtree(target)
         elif target.exists():

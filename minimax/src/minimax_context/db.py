@@ -82,6 +82,9 @@ class SeekDB:
         if pylibseekdb is None:
             raise RuntimeError("pylibseekdb is required; install requirements.txt")
         self.path = Path(path)
+        # seekdb creates the database directory but not the directories above
+        # it, so a nested path like /tmp/run/db/seekdb needs its parents.
+        self.path.parent.mkdir(parents=True, exist_ok=True)
         self.path.mkdir(parents=True, exist_ok=True)
         self.log_path = log_path
         self._instance = pylibseekdb.open(str(self.path))

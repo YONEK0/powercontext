@@ -12,11 +12,15 @@
 | `target-before.log` | 改前跑验收测试：`exit_code: 1`，记录命令、cwd、代码版本 hash |
 | `target-after.log` | 改后跑验收测试：`exit_code: 0` |
 | `regression-after.log` | 改后跑 3 个回归测试：`exit_code: 0` |
+| `app-before.py` / `app-after.py` | 修改前 / 修改后的代码快照 |
+| `code-diff.patch` | 两个快照之间的代码差异 |
 | `patch.diff` | 实际应用的 unified diff（已归一化 hunk 计数） |
 | `minimax-patch.json` | **真实 MiniMax 调用记录**：`cn:minimax-m3.1-flash` 的请求与原始响应、usage |
-| `context.json` | 上下文输出：检索词、三组来源（路径/行号/版本/hash/分数/命中词）、目标文件、验收与回归测试、探针结果 |
+| `context.json` | 上下文输出：检索词、三组来源（路径/行号/版本/hash/分数/命中词）、目标文件、验收与回归测试、探针结果，以及**已完成事项、待办事项、已有验证结果** |
 | `seekdb_queries.jsonl` | 实际执行的 SQL、时间戳、命中行数 |
 | `state-status.json` | **新进程**从 PowerContext 读回的任务状态 |
+
+本目录由 `bash scripts/validate.sh --live` 一次运行生成，各文件同属一次执行。
 
 ## 与六项必做的对应
 
@@ -54,8 +58,18 @@
 
 ## 复现方式
 
-- **有 Key**：`cli agent --live --apply`，`evidence/minimax/` 会记录本次真实
-  请求与响应。评审不要求模型重新生成完全相同的补丁。
+一条命令重跑整条链路并重新生成本目录：
+
+```bash
+bash scripts/validate.sh --live     # 真实调用 MiniMax
+bash scripts/validate.sh            # 无 Key 时回放已录制的补丁
+```
+
+脚本从空状态开始，依次执行 init → context → 改前测试 → 应用补丁 →
+改后测试 → 读回状态，最后把产物收集到本目录，并把工作区代码还原为初始状态。
+
+- **有 Key**：`cli agent --live --apply` 会记录本次真实请求与响应到
+  `evidence/minimax/`。评审不要求模型重新生成完全相同的补丁。
 - **无 Key**：`cli agent --replay --apply` 使用 `patches/recorded.patch`
   复现已验证的修改。
 - 重置：`bash scripts/reset.sh`。
