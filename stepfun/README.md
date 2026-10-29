@@ -12,13 +12,6 @@ WebGPU 优先、WASM 自动降级），向量与原文写入 **seekdb（seekdb-j
 
 ## 跑起来
 
-仓库里不包含前端 vendor（约 22 MB），先执行一次：
-
-```bash
-./scripts/fetch_vendor.sh
-```
-
-
 ```bash
 cd minikb
 export PATH="$PWD/../.tools/node/bin:$PATH"      # 本机用仓库内 Node 22；已装 node>=20 可跳过

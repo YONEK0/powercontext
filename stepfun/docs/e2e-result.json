@@ -10,8 +10,8 @@
         "HNSW 索引 | 相关度 0.031",
         "浏览器端向量化 | 相关度 0.015"
       ],
-      "meta": "query embedding 10 ms · seekdb 17.72 ms · 6 条结果",
-      "wall": 65
+      "meta": "query embedding 10 ms · seekdb 7.42 ms · 6 条结果",
+      "wall": 63
     },
     "semantic": {
       "cards": [
@@ -22,8 +22,8 @@
         "HNSW 索引 | 相似度 53.7%",
         "浏览器端向量化 | 相似度 43.2%"
       ],
-      "meta": "query embedding 10 ms · seekdb 2.24 ms · 6 条结果",
-      "wall": 62
+      "meta": "query embedding 10 ms · seekdb 2.16 ms · 6 条结果",
+      "wall": 63
     },
     "keyword": {
       "cards": [
@@ -33,20 +33,20 @@
         "hipVS 是什么 | 相关度 0.258",
         "HNSW 索引 | 相关度 0.186"
       ],
-      "meta": "query embedding 0 ms · seekdb 1.98 ms · 5 条结果",
+      "meta": "query embedding 0 ms · seekdb 1.74 ms · 5 条结果",
       "wall": 64
     }
   },
   "bench": {
     "backend": "WASM/int8",
-    "modelLoadMs": 388,
-    "embedSingleMs": 18.4,
+    "modelLoadMs": 412,
+    "embedSingleMs": 18.3,
     "batch8TotalMs": 140.9,
     "batch8PerItemMs": 17.6,
     "dbSearchMs": [
-      2.82,
-      3.18,
-      0.89
+      4.24,
+      1.88,
+      1.28
     ],
     "docs": "6"
   },

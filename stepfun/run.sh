@@ -10,11 +10,6 @@ command -v node >/dev/null 2>&1 || { echo "需要 Node.js >= 20"; exit 1; }
 
 export SEEKDB_BINDINGS_CACHE_DIR="${SEEKDB_BINDINGS_CACHE_DIR:-$PWD/.bindings}"
 
-# 前端 vendor（transformers.js + ORT wasm）不入库，缺失时自动拉取
-if [ ! -f public/vendor/transformers.min.js ] || [ ! -f public/vendor/ort/ort-wasm-simd-threaded.jsep.wasm ]; then
-  ./scripts/fetch_vendor.sh
-fi
-
 if [ ! -d node_modules ]; then
   echo "→ 安装依赖…"
   npm install --legacy-peer-deps --no-audit --no-fund \
