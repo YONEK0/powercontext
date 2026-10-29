@@ -1,0 +1,121 @@
+{
+  "env": {
+    "browser": "156.0.8078.4",
+    "backend": "后端：WASM/int8",
+    "rounds": 5,
+    "docs": "12"
+  },
+  "modelLoad": {
+    "coldMs": 420,
+    "warmMs": 175
+  },
+  "embedSingle": {
+    "median": 17.8,
+    "min": 17.7,
+    "max": 18.4,
+    "n": 5
+  },
+  "batch8PerItem": {
+    "median": 17.4,
+    "min": 17.2,
+    "max": 17.7,
+    "n": 5
+  },
+  "queryEmbed": {
+    "median": 10,
+    "min": 10,
+    "max": 10,
+    "n": 5
+  },
+  "queryDb": {
+    "median": 0.67,
+    "min": 0.63,
+    "max": 1.17,
+    "n": 5
+  },
+  "e2e": {
+    "median": 30,
+    "min": 27,
+    "max": 30,
+    "n": 5
+  },
+  "addToVisible": {
+    "median": 32,
+    "min": 32,
+    "max": 47,
+    "n": 5
+  },
+  "raw": [
+    {
+      "modelLoadMs": 118,
+      "embedSingleMs": 18.4,
+      "batch8PerItemMs": 17.7,
+      "dbSearchMs": [
+        50.03,
+        0.79,
+        0.57
+      ],
+      "queryEmbedMs": 10,
+      "queryDbMs": 1.17,
+      "e2eMs": 30,
+      "addToVisibleMs": 47
+    },
+    {
+      "modelLoadMs": 118,
+      "embedSingleMs": 17.8,
+      "batch8PerItemMs": 17.4,
+      "dbSearchMs": [
+        1.03,
+        1.36,
+        0.56
+      ],
+      "queryEmbedMs": 10,
+      "queryDbMs": 0.99,
+      "e2eMs": 27,
+      "addToVisibleMs": 32
+    },
+    {
+      "modelLoadMs": 118,
+      "embedSingleMs": 17.7,
+      "batch8PerItemMs": 17.4,
+      "dbSearchMs": [
+        2.72,
+        0.72,
+        0.69
+      ],
+      "queryEmbedMs": 10,
+      "queryDbMs": 0.67,
+      "e2eMs": 30,
+      "addToVisibleMs": 32
+    },
+    {
+      "modelLoadMs": 118,
+      "embedSingleMs": 17.8,
+      "batch8PerItemMs": 17.2,
+      "dbSearchMs": [
+        2.38,
+        0.84,
+        0.6
+      ],
+      "queryEmbedMs": 10,
+      "queryDbMs": 0.63,
+      "e2eMs": 30,
+      "addToVisibleMs": 32
+    },
+    {
+      "modelLoadMs": 118,
+      "embedSingleMs": 17.8,
+      "batch8PerItemMs": 17.3,
+      "dbSearchMs": [
+        4.27,
+        0.74,
+        0.57
+      ],
+      "queryEmbedMs": 10,
+      "queryDbMs": 0.64,
+      "e2eMs": 30,
+      "addToVisibleMs": 32
+    }
+  ],
+  "errors": []
+}

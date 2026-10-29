@@ -1,0 +1,20 @@
+{
+  "fp32": {
+    "size_mb": 90.5,
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "embed_ms_per_doc": 4.1,
+    "misses": [],
+    "compression": 1.0
+  },
+  "int8": {
+    "size_mb": 22.9,
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "embed_ms_per_doc": 3.6,
+    "misses": [],
+    "cosine_vs_fp32_mean": 0.9925,
+    "cosine_vs_fp32_min": 0.9895,
+    "compression": 3.95
+  }
+}
