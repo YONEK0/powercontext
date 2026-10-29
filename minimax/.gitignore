@@ -17,4 +17,6 @@ evidence/seekdb_queries.jsonl
 *.orig
 *.rej
 !evidence/README.md
+!evidence/final/*.patch
+!patches/*.patch
 *.egg-info/

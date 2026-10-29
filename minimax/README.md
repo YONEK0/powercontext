@@ -130,6 +130,40 @@ python -m minimax_context.cli status
 
 重置：`bash scripts/reset.sh`（清本地 seekdb/PowerContext 与生成物）。
 
+### 一条命令重跑整条链路
+
+```bash
+bash scripts/validate.sh --live     # 真实调用 MiniMax
+bash scripts/validate.sh            # 无 Key 时回放已录制的补丁
+```
+
+脚本从空状态开始走完 init → context → 改前测试 → 应用补丁 → 改后测试 →
+读回状态，把产物收集到 `evidence/final/`，并把工作区代码还原为初始状态。
+`evidence/final/` 里的所有文件都来自同一次运行。
+
+### 测试命令
+
+```bash
+# 业务工程的全部测试（初始状态下验收测试必然失败，这是预期）
+python -m pytest demo_app/tests -q
+
+# 只跑验收测试与三个回归测试
+python -m pytest -q \
+  demo_app/tests/test_books.py::test_price_filter_is_inclusive_and_keeps_order \
+  demo_app/tests/test_books.py::test_query_filter_still_works \
+  demo_app/tests/test_books.py::test_category_filter_still_works \
+  demo_app/tests/test_books.py::test_unfiltered_list_is_unchanged
+
+# 上下文模块自身的测试（离线部分无需 seekdb）
+python -m pytest tests/test_offline.py -q
+
+# 上下文模块的检索测试（需要 seekdb 与 Linux）
+MINIMAX_SEAKDB_PATH=/tmp/minimax-seekdb python -m pytest tests/test_retrieval.py -q
+```
+
+`pyproject.toml` 已配置 `pythonpath` 与 `testpaths`，在 `minimax/` 下直接
+运行 `python -m pytest` 即可执行全部测试。
+
 ## 上下文模块的调用入口与输入输出
 
 入口是 CLI，也可作为库调用：
@@ -186,3 +220,14 @@ fastapi / uvicorn / httpx / pytest
 ## 安全
 
 仓库不含真实 API Key、不含 `.env`。Key 只经环境变量传入。
+
+## 复用与来源
+
+- **OpenSpec**（Fission-AI，MIT）：仅使用其**目录约定与文档格式**
+  （`openspec/specs/`、`openspec/changes/<name>/{proposal,design,tasks}.md`、
+  `specs/<capability>/spec.md`），规格内容全部为本项目原创，未复制其代码。
+- **PowerContext**（OceanBase，Apache-2.0）：以 `powercontext[server]==1.2.0`
+  的公开包使用其 `builtin` Runtime 与 Memory 能力，未修改其源码。
+- **seekdb**（OceanBase，Apache-2.0）：以 `pylibseekdb==1.4.0.post2` 的公开
+  Python 绑定使用其嵌入式存储能力。
+- `demo_app/`、`fixtures/inventory/` 的业务代码与测试数据均为本项目原创。
