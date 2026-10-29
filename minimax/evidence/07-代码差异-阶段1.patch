@@ -1,0 +1,37 @@
+# 代码差异（阶段1）
+# 基准: schedule 1.2.2 官方发布包
+# 时间: 2026-10-29T12:35:37Z
+
+--- a/schedule/__init__.py
++++ b/schedule/__init__.py
+@@ -85,6 +85,7 @@
+ 
+     def __init__(self) -> None:
+         self.jobs: List[Job] = []
++        self.on_error = None
+ 
+     def run_pending(self) -> None:
+         """
+@@ -170,7 +171,21 @@
+         return job
+ 
+     def _run_job(self, job: "Job") -> None:
+-        ret = job.run()
++        try:
++            ret = job.run()
++        except Exception as exc:
++            if self.on_error is None:
++                logger.warning("Exception in job %s: %s", job, exc)
++            else:
++                try:
++                    self.on_error(job, exc)
++                except Exception as handler_exc:
++                    logger.warning(
++                        "Exception in on_error handler for job %s: %s",
++                        job,
++                        handler_exc,
++                    )
++            return
+         if isinstance(ret, CancelJob) or ret is CancelJob:
+             self.cancel_job(job)
+ 
