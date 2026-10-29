@@ -7,9 +7,9 @@
 | 项 | 值 |
 |---|---|
 | 仓库 | `YONEK0/powercontext`（官方 `oceanbase/powercontext` 的公开 fork，等价于「导入私有 repo」） |
-| 分支 | `2026-competition-ecosystem` |
+| 分支 | `2026-competition`（仓库默认分支；同一份资产也在 `2026-competition-ecosystem`） |
 | 文件夹 | `minimax/` |
-| 基线 | 官方 `2026-competition-ecosystem` 的 `d647275`（本分支为其直接后代） |
+| 基线 | 官方 `2026-competition-ecosystem` 的 `d647275`（已包含在本分支历史中） |
 
 seekdb 只是存储/检索依赖，不是提交仓库。
 
