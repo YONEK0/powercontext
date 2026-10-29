@@ -1,22 +1,12 @@
-# local runtime state only; `demo_app/data/` and `fixtures/` are committed
-/data/
-.env
+# 本地运行数据
+.sdctx/
 .venv/
+.pytest_cache/
 __pycache__/
 *.pyc
-.pytest_cache/
-.e2e/
-# generated run artifacts; `evidence/final/` and `evidence/before|after/` are kept
-evidence/minimax/*.json
-evidence/minimax/*.patch
-evidence/contexts/*.json
-evidence/tests/*.log
-evidence/state/*.json
-evidence/tasks/*.json
-evidence/seekdb_queries.jsonl
-*.orig
-*.rej
-!evidence/README.md
-!evidence/final/*.patch
-!patches/*.patch
-*.egg-info/
+
+# 凭据
+.env
+
+# 业务工程的运行产物
+business_project/**/__pycache__/
