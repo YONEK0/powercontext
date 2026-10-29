@@ -13,10 +13,9 @@ WebGPU 优先、WASM 自动降级），向量与原文写入 **seekdb（seekdb-j
 ## 跑起来
 
 ```bash
-cd minikb
-export PATH="$PWD/../.tools/node/bin:$PATH"      # 本机用仓库内 Node 22；已装 node>=20 可跳过
-export SEEKDB_BINDINGS_CACHE_DIR="$PWD/.bindings" # 原生库缓存目录（默认 ~/.seekdb）
-./run.sh
+cd stepfun                      # 本目录（比赛仓库中的 stepfun/）
+export SEEKDB_BINDINGS_CACHE_DIR="$PWD/.bindings"   # 原生库缓存目录（默认 ~/.seekdb）
+./run.sh                        # 首次会自动 npm install 并拉取前端 vendor
 # 打开 http://127.0.0.1:8787
 ```
 
@@ -27,9 +26,7 @@ export SEEKDB_BINDINGS_CACHE_DIR="$PWD/.bindings" # 原生库缓存目录（默�
 依赖安装：
 
 ```bash
-export PATH="$PWD/../.tools/node/bin:$PATH"
-npm install --legacy-peer-deps --registry=https://registry.npmmirror.com seekdb express
-npm install playwright-core   # 仅 e2e / 截图需要
+npm install --legacy-peer-deps --registry=https://registry.npmmirror.com
 ```
 
 > `--legacy-peer-deps` 是因为 seekdb 1.4.0 的 peer 依赖里带了 `workspace:*`，npm 会报 EUNSUPPORTEDPROTOCOL。
@@ -37,7 +34,7 @@ npm install playwright-core   # 仅 e2e / 截图需要
 ## 目录
 
 ```
-minikb/
+stepfun/
 ├── server.mjs              # Express + seekdb-js + HF 代理（约 300 行）
 ├── public/
 │   ├── index.html / app.js / style.css
