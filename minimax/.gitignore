@@ -1,0 +1,20 @@
+# local runtime state only; `demo_app/data/` and `fixtures/` are committed
+/data/
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.e2e/
+# generated run artifacts; `evidence/final/` and `evidence/before|after/` are kept
+evidence/minimax/*.json
+evidence/minimax/*.patch
+evidence/contexts/*.json
+evidence/tests/*.log
+evidence/state/*.json
+evidence/tasks/*.json
+evidence/seekdb_queries.jsonl
+*.orig
+*.rej
+!evidence/README.md
+*.egg-info/
