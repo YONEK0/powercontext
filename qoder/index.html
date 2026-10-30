@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="知溯：由 seekdb 驱动的本地学习知识库，让笔记可检索、出处可追溯、复习有节奏。">
+  <title>知溯 · 让知识找得到，也记得住</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#overview" aria-label="知溯首页">
+        <span class="brand-mark">知</span>
+        <span><strong>知溯</strong><small>ZHISHU STUDY OS</small></span>
+      </a>
+      <nav class="main-nav" aria-label="主导航">
+        <button class="nav-item active" data-view="overview"><span class="nav-icon">01</span>今日概览</button>
+        <button class="nav-item" data-view="library"><span class="nav-icon">02</span>我的知识库</button>
+        <button class="nav-item" data-view="search"><span class="nav-icon">03</span>混合检索</button>
+        <button class="nav-item" data-view="review"><span class="nav-icon">04</span>复习空间<span id="nav-due" class="nav-badge hidden"></span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button class="nav-item subtle" data-view="technology"><span class="nav-icon">05</span>技术与验证</button>
+        <div class="local-card">
+          <span class="pulse-dot"></span>
+          <div><strong>本地优先</strong><small>无需 API Key · 数据不离开设备</small></div>
+        </div>
+        <p class="sidebar-foot">Qoder × OceanBase seekdb</p>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div><p id="view-eyebrow" class="eyebrow">WORKSPACE / 01</p><h2 id="view-title">今日概览</h2></div>
+        <div class="topbar-actions">
+          <span class="engine-status"><span class="pulse-dot"></span>seekdb 已连接</span>
+          <button class="button button-primary" data-action="open-import">导入笔记<span>＋</span></button>
+        </div>
+      </header>
+
+      <section id="view-overview" class="view active">
+        <div class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow accent">YOUR KNOWLEDGE, ON RECALL</p>
+            <h1>让每一条笔记，<br>都能在需要时<span>找到。</span></h1>
+            <p>把散落的学习资料收进一个可追溯的知识库。用混合检索定位原文，再把重点变成有节奏的复习。</p>
+            <div class="hero-actions">
+              <button class="button button-dark" data-view="search">开始检索<span>↗</span></button>
+              <button class="text-button" data-action="load-demo">载入示例知识库<span>→</span></button>
+            </div>
+          </div>
+          <div class="hero-orbit" aria-hidden="true">
+            <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+            <div class="orbit-center"><strong>知</strong><span>RECALL</span></div>
+            <span class="orbit-label label-one">检索</span><span class="orbit-label label-two">溯源</span><span class="orbit-label label-three">复习</span>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><span class="stat-label">知识条目</span><strong id="stat-notes">0</strong><small>篇完整笔记</small></article>
+          <article class="stat-card"><span class="stat-label">可检索片段</span><strong id="stat-chunks">0</strong><small>由 seekdb 建立索引</small></article>
+          <article class="stat-card"><span class="stat-label">待复习</span><strong id="stat-due">0</strong><small>张卡片已到期</small></article>
+          <article class="stat-card accent-card"><span class="stat-label">平均掌握度</span><strong><span id="stat-mastery">0</span><sup>%</sup></strong><div class="mini-progress"><i id="mastery-bar"></i></div></article>
+        </div>
+
+        <div class="overview-grid">
+          <article class="panel workflow-panel">
+            <div class="panel-heading"><div><p class="eyebrow">LEARNING LOOP</p><h3>从资料到长期记忆</h3></div><span class="tag">完整闭环</span></div>
+            <div class="workflow-steps">
+              <div><span>1</span><section><strong>收进知识库</strong><p>粘贴 Markdown / 文本，自动切分并建立索引。</p></section></div>
+              <div><span>2</span><section><strong>问一个问题</strong><p>向量与全文双路召回，每条结果都能回到出处。</p></section></div>
+              <div><span>3</span><section><strong>转成主动回忆</strong><p>提取核心句生成复习卡，按反馈安排下次复习。</p></section></div>
+            </div>
+          </article>
+          <article class="panel activity-panel">
+            <div class="panel-heading"><div><p class="eyebrow">ACTIVITY</p><h3>最近动态</h3></div><button class="icon-button" data-action="refresh" title="刷新">↻</button></div>
+            <div id="recent-activity" class="activity-list"><div class="empty-compact">载入示例后，这里会记录真实读写。</div></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="view-library" class="view">
+        <div class="section-intro"><div><p class="eyebrow accent">KNOWLEDGE BASE</p><h1>你的知识，不再散落。</h1><p>每篇笔记自动切分为可检索片段，标题、分类与来源始终保留。</p></div><a class="button button-secondary" href="/api/export">导出 Markdown<span>↓</span></a></div>
+        <div id="subject-filters" class="filter-chips"><button class="chip active" data-subject="">全部</button></div>
+        <div id="notes-grid" class="notes-grid"></div>
+        <div id="library-empty" class="empty-state hidden"><span class="empty-symbol">知</span><h3>知识库还是空的</h3><p>导入第一篇笔记，或载入四篇示例快速体验完整流程。</p><div><button class="button button-dark" data-action="open-import">导入笔记</button><button class="button button-secondary" data-action="load-demo">载入示例</button></div></div>
+      </section>
+
+      <section id="view-search" class="view">
+        <div class="section-intro search-intro"><div><p class="eyebrow accent">HYBRID RETRIEVAL</p><h1>一个问题，找到原文依据。</h1><p>同时利用向量相似度与全文词项匹配，兼顾相关表达和精确术语。</p></div></div>
+        <form id="search-form" class="search-box">
+          <span class="search-symbol">⌕</span>
+          <input id="search-input" type="search" maxlength="200" placeholder="例如：怎样对抗遗忘？" aria-label="检索问题" required>
+          <select id="search-subject" aria-label="筛选分类"><option value="">全部分类</option></select>
+          <button class="button button-primary" type="submit">检索<span>↗</span></button>
+        </form>
+        <div class="search-options">
+          <div class="segmented" role="group" aria-label="检索模式">
+            <button type="button" class="active" data-mode="hybrid">混合检索</button><button type="button" data-mode="vector">仅向量</button><button type="button" data-mode="fulltext">仅全文</button>
+          </div>
+          <span>结果可展开核对原始出处</span>
+        </div>
+        <div class="search-layout">
+          <div>
+            <div id="suggestion-area" class="suggestion-area"><p>试试这些真实示例</p><div class="suggestion-chips"><button data-query="怎样对抗遗忘">怎样对抗遗忘</button><button data-query="RRF 融合排序">RRF 融合排序</button><button data-query="如何准备组会汇报">如何准备组会汇报</button></div></div>
+            <div id="search-summary" class="result-summary hidden"></div>
+            <div id="search-results" class="search-results"></div>
+          </div>
+          <aside class="panel trace-panel">
+            <div class="panel-heading"><div><p class="eyebrow">RETRIEVAL TRACE</p><h3>本次检索轨迹</h3></div><span class="tag">可核对</span></div>
+            <div id="search-trace" class="trace-content"><div class="trace-placeholder"><span>⌁</span><p>执行一次检索后，这里会展示 seekdb 实际使用的索引、排序方式与命中 ID。</p></div></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="view-review" class="view">
+        <div class="section-intro"><div><p class="eyebrow accent">ACTIVE RECALL</p><h1>不是重读，而是想起来。</h1><p>先回忆，再核对。每次反馈都会更新掌握度和下次复习日期。</p></div><div class="review-summary"><span><strong id="review-due">0</strong> 待复习</span><span><strong id="review-mastery">0%</strong> 平均掌握</span></div></div>
+        <div class="review-layout">
+          <article id="review-card" class="review-card">
+            <div class="review-card-top"><span id="review-subject" class="tag">等待开始</span><span id="review-progress">ACTIVE RECALL</span></div>
+            <div class="question-mark">?</div>
+            <p class="review-label">先在心里回答</p>
+            <h2 id="review-question">从知识库生成复习卡，开始一次主动回忆。</h2>
+            <div id="review-answer" class="review-answer hidden"><p>参考原文</p><div id="review-answer-text"></div></div>
+            <div id="review-actions" class="review-actions"><button id="reveal-answer" class="button button-light" disabled>显示答案<span>Space</span></button></div>
+            <div id="rating-actions" class="rating-actions hidden"><button data-rating="again"><span>模糊</span><small>1 天后复习</small></button><button data-rating="good"><span>熟悉</span><small>延长复习间隔</small></button><button data-rating="easy"><span>掌握</span><small>更快提升掌握度</small></button></div>
+          </article>
+          <aside class="panel review-queue-panel"><div class="panel-heading"><div><p class="eyebrow">UP NEXT</p><h3>复习队列</h3></div></div><div id="review-queue" class="review-queue"></div></aside>
+        </div>
+      </section>
+
+      <section id="view-technology" class="view">
+        <div class="section-intro"><div><p class="eyebrow accent">BUILT WITH QODER</p><h1>技术不是装饰，<br>每一步都能验证。</h1><p>知溯使用 Qoder 完成需求拆解、编码、调试与验证；seekdb 承担全部笔记、复习卡和操作记录的持久化与检索。</p></div></div>
+        <div class="architecture panel">
+          <div class="architecture-node"><span>01</span><strong>学习资料</strong><small>Markdown / 文本</small></div><i>→</i><div class="architecture-node"><span>02</span><strong>知溯应用</strong><small>切分 · 复习 · 溯源</small></div><i>→</i><div class="architecture-node highlighted"><span>03</span><strong>seekdb</strong><small>HNSW + 全文 + RRF</small></div><i>→</i><div class="architecture-node"><span>04</span><strong>可追溯结果</strong><small>出处 + 检索轨迹</small></div>
+        </div>
+        <div class="tech-grid">
+          <article class="panel"><p class="eyebrow">REAL CAPABILITIES</p><h3>指定技术的实际作用</h3><ul class="check-list"><li><strong>混合检索</strong>128 维 HNSW 向量索引与中文二元全文索引双路召回。</li><li><strong>结构化过滤</strong>按笔记类型、分类和笔记 ID 精准限定数据范围。</li><li><strong>状态持久化</strong>复习间隔、掌握度和操作事件均存入 seekdb。</li><li><strong>离线可复现</strong>本地确定性向量，不下载模型，不调用外部 API。</li></ul></article>
+          <article class="panel"><p class="eyebrow">AUDIT LOG</p><h3>最新技术记录</h3><div id="tech-events" class="tech-events"></div></article>
+        </div>
+        <div class="project-note"><strong>项目交付</strong><span>完整源码 · 一键示例 · 运行说明 · 验证样例 · Qoder 开发记录</span><span class="tag">本地版本</span></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="import-dialog" class="modal">
+    <form id="import-form" method="dialog">
+      <div class="modal-heading"><div><p class="eyebrow accent">NEW KNOWLEDGE</p><h2>收进一篇新笔记</h2></div><button type="button" class="close-button" data-action="close-import" aria-label="关闭">×</button></div>
+      <label class="file-drop">选择 Markdown / 文本文件<input id="note-file" type="file" accept=".md,.txt,text/plain,text/markdown"><span id="file-label">也可以直接在下方粘贴内容，单篇不超过 100 KB</span></label>
+      <div class="form-row"><label>标题<input id="note-title" maxlength="120" required placeholder="例如：遗忘曲线与间隔重复"></label><label>分类<input id="note-subject" maxlength="40" placeholder="例如：学习科学"></label></div>
+      <label>来源<input id="note-source" maxlength="200" placeholder="书名、课程或文件来源（可选）"></label>
+      <label>正文<textarea id="note-content" rows="10" required placeholder="粘贴笔记正文，支持 Markdown 与纯文本…"></textarea></label>
+      <div class="modal-actions"><button type="button" class="button button-secondary" data-action="close-import">取消</button><button type="submit" class="button button-primary">写入并建立索引<span>↗</span></button></div>
+    </form>
+  </dialog>
+
+  <dialog id="note-dialog" class="modal note-modal"><div class="modal-heading"><div><p id="detail-subject" class="eyebrow accent"></p><h2 id="detail-title"></h2></div><button type="button" class="close-button" data-action="close-note" aria-label="关闭">×</button></div><p id="detail-meta" class="detail-meta"></p><div id="detail-content" class="note-content"></div><div class="detail-footer"><button id="delete-note" class="text-button danger">删除笔记</button><button id="generate-cards" class="button button-primary">生成复习卡<span>↗</span></button></div><div id="detail-card-status" class="detail-card-status"></div></dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
