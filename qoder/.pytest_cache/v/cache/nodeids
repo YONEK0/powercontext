@@ -1,0 +1,5 @@
+[
+  "test_app.py::ApplicationFlowTest::test_complete_learning_flow",
+  "test_app.py::TextUtilsTest::test_chunking_and_card_generation",
+  "test_app.py::TextUtilsTest::test_embedding_is_deterministic_and_normalized"
+]
