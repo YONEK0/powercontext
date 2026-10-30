@@ -1,0 +1,24 @@
+{
+  "yaml_parsed": true,
+  "app_mode": "advanced-chat",
+  "version": "0.1.3",
+  "node_count": 5,
+  "edge_count": 4,
+  "node_types": [
+    "start",
+    "http-request",
+    "llm",
+    "http-request",
+    "answer"
+  ],
+  "edges": [
+    "1740000000001 -> 1740000000002",
+    "1740000000002 -> 1740000000003",
+    "1740000000003 -> 1740000000004",
+    "1740000000004 -> answer"
+  ],
+  "refs_sys_query": true,
+  "refs_recall_body": true,
+  "refs_llm_text": true,
+  "answer_matches_llm": true
+}

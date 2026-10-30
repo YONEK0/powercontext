@@ -1,0 +1,7 @@
+# 记忆写入与召回（2026-10-30T17:39:59）
+
+POST /remember '我又把你的充电线藏起来了' -> 200 {"ok": true, "memory_id": "aaf3dbb8-3f18-41a9-81fc-2805f1124ada"}
+POST /remember '上次我说你的代码有 bug，其实是夸你' -> 200 {"ok": true, "memory_id": "06e5cd3d-9108-4bae-b1b1-3c2c0d6cf165"}
+
+POST /recall '充电线 藏起来' -> 200 {"memories": [{"text": "我又把你的充电线藏起来了", "kind": "prank", "score": 0.0164}], "count": 1}
+POST /recall '代码 bug 夸奖' -> 200 {"memories": [{"text": "上次我说你的代码有 bug，其实是夸你", "kind": "joke", "score": 0.0164}], "count": 1}

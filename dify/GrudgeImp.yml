@@ -1,0 +1,276 @@
+app:
+  description: 一个会记仇的 NPC：记住你每次恶作剧，下次见面翻旧账。PowerContext 记忆 + Dify Chatflow。
+  icon: 😈
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: 记仇小妖 GrudgeImp
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.3
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: 哟，是你啊。今天又想对我做什么？我可都记着呢。
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions:
+    - 我把你的咖啡换成酱油了
+    - 我又来啦，还记得我干过什么吗？
+    - 这次我什么坏事都没干
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: http-request
+      id: 1740000000001-source-1740000000002-target
+      source: '1740000000001'
+      sourceHandle: source
+      target: '1740000000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: llm
+      id: 1740000000002-source-1740000000003-target
+      source: '1740000000002'
+      sourceHandle: source
+      target: '1740000000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: http-request
+      id: 1740000000003-source-1740000000004-target
+      source: '1740000000003'
+      sourceHandle: source
+      target: '1740000000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: answer
+      id: 1740000000004-source-answer-target
+      source: '1740000000004'
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables: []
+      height: 52
+      id: '1740000000001'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data:
+          - key: query
+            type: text
+            value: '{{#sys.query#}}'
+          type: json
+        desc: 从 PowerContext 召回旧账
+        headers: ''
+        method: post
+        params: ''
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 召回旧账 (PowerContext)
+        type: http-request
+        url: http://host.docker.internal:19080/recall
+        variables: []
+      height: 110
+      id: '1740000000002'
+      position:
+        x: 360
+        y: 282
+      positionAbsolute:
+        x: 360
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.8
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: 6f2d1a3e-0001-4a11-9b21-000000000001
+          role: system
+          text: '你是「记仇小妖」，一只住在旧键盘缝里的小妖怪。玩家每次来找你，你都会翻出他以前干过的坏事。
+
+
+            【旧账】（来自 PowerContext 的记忆检索，JSON）：
+
+            {{#1740000000002.body#}}
+
+
+            回答规则：
+
+            1. 先用一句话回应玩家这次说的话；
+
+            2. 如果【旧账】里有相关的记录，就阴阳怪气地翻出来（引用具体事件）；没有相关的就别硬编；
+
+            3. 语气俏皮、欠揍但不刻薄，中文，不超过 120 字；
+
+            4. 绝对不要编造【旧账】里没有的旧事，也不要提“数据库”“检索”这类实现细节。'
+        - id: 6f2d1a3e-0002-4a11-9b21-000000000002
+          role: user
+          text: '{{#sys.query#}}'
+        selected: false
+        title: 小妖翻旧账
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1740000000003'
+      position:
+        x: 680
+        y: 282
+      positionAbsolute:
+        x: 680
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data:
+          - key: text
+            type: text
+            value: '{{#sys.query#}}'
+          - key: kind
+            type: text
+            value: prank
+          type: json
+        desc: 把这句记到 PowerContext
+        headers: ''
+        method: post
+        params: ''
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 记一笔 (PowerContext)
+        type: http-request
+        url: http://host.docker.internal:19080/remember
+        variables: []
+      height: 110
+      id: '1740000000004'
+      position:
+        x: 1000
+        y: 282
+      positionAbsolute:
+        x: 1000
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1740000000003.text#}}'
+        desc: ''
+        selected: false
+        title: 直接回复
+        type: answer
+        variables: []
+      height: 103
+      id: answer
+      position:
+        x: 1320
+        y: 282
+      positionAbsolute:
+        x: 1320
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    viewport:
+      x: 71
+      y: -19
+      zoom: 0.7
