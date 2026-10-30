@@ -1,6 +1,0 @@
-[
-  {"sku": "SKU-100", "name": "Bolt M8", "warehouse": "north", "on_hand": 40, "reserved": 5},
-  {"sku": "SKU-200", "name": "Nut M8", "warehouse": "north", "on_hand": 12, "reserved": 12},
-  {"sku": "SKU-300", "name": "Washer M8", "warehouse": "south", "on_hand": 7, "reserved": 1},
-  {"sku": "SKU-400", "name": "Bolt M12", "warehouse": "south", "on_hand": 3, "reserved": 1}
-]

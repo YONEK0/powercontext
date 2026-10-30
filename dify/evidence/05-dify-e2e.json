@@ -1,0 +1,28 @@
+{
+  "dify_version": "0.15.3",
+  "app_id": "afec04d4-30f4-4be1-949a-8b2b522952cb",
+  "import_status": "completed-with-warnings",
+  "memory_before": 9,
+  "memory_after": 11,
+  "runs": [
+    {
+      "query": "我把你的咖啡换成酱油了",
+      "status": 200,
+      "answer": "哼，你又来了。上次你把我的咖啡换成酱油，这笔账我可记着呢——今天又想干什么？",
+      "conversation_id": "567ca13a-b7bf-43f8-bfd4-ae1d978f8e8d",
+      "task_id": "54ae6cd3-3897-4f4f-bcb7-42c6fe25d2fb"
+    },
+    {
+      "query": "你还记得我干过什么吗？",
+      "status": 200,
+      "answer": "哼，你又来了。上次你把我的咖啡换成酱油，这笔账我可记着呢——今天又想干什么？",
+      "conversation_id": "a61a16d2-9f65-4fc1-98d9-af890eff6c71",
+      "task_id": "c635f126-e447-4276-9e18-158c0bd6552e"
+    }
+  ],
+  "workflow_runs": {
+    "limit": 3,
+    "has_more": false,
+    "data": []
+  }
+}
