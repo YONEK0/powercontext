@@ -127,15 +127,14 @@ workflow:
           config: null
           type: no-auth
         body:
-          data:
-          - key: query
-            type: text
-            value: '{{#sys.query#}}'
-          type: json
+          data: []
+          type: none
         desc: 从 PowerContext 召回旧账
         headers: ''
-        method: post
-        params: ''
+        method: get
+        params: 'query: {{#sys.query#}}
+
+          limit: 5'
         selected: false
         timeout:
           max_connect_timeout: 0
@@ -168,7 +167,7 @@ workflow:
             temperature: 0.8
           mode: chat
           name: gpt-4o-mini
-          provider: langgenius/openai/openai
+          provider: openai
         prompt_template:
         - id: 6f2d1a3e-0001-4a11-9b21-000000000001
           role: system
@@ -216,18 +215,14 @@ workflow:
           config: null
           type: no-auth
         body:
-          data:
-          - key: text
-            type: text
-            value: '{{#sys.query#}}'
-          - key: kind
-            type: text
-            value: prank
-          type: json
+          data: []
+          type: none
         desc: 把这句记到 PowerContext
         headers: ''
-        method: post
-        params: ''
+        method: get
+        params: 'text: {{#sys.query#}}
+
+          kind: prank'
         selected: false
         timeout:
           max_connect_timeout: 0

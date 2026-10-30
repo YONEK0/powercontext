@@ -112,9 +112,28 @@ dify/
 └── evidence/                # 实测记录（桥接、PowerContext 原始返回、DSL 结构校验）
 ```
 
-## 7. 已知限制
+## 7. 实测记录（Dify 0.15.3，本机自建）
 
-1. **DSL 未在本机导入验证**：开发环境没有 Docker / Dify 实例，`GrudgeImp.yml` 是按 Dify `0.1.3` advanced-chat 结构编写的（节点、边、变量引用都做了静态校验，见 `evidence/04-dsl-structure.json`）。若你的 Dify 版本对字段有差异，导入时按提示调整两个 HTTP 节点的 URL 即可。
-2. **模型需自备**：DSL 里写的是 `langgenius/openai/openai` + `gpt-4o-mini`，导入后请换成你环境里可用的模型。
+为了确认 DSL 真的能用，本地起了一套 Dify 0.15.3（PostgreSQL 16 + Redis 7 + 一个 OpenAI 兼容的假模型服务，用于免 key 验证流程）：
+
+| 步骤 | 结果 |
+|---|---|
+| 导入 `GrudgeImp.yml` | `completed-with-warnings`，DSL 0.1.3 → 0.1.5，5 节点 4 边全部保留（`evidence/05-dify-e2e.json`） |
+| 发布 + 创建 API Key | 成功 |
+| 调用 `/v1/chat-messages` 两轮 | 均 `200`，返回小妖回复 |
+| PowerContext 记忆 | 调用前 9 条 → 调用后 11 条（每轮写入一条） |
+| 节点执行 | 桥接日志可见 `GET /recall` 与 `GET /remember` 均 `200`（`evidence/06-bridge-node-requests.txt`） |
+
+两处实测踩到的坑，已在 DSL 里修正：
+
+- 查询参数必须写成 **`key: value`（冒号分隔、每行一个）**，Dify 会 `urlencode`；写成 `key=value` 会被整体当成参数名（早先版本就是这么错的）。
+- 模型 provider 在 0.15 里是 **`openai`**，不是插件式的 `langgenius/openai/openai`。
+
+> 实测用的是假模型（固定回复），所以小妖的「回复内容」不具参考价值；被验证的是链路：Dify 编排 → HTTP 节点 → PowerContext 读写。换成真实模型后回复才会随旧账变化。
+
+## 8. 已知限制
+
+1. **Dify 版本差异**：在 0.15.3 上实测通过；1.x 导入会把 DSL 升到 0.1.5，字段基本兼容，但 1.x 的模型是插件机制，provider 名可能变回 `langgenius/openai/openai` 一类，导入后按提示重选模型即可。
+2. **模型需自备**：DSL 里写的是 `openai` + `gpt-4o-mini`，导入后请换成你环境里可用的模型。
 3. **记忆召回是文本通道**：没有配置向量模型时，PowerContext 用全文匹配召回；语义相近但用词不同的旧账可能召不回，可以给 PowerContext 配 embedding 提升。
 4. 桥接服务只监听内网，没有鉴权；生产使用请加 token（`PC_TOKEN` 已支持）。
