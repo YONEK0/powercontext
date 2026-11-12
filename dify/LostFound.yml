@@ -1,5 +1,5 @@
 app:
-  description: 把你会忘的事登记进档案，需要时按关键词翻出来。seekdb 记忆 + Dify Chatflow。
+  description: 把你会忘的事登记进档案，需要时按关键词翻出来。PowerContext 记忆 + Dify 编排，无需模型、无需登录。
   icon: 🗂️
   icon_background: '#FFEAD5'
   mode: advanced-chat
@@ -98,20 +98,20 @@ workflow:
     - data:
         isInIteration: false
         sourceType: http-request
-        targetType: llm
-      id: recall-llm1
+        targetType: code
+      id: recall-code1
       source: recall
       sourceHandle: source
-      target: llm1
+      target: code1
       targetHandle: target
       type: custom
       zIndex: 0
     - data:
         isInIteration: false
-        sourceType: llm
+        sourceType: code
         targetType: answer
-      id: llm1-answer1
-      source: llm1
+      id: code1-answer1
+      source: code1
       sourceHandle: source
       target: answer1
       targetHandle: target
@@ -183,14 +183,21 @@ workflow:
           conditions:
           - comparison_operator: contains
             id: c-s1
-            value: 存
+            value: 存：
             varType: string
             variable_selector:
             - sys
             - query
           - comparison_operator: contains
             id: c-s2
-            value: 记
+            value: '存:'
+            varType: string
+            variable_selector:
+            - sys
+            - query
+          - comparison_operator: contains
+            id: c-s3
+            value: 登记
             varType: string
             variable_selector:
             - sys
@@ -250,51 +257,7 @@ workflow:
       type: custom
       width: 244
     - data:
-        context:
-          enabled: false
-          variable_selector: []
-        desc: ''
-        model:
-          completion_params:
-            temperature: 0.3
-          mode: chat
-          name: gpt-4o-mini
-          provider: openai
-        prompt_template:
-        - id: 261ba92c-07d5-4bdf-9fec-240335d5024f
-          role: system
-          text: '你是「忘事管理局」的档案管理员。用户来查询他之前登记过的事情。
-
-            【档案】(JSON)：
-
-            {{#recall.body#}}
-
-
-            规则：1) 只根据档案回答，不要编造；2) 档案为空就说“这条没登记过”；3) 引用登记时的原话，并补一句冷幽默；4) 中文，不超过 100 字。'
-        - id: 40853e40-9c4a-4d56-902d-d6c8f7d97ce6
-          role: user
-          text: '{{#sys.query#}}'
-        selected: false
-        title: 档案管理员回答
-        type: llm
-        variables: []
-        vision:
-          enabled: false
-      height: 98
-      id: llm1
-      position:
-        x: 940
-        y: 300
-      positionAbsolute:
-        x: 940
-        y: 300
-      selected: false
-      sourcePosition: right
-      targetPosition: left
-      type: custom
-      width: 244
-    - data:
-        answer: '{{#llm1.text#}}'
+        answer: '{{#code1.answer#}}'
         desc: ''
         selected: false
         title: 回复查询
@@ -395,6 +358,38 @@ workflow:
       targetPosition: left
       type: custom
       width: 243
+    - data:
+        type: code
+        title: 整理档案回答
+        desc: ''
+        selected: false
+        code_language: python3
+        code: "import json\n\ndef main(recall_body: str) -> dict:\n    try:\n        data = json.loads(recall_body) if recall_body else {}\n    except Exception:\n        return {\"answer\": \"档案柜卡住了，读不出来，稍后再试。\"\
+          }\n    mems = data.get(\"memories\") or []\n    seen, lines = set(), []\n    for m in mems:\n        t = (m.get(\"text\") or \"\").strip()\n        for p in (\"存：\", \"存:\", \"记：\", \"记:\"):\n\
+          \            if t.startswith(p):\n                t = t[len(p):].strip()\n        if t and t not in seen:\n            seen.add(t)\n            lines.append(\"· \" + t)\n    if not lines:\n  \
+          \      return {\"answer\": \"查无此档。你确定当初真的登记过？要不要用「存：」再记一次？\"}\n    body = \"\\n\".join(lines[:5])\n    return {\"answer\": f\"档案里记着：\\n{body}\\n记性这东西，交给我就对了。\"}\n"
+        variables:
+        - variable: recall_body
+          value_selector:
+          - recall
+          - body
+        outputs:
+          answer:
+            type: string
+            children: null
+      height: 120
+      id: code1
+      position:
+        x: 940
+        y: 300
+      positionAbsolute:
+        x: 940
+        y: 300
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
     viewport:
       x: 71
       y: -19
