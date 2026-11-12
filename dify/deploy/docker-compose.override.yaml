@@ -1,0 +1,29 @@
+# 放到 Dify 官方 docker/docker-compose.yaml 同级目录，然后：
+#   docker compose -f docker-compose.yaml -f docker-compose.override.yaml up -d
+#
+# 作用：让 Dify 的 api / worker 容器能用 host.docker.internal 访问宿主机上的
+# 记忆桥（19080）与 PowerContext（18080）。
+# - Docker Desktop（macOS / Windows）：host.docker.internal 默认可用，本文件只是显式声明；
+# - Linux：必须加 host-gateway，否则容器内 host.docker.internal 无法解析，
+#   这正是评审反馈里“容器内 loopback 指向自身、样例主路径不可达”的原因。
+services:
+  api:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  worker:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # 可选：把记忆桥也放进 compose 网络，彻底不依赖 host-gateway。
+  # 启用后把 GrudgeImp.yml 里两个节点的 URL 改成 http://memory-bridge:19080/recall 与 /remember。
+  # memory-bridge:
+  #   build:
+  #     context: ../backend
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     PC_BASE_URL: http://host.docker.internal:18080
+  #     PORT: "19080"
+  #   extra_hosts:
+  #     - "host.docker.internal:host-gateway"
+  #   ports:
+  #     - "19080:19080"

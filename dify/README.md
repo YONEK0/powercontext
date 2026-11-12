@@ -79,14 +79,42 @@ curl -s http://127.0.0.1:19080/health
 
 1. Dify → 工作室 → 创建空白应用 → **导入 DSL 文件** → 选择 `GrudgeImp.yml`；
 2. 打开应用 → 右上角「模型」→ 选择你已配置的对话模型（默认 `gpt-4o-mini`，可换成任意可用模型）；
-3. 检查两个 HTTP 节点的地址（Dify 在 Docker 里跑时用 `host.docker.internal:19080`；Dify 在宿主机直接跑时改成 `127.0.0.1:19080`）：
+3. 检查两个 HTTP 节点的地址（**默认就是 Docker 场景的正确值**）：
    - `召回旧账` → `http://host.docker.internal:19080/recall`
    - `记一笔` → `http://host.docker.internal:19080/remember`
+
+   > ⚠️ **Linux 上必须加 host-gateway**：Docker 容器里的 `127.0.0.1` 指向容器自己，
+   > 访问不到宿主机上的桥接服务。把本仓库的 `deploy/docker-compose.override.yaml`
+   > 放到 Dify 的 `docker/` 目录，用
+   > `docker compose -f docker-compose.yaml -f docker-compose.override.yaml up -d` 启动。
+   > macOS / Windows 的 Docker Desktop 默认已有 `host.docker.internal`，加不加都行。
+   > 只有当你把 Dify 直接跑在宿主机（不用容器）时，才把地址改成 `127.0.0.1:19080`。
 4. 发布 → 进入应用对话页，开始玩。
 
 ### 4.4 验证
 
 按 [`docs/验证样例.md`](docs/验证样例.md) 走一遍：说一件坏事 → 新开会话问「还记得吗」→ 小妖翻旧账；再看 PowerContext 里条目数变化。
+
+## 4.5 网络拓扑与端到端验证（对应评审反馈）
+
+```
+Dify 容器(api/worker) ──host.docker.internal:19080──▶ 宿主机: 记忆桥 ──127.0.0.1:18080──▶ PowerContext
+```
+
+- 记忆桥和 PowerContext 都跑在**宿主机**，所以桥接用自己的 `127.0.0.1:18080` 访问 PowerContext 是正确的；
+  唯一跨容器边界的地址是 Dify 侧看到的 `host.docker.internal:19080`。
+- Linux 缺 host-gateway 时这条链路不通（容器内 loopback 指向自身），用 `deploy/docker-compose.override.yaml` 修复。
+- 端到端自检（宿主机执行，需已发布应用并创建 API Key）：
+
+```bash
+DIFY_API_KEY=app-xxxx bash deploy/verify_e2e.sh
+```
+
+脚本会打两轮对话（说坏事 → 问“还记得吗”），打印 Dify 回答，并对比 PowerContext 记忆条数，末行输出
+`✅ 主路径通过` 或 `❌ 记忆没有增长`；日志写入 `evidence/07-dify-e2e-*.log`，可直接作为评审证据。
+
+本仓库已提交的实测记录：`evidence/05-dify-e2e.json`（Dify 0.15.3，两轮均 200，记忆 9→11）与
+`evidence/06-bridge-node-requests.txt`（`GET /recall`、`GET /remember` 均 200）。
 
 ## 5. 配置项
 
