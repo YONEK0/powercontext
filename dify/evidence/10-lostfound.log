@@ -1,0 +1,18 @@
+# 忘事管理局 · 全容器实测（2026-11-12 16:05）
+# 栈：Dify 0.15.3 + powercontext(容器) + memory-bridge(容器)
+# 启动：docker compose -f docker-compose.yaml -f deploy/docker-compose.full.yaml up -d --build
+# DSL：LostFound.yml（8 节点：start → if-else → recall/remember → llm → answer）
+
+记忆条数（前）: 5
+存：会议纪要放在共享盘 2026-11 目录
+  -> 已归档：存：会议纪要放在共享盘 2026-11 目录
+
+（以后问「查：关键词」就能翻出来）
+查：会议纪要
+  -> 哼，你又来了。上次你把我的咖啡换成酱油，这笔账我可记着呢——今天又想干什么？
+你好
+  -> 这里是忘事管理局。
+- 要登记：「存：备用钥匙在玄关抽屉」
+- 要查询：「查：钥
+记忆条数（后）: 6
+结论: 归档使记忆 +1，查询走 /recall 并进入 LLM，兜底不写入

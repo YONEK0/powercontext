@@ -1,0 +1,401 @@
+app:
+  description: 把你会忘的事登记进档案，需要时按关键词翻出来。seekdb 记忆 + Dify Chatflow。
+  icon: 🗂️
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: 忘事管理局 Lost & Found Bureau
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.3
+workflow:
+  conversation_variables: []
+  environment_variables:
+  - id: 90786281-9ede-44ae-95ca-f8d09b234703
+    name: MEMORY_BRIDGE_URL
+    value: http://memory-bridge:19080
+    value_type: string
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: 欢迎来到忘事管理局。要登记就说「存：」，要查就问「查：」。
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions:
+    - 存：备用钥匙在玄关第二个抽屉
+    - 查：钥匙在哪
+    - 你好
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: if-else
+      id: 1740000000001-source-ifelse1-target
+      source: '1740000000001'
+      sourceHandle: source
+      target: ifelse1
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: http-request
+      id: ifelse1-recall
+      source: ifelse1
+      sourceHandle: recall
+      target: recall
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: http-request
+      id: ifelse1-store
+      source: ifelse1
+      sourceHandle: store
+      target: remember
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: llm
+      id: recall-llm1
+      source: recall
+      sourceHandle: source
+      target: llm1
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: answer
+      id: llm1-answer1
+      source: llm1
+      sourceHandle: source
+      target: answer1
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: answer
+      id: remember-answer2
+      source: remember
+      sourceHandle: source
+      target: answer2
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: answer
+      id: ifelse1-false-guide
+      source: ifelse1
+      sourceHandle: 'false'
+      target: answer3
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables: []
+      height: 52
+      id: '1740000000001'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    - data:
+        cases:
+        - case_id: recall
+          conditions:
+          - comparison_operator: contains
+            id: c-r1
+            value: 查
+            varType: string
+            variable_selector:
+            - sys
+            - query
+          - comparison_operator: contains
+            id: c-r2
+            value: 找
+            varType: string
+            variable_selector:
+            - sys
+            - query
+          id: recall
+          logical_operator: or
+        - case_id: store
+          conditions:
+          - comparison_operator: contains
+            id: c-s1
+            value: 存
+            varType: string
+            variable_selector:
+            - sys
+            - query
+          - comparison_operator: contains
+            id: c-s2
+            value: 记
+            varType: string
+            variable_selector:
+            - sys
+            - query
+          id: store
+          logical_operator: or
+        desc: ''
+        selected: false
+        title: 查档案 / 存档案
+        type: if-else
+      height: 124
+      id: ifelse1
+      position:
+        x: 340
+        y: 300
+      positionAbsolute:
+        x: 340
+        y: 300
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 240
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: []
+          type: none
+        desc: ''
+        headers: ''
+        method: get
+        params: 'query: {{#sys.query#}}
+
+          limit: 5'
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 查档案 (PowerContext)
+        type: http-request
+        url: '{{#env.MEMORY_BRIDGE_URL#}}/recall'
+        variables: []
+      height: 110
+      id: recall
+      position:
+        x: 640
+        y: 300
+      positionAbsolute:
+        x: 640
+        y: 300
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.3
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: 261ba92c-07d5-4bdf-9fec-240335d5024f
+          role: system
+          text: '你是「忘事管理局」的档案管理员。用户来查询他之前登记过的事情。
+
+            【档案】(JSON)：
+
+            {{#recall.body#}}
+
+
+            规则：1) 只根据档案回答，不要编造；2) 档案为空就说“这条没登记过”；3) 引用登记时的原话，并补一句冷幽默；4) 中文，不超过 100 字。'
+        - id: 40853e40-9c4a-4d56-902d-d6c8f7d97ce6
+          role: user
+          text: '{{#sys.query#}}'
+        selected: false
+        title: 档案管理员回答
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: llm1
+      position:
+        x: 940
+        y: 300
+      positionAbsolute:
+        x: 940
+        y: 300
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#llm1.text#}}'
+        desc: ''
+        selected: false
+        title: 回复查询
+        type: answer
+        variables: []
+      height: 103
+      id: answer1
+      position:
+        x: 1240
+        y: 300
+      positionAbsolute:
+        x: 1240
+        y: 300
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: []
+          type: none
+        desc: ''
+        headers: ''
+        method: get
+        params: 'text: {{#sys.query#}}
+
+          kind: memo'
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 存档 (PowerContext)
+        type: http-request
+        url: '{{#env.MEMORY_BRIDGE_URL#}}/remember'
+        variables: []
+      height: 110
+      id: remember
+      position:
+        x: 640
+        y: 300
+      positionAbsolute:
+        x: 640
+        y: 300
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '已归档：{{#sys.query#}}
+
+
+          （以后问「查：关键词」就能翻出来）'
+        desc: ''
+        selected: false
+        title: 回复归档
+        type: answer
+        variables: []
+      height: 103
+      id: answer2
+      position:
+        x: 940
+        y: 480
+      positionAbsolute:
+        x: 940
+        y: 480
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    - data:
+        answer: '这里是忘事管理局。
+
+          - 要登记：「存：备用钥匙在玄关抽屉」
+
+          - 要查询：「查：钥匙」'
+        desc: ''
+        selected: false
+        title: 使用说明
+        type: answer
+        variables: []
+      height: 103
+      id: answer3
+      position:
+        x: 640
+        y: 620
+      positionAbsolute:
+        x: 640
+        y: 620
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 243
+    viewport:
+      x: 71
+      y: -19
+      zoom: 0.7

@@ -1,9 +1,8 @@
-# 记仇小妖 GrudgeImp
+# 忘事管理局 · Lost & Found Bureau
 
-> Dify × OceanBase 大赛 · Dify 赛道（`dify/`）
-> 一个会记仇的 NPC：你说过的每件坏事它都记着，下次见面翻旧账。
+> Dify 赛道（Just for Fun）｜`dify/`｜分支 `2026-competition-ecosystem`
 
-## 0. 评审 5 分钟复现（全容器，推荐）
+## 0. 一键跑起来（推荐，全容器）
 
 ```bash
 cd <dify源码>/docker
@@ -11,203 +10,78 @@ docker compose -f docker-compose.yaml \
   -f <本仓库>/dify/deploy/docker-compose.full.yaml up -d --build
 ```
 
-这一步同时起：Dify 0.15.3 全栈 + **PowerContext** + **记忆桥**（后两个由本仓库的 Dockerfile 构建）。
+会同时起：Dify 0.15.3 全栈 + **PowerContext**（记忆存储）+ **记忆桥**（`memory-bridge`，把 PowerContext 包装成两个 HTTP 接口）。
 
-1. 打开 Dify（http://localhost）→ 工作室 → 导入 `dify/GrudgeImp.yml`；
-2. 应用设置里选一个可用模型（默认 `openai / gpt-4o-mini`，可换）；
+1. Dify → 工作室 → 导入 `dify/LostFound.yml`；
+2. 应用设置里选一个对话模型（默认 `openai / gpt-4o-mini`）；
 3. 发布 → 创建 API Key；
-4. 宿主验证：
+4. 验证：
 
 ```bash
 DIFY_BASE=http://127.0.0.1 DIFY_API_KEY=app-xxxx bash deploy/verify_e2e.sh
 # 末行应为：✅ 主路径通过
 ```
 
-DSL 里两个 HTTP 节点用**环境变量** `MEMORY_BRIDGE_URL`（默认 `http://memory-bridge:19080`），
-换成宿主桥模式时只需把这个值改成 `http://host.docker.internal:19080`。
-
-> 只想用宿主上的 PowerContext/桥？用 `deploy/docker-compose.override.yaml`（给 api/worker/**ssrf_proxy** 加 host 映射），
-> 详见 §4.5、§4.6。
+> DSL 里两个 HTTP 节点用环境变量 `MEMORY_BRIDGE_URL`（默认 `http://memory-bridge:19080`）。
+> 想把记忆桥跑在宿主机，把这个值改成 `http://host.docker.internal:19080`，并用
+> `deploy/docker-compose.override.yaml` 给 api / worker / **ssrf_proxy** 加 host 映射。
 
 ## 1. 作品是什么
 
-「记仇小妖」是一只住在旧键盘缝里的小妖怪。你每对它做一件坏事（把咖啡换成酱油、藏起充电线、说它代码有 bug），它都会记在小本本上；下次你再来，它会把旧账翻出来，阴阳怪气地还给你。
+一个**帮人记事**的小工具，但被做成了官僚机构的语气：
 
-**玩法**：打开 Dify 应用，直接聊天。
-- 说一件新的坏事 → 小妖吐槽，并**记住**
-- 换一个新会话问「你还记得我干过什么吗」→ 小妖**翻出旧账**（跨会话记忆）
-- 说无关的话 → 小妖正常接话，**不硬编**旧事
+- **存**：`存：备用钥匙在玄关第二个抽屉` → 归档，返回回执；
+- **查**：`查：钥匙在哪` → 从档案里检索，管理员用欠揍的语气告诉你；
+- 其他输入 → 使用说明。
 
-好玩点在于：它的「记仇」是真的存在数据库里的，不是靠长上下文硬撑——新开会话、重启服务，它都记得。
+好玩点在于：它真的记得（PowerContext 持久化），换会话、重启都还在；而查询走的不是"把整段对话塞给模型"，是**先检索再回答**。
 
 ## 2. 技术分工
 
-| 技术 | 在本作品里的作用 | 落点 |
+| 技术 | 作用 | 落点 |
 |---|---|---|
-| **Dify**（必选） | Chatflow 编排全部流程：接收输入 → HTTP 召回记忆 → LLM 生成回复 → HTTP 写入记忆 → 输出 | `GrudgeImp.yml` |
-| **PowerContext**（二选一） | 记忆的持久化存储与语义召回：每次对话写入一条原子记忆，下次按 query 检索出来注入提示词 | `backend/memory_bridge.py` 调用 PowerContext HTTP API |
-| seekdb | 本作品**未使用**（赛题要求 seekdb / PowerContext 至少一种） | — |
+| **Dify**（必选） | Chatflow 编排：关键词分流（if-else）→ 检索/归档 → LLM → 回复 | `LostFound.yml`（8 节点） |
+| **PowerContext**（二选一） | 记忆的持久化与检索：每条登记写一条 memory，查询时按关键词召回 | `backend/memory_bridge.py` 调 PowerContext HTTP API |
 
-为什么加一个 bridge：Dify 的 HTTP Request 节点不处理鉴权、Scope 创建和 JSON 整形，桥接层把 PowerContext 的三个动作（建 Scope / 写记忆 / 搜记忆）包成 `/remember`、`/recall` 两个傻瓜接口，也让 DSL 保持 5 个节点、易读易改。
-
-```
-用户 ──▶ Dify Chatflow ──▶ HTTP POST /recall ──▶ bridge ──▶ PowerContext /v1/memory/search
-                │                                                   │
-                ▼                                                   │
-             LLM 生成回复（提示词里带旧账）                          │
-                │                                                   │
-                ▼                                                   ▼
-           HTTP POST /remember ──▶ bridge ──▶ PowerContext /v1/memory/remember
-                │
-                ▼
-              Answer
-```
-
-## 3. 版本与环境
-
-| 组件 | 版本 | 说明 |
-|---|---|---|
-| Dify | 1.x（DSL `version: 0.1.3`，`mode: advanced-chat`） | 社区版即可，需在「设置 → 模型供应商」里配好一个对话模型 |
-| PowerContext | 1.4.1（Server + HTTP API） | `pip install "powercontext[server,client]==1.4.1"`，默认监听 `127.0.0.1:18080` |
-| Python | ≥ 3.11 | 桥接服务 |
-| 桥接依赖 | `fastapi`、`uvicorn` | 见 `backend/requirements.txt` |
-| 模型 | 任意 OpenAI 兼容对话模型 | DSL 里默认 `langgenius/openai/openai` + `gpt-4o-mini`，导入后可一键切换 |
-
-> 记忆召回走 PowerContext 的文本通道，**不需要** embedding / rerank 服务；想启用向量通道可在 PowerContext 侧配置，本作品不依赖。
-
-## 4. 运行步骤
-
-### 4.1 启动 PowerContext（记忆服务）
-
-```bash
-pip install "powercontext[server,client]==1.4.1"
-powercontext server run --host 127.0.0.1 --port 18080
-# 另开终端验证
-curl -s http://127.0.0.1:18080/health/live      # {"status":"ok"}
-```
-
-### 4.2 启动记忆桥
-
-```bash
-cd backend
-pip install -r requirements.txt
-PC_BASE_URL=http://127.0.0.1:18080 python memory_bridge.py     # 监听 0.0.0.0:19080
-```
-
-首次启动会自动创建（或复用）一个名为「记仇小妖 · GrudgeImp」的 Scope，并把 `scope_id` 缓存到 `.scope.json`。
-
-```bash
-curl -s http://127.0.0.1:19080/health
-# {"ok":true,"pc_base_url":"http://127.0.0.1:18080","scope_id":"scp_...","memories":0}
-```
-
-### 4.3 导入 DSL
-
-1. Dify → 工作室 → 创建空白应用 → **导入 DSL 文件** → 选择 `GrudgeImp.yml`；
-2. 打开应用 → 右上角「模型」→ 选择你已配置的对话模型（默认 `gpt-4o-mini`，可换成任意可用模型）；
-3. 检查两个 HTTP 节点的地址（**默认就是 Docker 场景的正确值**）：
-   - `召回旧账` → `http://host.docker.internal:19080/recall`
-   - `记一笔` → `http://host.docker.internal:19080/remember`
-
-   > ⚠️ **Linux 上必须加 host-gateway**：Docker 容器里的 `127.0.0.1` 指向容器自己，
-   > 访问不到宿主机上的桥接服务。把本仓库的 `deploy/docker-compose.override.yaml`
-   > 放到 Dify 的 `docker/` 目录，用
-   > `docker compose -f docker-compose.yaml -f docker-compose.override.yaml up -d` 启动。
-   > macOS / Windows 的 Docker Desktop 默认已有 `host.docker.internal`，加不加都行。
-   > 只有当你把 Dify 直接跑在宿主机（不用容器）时，才把地址改成 `127.0.0.1:19080`。
-4. 发布 → 进入应用对话页，开始玩。
-
-### 4.4 验证
-
-按 [`docs/验证样例.md`](docs/验证样例.md) 走一遍：说一件坏事 → 新开会话问「还记得吗」→ 小妖翻旧账；再看 PowerContext 里条目数变化。
-
-## 4.5 网络拓扑与端到端验证（对应评审反馈）
+流程：
 
 ```
-Dify 容器(api/worker) ──host.docker.internal:19080──▶ 宿主机: 记忆桥 ──127.0.0.1:18080──▶ PowerContext
+用户输入
+  └─ if-else
+      ├─ 含「查/找」 → HTTP /recall → LLM（带档案）→ 回答
+      ├─ 含「存/记」 → HTTP /remember → 回执
+      └─ 其他      → 使用说明
 ```
 
-- 记忆桥和 PowerContext 都跑在**宿主机**，所以桥接用自己的 `127.0.0.1:18080` 访问 PowerContext 是正确的；
-  唯一跨容器边界的地址是 Dify 侧看到的 `host.docker.internal:19080`。
-- Linux 缺 host-gateway 时这条链路不通（容器内 loopback 指向自身），用 `deploy/docker-compose.override.yaml` 修复。
-- 端到端自检（宿主机执行，需已发布应用并创建 API Key）：
+## 3. 版本与依赖
 
-```bash
-DIFY_API_KEY=app-xxxx bash deploy/verify_e2e.sh
-```
-
-脚本会打两轮对话（说坏事 → 问“还记得吗”），打印 Dify 回答，并对比 PowerContext 记忆条数，末行输出
-`✅ 主路径通过` 或 `❌ 记忆没有增长`；日志写入 `evidence/07-dify-e2e-*.log`，可直接作为评审证据。
-
-本仓库已提交的实测记录：`evidence/05-dify-e2e.json`（Dify 0.15.3，两轮均 200，记忆 9→11）与
-`evidence/06-bridge-node-requests.txt`（`GET /recall`、`GET /remember` 均 200）。
-
-## 4.6 Docker 实跑记录（2026-11-12，已闭环）
-
-在 macOS 上用 Lima/colima 起 Docker（4C/8G），跑官方 `docker-compose.yaml` + 本仓库的
-`deploy/docker-compose.override.yaml`，Dify **0.15.3** 全栈（`api/worker/web/ssrf_proxy/nginx/db/redis/weaviate`）启动成功。
-
-| 检查 | 结果 |
+| 组件 | 版本 |
 |---|---|
-| DSL 导入 | `completed-with-warnings`，5 节点 4 边 |
-| 发布 + API Key | 成功 |
-| `verify_e2e.sh` 两轮对话 | Dify 均返回 200 |
-| PowerContext 记忆 | **11 → 13**（每轮写一条） |
-| HTTP 节点 | `GET /recall`、`GET /remember` 在容器侧均 `200` |
+| Dify | 0.15.3（DSL `0.1.3`，`advanced-chat`；1.x 导入会升级到 0.1.5） |
+| PowerContext | 1.4.1（容器内运行，端口 18080） |
+| 记忆桥 | FastAPI + uvicorn（`backend/`，端口 19080） |
+| 模型 | 任意 OpenAI 兼容对话模型（默认 `gpt-4o-mini`，导入后可在应用里更换） |
 
-**关键坑（也是评审环境失败的真正原因）**：Dify 的 HTTP Request 节点默认经 **`ssrf_proxy`（squid）** 出网，
-只给 `api`/`worker` 加 `host.docker.internal` 映射还不够——**`ssrf_proxy` 也必须加同样的映射**，
-否则容器侧会收到 `404`，表现就是「DSL 能跑、但记忆不增长」。`deploy/docker-compose.override.yaml` 已包含该服务。
+## 4. 验证
 
-证据：`evidence/07-dify-e2e-docker.log`（记忆 11→13、末行 ✅）、
-`evidence/08-dify-container-requests.log`（容器侧 recall/remember 200）。
+见 [`docs/验证样例.md`](docs/验证样例.md)：三条用例（存 / 查 / 兜底）+ PowerContext 记忆条数核对。
 
-## 5. 配置项
+实测记录：[`evidence/10-lostfound.log`](evidence/10-lostfound.log)（Dify 0.15.3 全容器，导入 → 发布 → 三条用例 200，记忆 2→3）。
 
-| 变量 | 默认 | 说明 |
-|---|---|---|
-| `PC_BASE_URL` | `http://127.0.0.1:18080` | PowerContext 地址 |
-| `PC_TOKEN` | 空 | PowerContext 开启鉴权时填写 |
-| `PC_SCOPE_ID` | 空 | 指定已有 Scope；不填则自动查找/创建 |
-| `PC_SCOPE_TITLE` | `记仇小妖 · GrudgeImp` | 自动创建时的 Scope 名称 |
-| `PORT` | `19080` | 桥接服务端口 |
-
-## 6. 目录
+## 5. 目录
 
 ```
 dify/
-├── GrudgeImp.yml            # Dify Chatflow DSL（5 节点）
-├── README.md                # 本文件（运行说明）
-├── docs/验证样例.md          # 可执行的验证样例
-├── backend/
-│   ├── memory_bridge.py     # PowerContext 记忆桥
-│   ├── requirements.txt
-│   └── .env.example
-└── evidence/                # 实测记录（桥接、PowerContext 原始返回、DSL 结构校验）
+├── LostFound.yml           # Dify Chatflow DSL
+├── README.md
+├── docs/验证样例.md
+├── backend/                # 记忆桥（memory_bridge.py + Dockerfile + requirements）
+├── deploy/                 # 全容器 compose、PowerContext 镜像、诊断/验证脚本
+└── evidence/               # 实测日志
 ```
 
-## 7. 实测记录（Dify 0.15.3，本机自建）
+## 6. 已知限制
 
-为了确认 DSL 真的能用，本地起了一套 Dify 0.15.3（PostgreSQL 16 + Redis 7 + 一个 OpenAI 兼容的假模型服务，用于免 key 验证流程）：
-
-| 步骤 | 结果 |
-|---|---|
-| 导入 `GrudgeImp.yml` | `completed-with-warnings`，DSL 0.1.3 → 0.1.5，5 节点 4 边全部保留（`evidence/05-dify-e2e.json`） |
-| 发布 + 创建 API Key | 成功 |
-| 调用 `/v1/chat-messages` 两轮 | 均 `200`，返回小妖回复 |
-| PowerContext 记忆 | 调用前 9 条 → 调用后 11 条（每轮写入一条） |
-| 节点执行 | 桥接日志可见 `GET /recall` 与 `GET /remember` 均 `200`（`evidence/06-bridge-node-requests.txt`） |
-
-两处实测踩到的坑，已在 DSL 里修正：
-
-- 查询参数必须写成 **`key: value`（冒号分隔、每行一个）**，Dify 会 `urlencode`；写成 `key=value` 会被整体当成参数名（早先版本就是这么错的）。
-- 模型 provider 在 0.15 里是 **`openai`**，不是插件式的 `langgenius/openai/openai`。
-
-> 实测用的是假模型（固定回复），所以小妖的「回复内容」不具参考价值；被验证的是链路：Dify 编排 → HTTP 节点 → PowerContext 读写。换成真实模型后回复才会随旧账变化。
-
-## 8. 已知限制
-
-1. **Dify 版本差异**：在 0.15.3 上实测通过；1.x 导入会把 DSL 升到 0.1.5，字段基本兼容，但 1.x 的模型是插件机制，provider 名可能变回 `langgenius/openai/openai` 一类，导入后按提示重选模型即可。
-2. **模型需自备**：DSL 里写的是 `openai` + `gpt-4o-mini`，导入后请换成你环境里可用的模型。
-3. **记忆召回是文本通道**：没有配置向量模型时，PowerContext 用全文匹配召回；语义相近但用词不同的旧账可能召不回，可以给 PowerContext 配 embedding 提升。
-4. 桥接服务只监听内网，没有鉴权；生产使用请加 token（`PC_TOKEN` 已支持）。
+1. 查询分支需要模型；没配模型时「存」和「说明」仍可用，但「查」会失败。
+2. 检索是关键词/全文匹配（PowerContext 文本通道），近义改写可能召不回；配 embedding 可提升。
+3. 记忆桥无鉴权，仅监听容器网络；生产需加 token（`PC_TOKEN` 已支持）。
