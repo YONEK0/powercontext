@@ -13,6 +13,11 @@ services:
   worker:
     extra_hosts:
       - "host.docker.internal:host-gateway"
+  # 关键：Dify 的 HTTP Request 节点默认经 ssrf_proxy(squid) 出网，
+  # 只给 api/worker 加映射仍然会 404 —— ssrf_proxy 也必须能解析 host.docker.internal
+  ssrf_proxy:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   # 可选：把记忆桥也放进 compose 网络，彻底不依赖 host-gateway。
   # 启用后把 GrudgeImp.yml 里两个节点的 URL 改成 http://memory-bridge:19080/recall 与 /remember。

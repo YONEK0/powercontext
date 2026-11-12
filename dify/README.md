@@ -137,6 +137,26 @@ DIFY_API_KEY=app-xxxx bash deploy/verify_e2e.sh
 本仓库已提交的实测记录：`evidence/05-dify-e2e.json`（Dify 0.15.3，两轮均 200，记忆 9→11）与
 `evidence/06-bridge-node-requests.txt`（`GET /recall`、`GET /remember` 均 200）。
 
+## 4.6 Docker 实跑记录（2026-11-12，已闭环）
+
+在 macOS 上用 Lima/colima 起 Docker（4C/8G），跑官方 `docker-compose.yaml` + 本仓库的
+`deploy/docker-compose.override.yaml`，Dify **0.15.3** 全栈（`api/worker/web/ssrf_proxy/nginx/db/redis/weaviate`）启动成功。
+
+| 检查 | 结果 |
+|---|---|
+| DSL 导入 | `completed-with-warnings`，5 节点 4 边 |
+| 发布 + API Key | 成功 |
+| `verify_e2e.sh` 两轮对话 | Dify 均返回 200 |
+| PowerContext 记忆 | **11 → 13**（每轮写一条） |
+| HTTP 节点 | `GET /recall`、`GET /remember` 在容器侧均 `200` |
+
+**关键坑（也是评审环境失败的真正原因）**：Dify 的 HTTP Request 节点默认经 **`ssrf_proxy`（squid）** 出网，
+只给 `api`/`worker` 加 `host.docker.internal` 映射还不够——**`ssrf_proxy` 也必须加同样的映射**，
+否则容器侧会收到 `404`，表现就是「DSL 能跑、但记忆不增长」。`deploy/docker-compose.override.yaml` 已包含该服务。
+
+证据：`evidence/07-dify-e2e-docker.log`（记忆 11→13、末行 ✅）、
+`evidence/08-dify-container-requests.log`（容器侧 recall/remember 200）。
+
 ## 5. 配置项
 
 | 变量 | 默认 | 说明 |
