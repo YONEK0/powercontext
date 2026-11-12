@@ -3,26 +3,31 @@
 > Dify × OceanBase 大赛 · Dify 赛道（`dify/`）
 > 一个会记仇的 NPC：你说过的每件坏事它都记着，下次见面翻旧账。
 
-## 0. 评审 5 分钟复现（最快路径）
+## 0. 评审 5 分钟复现（全容器，推荐）
 
 ```bash
-# 1) 宿主：装并启动 PowerContext（默认 8000，本题用 18080）
-pip install "powercontext[server,client]==1.4.1"
-powercontext server run --host 127.0.0.1 --port 18080
-
-# 2) 宿主：启动记忆桥（另开终端）
-cd backend && pip install -r requirements.txt && PC_BASE_URL=http://127.0.0.1:18080 python memory_bridge.py
-
-# 3) 部署 Dify（Linux 必须带 override，否则容器访问不到宿主）
 cd <dify源码>/docker
-docker compose -f docker-compose.yaml -f <本仓库>/dify/deploy/docker-compose.override.yaml up -d
-
-# 4) 导入 dify/GrudgeImp.yml → 选模型 → 发布 → 创建 API Key
-
-# 5) 宿主：一键验证主路径
-cd <本仓库>/dify && DIFY_API_KEY=app-xxxx bash deploy/verify_e2e.sh
-# 期望末行：✅ 主路径通过（记忆条数增加）
+docker compose -f docker-compose.yaml \
+  -f <本仓库>/dify/deploy/docker-compose.full.yaml up -d --build
 ```
+
+这一步同时起：Dify 0.15.3 全栈 + **PowerContext** + **记忆桥**（后两个由本仓库的 Dockerfile 构建）。
+
+1. 打开 Dify（http://localhost）→ 工作室 → 导入 `dify/GrudgeImp.yml`；
+2. 应用设置里选一个可用模型（默认 `openai / gpt-4o-mini`，可换）；
+3. 发布 → 创建 API Key；
+4. 宿主验证：
+
+```bash
+DIFY_BASE=http://127.0.0.1 DIFY_API_KEY=app-xxxx bash deploy/verify_e2e.sh
+# 末行应为：✅ 主路径通过
+```
+
+DSL 里两个 HTTP 节点用**环境变量** `MEMORY_BRIDGE_URL`（默认 `http://memory-bridge:19080`），
+换成宿主桥模式时只需把这个值改成 `http://host.docker.internal:19080`。
+
+> 只想用宿主上的 PowerContext/桥？用 `deploy/docker-compose.override.yaml`（给 api/worker/**ssrf_proxy** 加 host 映射），
+> 详见 §4.5、§4.6。
 
 ## 1. 作品是什么
 

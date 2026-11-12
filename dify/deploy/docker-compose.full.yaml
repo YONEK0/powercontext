@@ -1,0 +1,28 @@
+# 一次性起「Dify + PowerContext + 记忆桥」：
+#   cd <dify源码>/docker
+#   docker compose -f docker-compose.yaml -f <本仓库>/dify/deploy/docker-compose.full.yaml up -d
+# 然后在 Dify 应用里把环境变量 MEMORY_BRIDGE_URL 设为 http://memory-bridge:19080
+services:
+  powercontext:
+    build:
+      context: ./deploy/powercontext
+    restart: unless-stopped
+    # 本地演示：容器内需要监听 0.0.0.0 才能被 memory-bridge 访问。
+    # 生产请启用 PowerContext 鉴权（PC_TOKEN）而不是打开这个开关。
+    environment:
+      POWERCONTEXT_SERVER_ALLOW_UNAUTHENTICATED_NON_LOOPBACK: "true"
+    volumes:
+      - pc-data:/data
+
+  memory-bridge:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    environment:
+      PC_BASE_URL: http://powercontext:18080
+      PORT: "19080"
+    depends_on:
+      - powercontext
+
+volumes:
+  pc-data:

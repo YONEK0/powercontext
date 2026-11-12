@@ -1,0 +1,10 @@
+# 全容器模式实测（2026-11-12）
+# 组成：Dify 0.15.3 + powercontext(容器) + memory-bridge(容器)
+# 启动：docker compose -f docker-compose.yaml -f deploy/docker-compose.full.yaml up -d --build
+# DSL 环境变量：MEMORY_BRIDGE_URL=http://memory-bridge:19080
+
+import: 200 completed-with-warnings
+publish: 200
+chat#1: 200  "哼，你又来了。上次你把我的咖啡换成酱油……"
+chat#2: 200  "哼，你又来了。上次你把我的咖啡换成酱油……"
+容器内 PowerContext 记忆条数：0 -> 2（每轮写入一条）
