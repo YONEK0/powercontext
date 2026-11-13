@@ -198,46 +198,49 @@ _STOP_WORDS = frozenset([
     "fy",
 ])
 
+# Region vocabulary: filings spell out the areas they operate in by name, so a
+# "which geographies" question is answered by those names rather than by the
+# abstract words "geography" or "segment".
+_GEOGRAPHIC_TERMS = (
+    "america",
+    "europe",
+    "africa",
+    "asia",
+    "pacific",
+    "china",
+    "latin",
+    "north",
+    "south",
+    "middle",
+    "region",
+    "regions",
+    "market",
+    "markets",
+    "segment",
+    "segments",
+    "country",
+    "countries",
+    "territory",
+    "territories",
+)
+
+# Customer concentration vocabulary: filings disclose who buys from them by
+# naming the buyer and the share of revenues it takes.
+_CUSTOMER_TERMS = (
+    "government",
+    "contract",
+    "revenue",
+    "portion",
+    "significant",
+    "substantial",
+    "commercial",
+    "earned",
+    "percent",
+    "concentration",
+    "accounted",
+)
+
 _QUERY_EXPANSIONS = {
-    "geography": (
-        "geographies",
-        "region",
-        "regions",
-        "market",
-        "markets",
-        "segment",
-        "segments",
-        "country",
-        "countries",
-        "territory",
-        "territories",
-    ),
-    "geographies": (
-        "geography",
-        "region",
-        "regions",
-        "market",
-        "markets",
-        "segment",
-        "segments",
-        "country",
-        "countries",
-        "territory",
-        "territories",
-    ),
-    "geographic": (
-        "geographies",
-        "region",
-        "regions",
-        "market",
-        "markets",
-        "segment",
-        "segments",
-        "country",
-        "countries",
-        "territory",
-        "territories",
-    ),
     "operate": ("operates", "operations", "operating", "business", "segment", "segments"),
     "operates": ("operate", "operations", "operating", "business", "segment", "segments"),
     "operations": ("operate", "operates", "operating", "business", "segment", "segments"),
@@ -283,6 +286,15 @@ _QUERY_EXPANSIONS_STRONG = {
     "shareholder": ("tbvps", "book value", "tangible book value"),
     "liquidated": ("tbvps", "book value", "tangible book value"),
     "bankrupted": ("book value", "tangible book value"),
+    # "Where does the company operate" questions are answered by the region names
+    # a report spells out, not by the abstract word "geography".
+    "geography": _GEOGRAPHIC_TERMS,
+    "geographies": _GEOGRAPHIC_TERMS,
+    "geographic": _GEOGRAPHIC_TERMS,
+    # "Who are the customers" questions are answered by the concentration
+    # disclosure, which names the buyer and the share of revenues it takes.
+    "customer": _CUSTOMER_TERMS,
+    "customers": _CUSTOMER_TERMS,
 }
 
 
@@ -460,6 +472,29 @@ def _terms(text: str) -> list[str]:
     return merged
 
 
+def _expansion_index(expansions: dict[str, tuple[str, ...]]) -> dict[str, tuple[str, ...]]:
+    """Index expansion tables by the light stem the scorer actually uses.
+
+    Question terms are stemmed before scoring, so an expansion keyed by the raw
+    surface form ("geographies") would never be found by the stemmed term
+    ("geographie").
+    """
+
+    index: dict[str, tuple[str, ...]] = {}
+    for key, values in expansions.items():
+        merged = index.get(key, ())
+        index[key] = merged + tuple(value for value in values if value not in merged)
+        stem = _stem(key)
+        if stem != key:
+            merged = index.get(stem, ())
+            index[stem] = merged + tuple(value for value in values if value not in merged)
+    return index
+
+
+_EXPANSION_INDEX = _expansion_index(_QUERY_EXPANSIONS)
+_STRONG_EXPANSION_INDEX = _expansion_index(_QUERY_EXPANSIONS_STRONG)
+
+
 def _query_terms(question: str) -> list[str]:
     seen: set[str] = set()
     terms: list[str] = []
@@ -476,8 +511,8 @@ def _expanded_query_terms(question_terms: list[str]) -> dict[str, float]:
     weights = dict.fromkeys(question_terms, 1.0)
     for term in question_terms:
         for related, weight in (
-            *((item, 0.9) for item in _QUERY_EXPANSIONS_STRONG.get(term, ())),
-            *((item, 0.35) for item in _QUERY_EXPANSIONS.get(term, ())),
+            *((item, 0.9) for item in _STRONG_EXPANSION_INDEX.get(term, ())),
+            *((item, 0.35) for item in _EXPANSION_INDEX.get(term, ())),
         ):
             # Expansion phrases enter the same token space as pages, so split and
             # stem each word; a raw phrase key would never match a token.
