@@ -1,0 +1,45 @@
+{
+  "method": "Local browser interaction, observed accessibility tree and screenshot; synthetic data only",
+  "url": "http://127.0.0.1:18081/chat/sGr8kWOVq1uDCDwJ",
+  "case_id": "LF-AC5C54",
+  "passed": true,
+  "checks": [
+    "natural_multi_record",
+    "open_case",
+    "checked_location",
+    "new_clue",
+    "new_conversation_resumes_same_case",
+    "found_closes_same_case",
+    "trip_real_table",
+    "charge_done_pack_pending",
+    "new_conversation_keeps_trip_progress"
+  ],
+  "case_screenshot": "browser-case.png",
+  "observed_trip_rows": [
+    {
+      "item": "相机",
+      "task": "装包",
+      "status": "待处理"
+    },
+    {
+      "item": "电池",
+      "task": "充电",
+      "status": "已确认"
+    },
+    {
+      "item": "电池",
+      "task": "装包",
+      "status": "待处理"
+    },
+    {
+      "item": "三脚架",
+      "task": "取回",
+      "status": "待处理"
+    },
+    {
+      "item": "三脚架",
+      "task": "装包",
+      "status": "待处理"
+    }
+  ]
+}

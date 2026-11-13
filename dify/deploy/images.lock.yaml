@@ -1,0 +1,19 @@
+services:
+  api:
+    image: langgenius/dify-api@sha256:20a7c498bbbe4340f52b3d1ad10a0cff5b48670c9df634b4d37d2335b3a1fd5f
+  worker:
+    image: langgenius/dify-api@sha256:20a7c498bbbe4340f52b3d1ad10a0cff5b48670c9df634b4d37d2335b3a1fd5f
+  web:
+    image: langgenius/dify-web@sha256:56d71486474e63e260b57a14c5109bb660d0dd3f0b75a5d8c5cc97cd44d6e174
+  sandbox:
+    image: langgenius/dify-sandbox@sha256:6c69b6e379255d5865dd9ac25b588942dc4a7a5e8f57afcf736080414459e8dd
+  db:
+    image: postgres@sha256:fc41cfa8a90c09e84dd723ee764be4b2f59ba6c98b1e5b3fca540adddf68a5ba
+  redis:
+    image: redis@sha256:3f9c6e23ed6bea3b41d0ef709fc164c1a0b7c00d5a21a60e0e9c33ada5496881
+  ssrf_proxy:
+    image: ubuntu/squid@sha256:6a097f68bae708cedbabd6188d68c7e2e7a38cedd05a176e1cc0ba29e3bbe029
+  nginx:
+    image: nginx@sha256:42c68eab6f7e22611786a9fe1d1c019e275c50185bd54b8f75dc2b9184322703
+  weaviate:
+    image: semitechnologies/weaviate@sha256:17a5238fcfc31d50427bb0e8338f01c3a0d62e27fbe3b6a9a6832b6e43b638bf

@@ -1,0 +1,10 @@
+.env
+.runtime/
+__pycache__/
+*.pyc
+vendor/dify/docker/nginx/conf.d/default.conf
+vendor/dify/docker/volumes/app/
+vendor/dify/docker/volumes/db/
+vendor/dify/docker/volumes/redis/
+vendor/dify/docker/volumes/weaviate/
+vendor/dify/docker/volumes/certbot/

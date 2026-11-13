@@ -1,0 +1,20 @@
+test_authentication_and_invalid_actions (__main__.BureauTests.test_authentication_and_invalid_actions) ... ok
+test_checked_places_and_new_conversation (__main__.BureauTests.test_checked_places_and_new_conversation) ... ok
+test_concurrent_old_version_cannot_overwrite (__main__.BureauTests.test_concurrent_old_version_cannot_overwrite) ... ok
+test_fabricated_location_and_partial_batch_roll_back (__main__.BureauTests.test_fabricated_location_and_partial_batch_roll_back) ... ok
+test_found_is_not_usual_location (__main__.BureauTests.test_found_is_not_usual_location) ... ok
+test_model_invented_completion_rejected (__main__.BureauTests.test_model_invented_completion_rejected) ... ok
+test_negative_found_rolls_back (__main__.BureauTests.test_negative_found_rolls_back) ... ok
+test_requested_trip_items_override_planner (__main__.BureauTests.test_requested_trip_items_override_planner) ... ok
+test_retry_same_turn_is_idempotent (__main__.BureauTests.test_retry_same_turn_is_idempotent) ... ok
+test_same_activity_selects_latest_or_explicit_date (__main__.BureauTests.test_same_activity_selects_latest_or_explicit_date) ... ok
+test_timeout_after_write_reconciles_receipt (__main__.BureauTests.test_timeout_after_write_reconciles_receipt) ... ok
+test_trip_charge_pack_borrow_and_exclusion (__main__.BureauTests.test_trip_charge_pack_borrow_and_exclusion) ... ok
+test_two_open_cases_need_name_in_new_conversation (__main__.BureauTests.test_two_open_cases_need_name_in_new_conversation) ... ok
+test_unpacked_feedback_reopens_completed_task (__main__.BureauTests.test_unpacked_feedback_reopens_completed_task) ... ok
+test_user_isolation_and_replay (__main__.BureauTests.test_user_isolation_and_replay) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.068s
+
+OK

@@ -1,0 +1,4 @@
+Official upstream: https://github.com/langgenius/dify/tree/0.15.3
+Tag: 0.15.3
+Archive SHA256: 8f17af90ef0cb2601db1a0e5ca989622e05974e9e23916412c544b113bbf7f00
+Docker deployment files copied without changes.

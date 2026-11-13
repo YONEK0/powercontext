@@ -1,0 +1,4358 @@
+{
+  "started_at": "2026-11-13T13:32:05.674776+00:00",
+  "run_id": "5b4b9e3451",
+  "app_id": "94350545-1059-4942-9394-222e4af4779d",
+  "method": "Published Dify advanced-chat; real deepseek-flash; real PowerContext; assertions inspect Dify persisted node outputs",
+  "checks": [
+    {
+      "label": "three_facts_persisted",
+      "memory_id": "art_a4845271a70a486e8292b0c7e2a519fd"
+    },
+    {
+      "label": "natural_recall_across_sessions"
+    },
+    {
+      "label": "case_opened",
+      "case_id": "LF-5DDE62"
+    },
+    {
+      "label": "checked_location_persisted"
+    },
+    {
+      "label": "clue_saved"
+    },
+    {
+      "label": "resumed_same_case_new_session",
+      "old_conversation": "77d4d2de-8f36-4def-9c66-85e837295e3f",
+      "new_conversation": "e7e586a3-8630-486d-b369-e12d47acf4af"
+    },
+    {
+      "label": "no_repeat_checked_suggestion"
+    },
+    {
+      "label": "found_closes_case_not_usual"
+    },
+    {
+      "label": "explicit_current_and_usual"
+    },
+    {
+      "label": "trip_uses_real_borrow_and_charge_facts"
+    },
+    {
+      "label": "charge_and_pack_separate"
+    },
+    {
+      "label": "negative_does_not_complete_task"
+    },
+    {
+      "label": "two_explicit_pack_updates"
+    },
+    {
+      "label": "negative_feedback_reopens_task"
+    },
+    {
+      "label": "explicit_pack_again"
+    },
+    {
+      "label": "excluded_only_this_trip"
+    },
+    {
+      "label": "trip_progress_across_sessions"
+    },
+    {
+      "label": "new_trip_no_completed_state_leak"
+    },
+    {
+      "label": "ambiguous_cases_do_not_mix"
+    },
+    {
+      "label": "different_user_empty_archive"
+    },
+    {
+      "label": "model_failure_stops_mutation"
+    },
+    {
+      "label": "memory_failure_stops_before_llm"
+    },
+    {
+      "label": "container_recreation_keeps_scope_and_state"
+    },
+    {
+      "label": "failed_turns_left_no_item"
+    }
+  ],
+  "turns": [
+    {
+      "label": "natural_multi_record",
+      "query": "相机在蓝色背包，电池还没充，三脚架借给小张了。",
+      "answer": "已更新物品档案：相机\n\n已更新物品档案：电池\n\n已更新物品档案：三脚架\n\n\n### 物品档案｜三脚架\n\n上次位置：未登记\n\n常用位置：未设置\n\n借出给：小张\n\n— 档案已同步 · 版本 1 · 换新对话可继续",
+      "conversation_id": "77d4d2de-8f36-4def-9c66-85e837295e3f",
+      "message_id": "d930ec7c-3a7d-48ac-9cc9-bbde9805e431",
+      "workflow_run_id": "ada470d7-cca0-4957-86da-b4de9b2a446a",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3493,
+      "node_statuses": {
+        "prepare": "succeeded",
+        "start": "succeeded",
+        "begin": "succeeded",
+        "understand": "succeeded",
+        "commit": "succeeded",
+        "begin_check": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_check": "succeeded",
+        "intent_gate": "succeeded",
+        "resolve_gate": "succeeded",
+        "resolve": "succeeded",
+        "resolve_check": "succeeded",
+        "plan": "succeeded",
+        "plan_check": "succeeded",
+        "commit_check": "succeeded",
+        "result": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"record\",\"item\":\"相机\",\"location\":\"蓝色背包\",\"location_kind\":\"current\",\"condition\":\"unknown\"},{\"type\":\"record\",\"item\":\"电池\",\"condition\":\"needs_charge\"},{\"type\":\"record\",\"item\":\"三脚架\",\"borrower\":\"小张\",\"returned\":false}]}",
+      "planner_text": "{\"suggestion\":\"相机已在蓝色背包，电池需充电，三脚架在小张处。建议先确认蓝色背包是否随身、电池是否已放入包中，并联系小张约定归还时间。\",\"question\":\"蓝色背包现在在你身边吗？电池打算什么时候充好放进包里？\",\"next_location\":\"蓝色背包\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[]}",
+      "commit": {
+        "ok": true,
+        "answer": "已更新物品档案：相机\n\n已更新物品档案：电池\n\n已更新物品档案：三脚架\n\n\n### 物品档案｜三脚架\n\n上次位置：未登记\n\n常用位置：未设置\n\n借出给：小张\n\n— 档案已同步 · 版本 1 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_a4845271a70a486e8292b0c7e2a519fd",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 1,
+        "focus": [
+          "item",
+          "item_92c2b01832"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "蓝色背包",
+                "at": "2026-11-13T21:32:08+08:00"
+              },
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "known",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "needs_charge",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {},
+          "trips": {},
+          "pending": null,
+          "last_item": "item_92c2b01832",
+          "last_case": null,
+          "last_trip": null,
+          "seq": 1
+        },
+        "evidence_ids": [],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 1389,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 153,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 1542,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.2466637280012947
+      }
+    },
+    {
+      "label": "recall_new_conversation",
+      "query": "我上次把相机放在哪里？",
+      "answer": "\n### 物品档案｜相机\n\n上次位置：蓝色背包\n\n常用位置：未设置",
+      "conversation_id": "182996f5-d2b1-419e-9167-261973461890",
+      "message_id": "f03b7e68-b10b-4d2e-a31d-60b81c426da5",
+      "workflow_run_id": "f6c0fdde-72cc-4bfd-963b-105bd9bf52fd",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 2987,
+      "node_statuses": {
+        "start": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "prepare": "succeeded",
+        "plan": "succeeded",
+        "begin": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "resolve_gate": "succeeded",
+        "commit": "succeeded",
+        "begin_check": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "commit_check": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"recall\",\"item\":\"相机\"}]}",
+      "planner_text": "{\"suggestion\":\"档案显示相机上次放在蓝色背包里，可先检查这个包；电池需要充电，三脚架已借给小张，暂不用找。\",\"question\":\"蓝色背包现在在哪儿？最近一次看到相机是什么时候？\",\"next_location\":\"蓝色背包\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_a4845271a70a486e8292b0c7e2a519fd\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "\n### 物品档案｜相机\n\n上次位置：蓝色背包\n\n常用位置：未设置",
+        "mutated": false,
+        "memory_id": null,
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 1,
+        "focus": [
+          "item",
+          "item_63323d561b"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "蓝色背包",
+                "at": "2026-11-13T21:32:08+08:00"
+              },
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "known",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "needs_charge",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {},
+          "trips": {},
+          "pending": null,
+          "last_item": "item_92c2b01832",
+          "last_case": null,
+          "last_trip": null,
+          "seq": 1
+        },
+        "evidence_ids": [
+          "art_a4845271a70a486e8292b0c7e2a519fd"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 1995,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 113,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 2108,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 1.808835469000769
+      }
+    },
+    {
+      "label": "open_case",
+      "query": "我的相机找不到了",
+      "answer": "\n### 寻物案 LF-5DDE62｜调查中\n\n**物品：** 相机\n\n**上次位置：** 蓝色背包（2026-11-13 21:32 的记录，当前位置待确认）\n\n**已排查：** 暂无\n\n**下一步建议（未确认）：** 档案显示相机上次放在蓝色背包里，建议先检查蓝色背包及其周围，再回想最后一次用相机的场景。\n\n**继续调查：** 你最后一次用相机是什么时候、在哪里？之后蓝色背包放在哪了？\n\n— 档案已同步 · 版本 2 · 换新对话可继续",
+      "conversation_id": "77d4d2de-8f36-4def-9c66-85e837295e3f",
+      "message_id": "54ef6454-93fc-4e54-9be0-30620b83fca1",
+      "workflow_run_id": "9fa371f4-39e9-47f9-8a32-5856b2626ff1",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3230,
+      "node_statuses": {
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "commit_check": "succeeded",
+        "prepare": "succeeded",
+        "start": "succeeded",
+        "begin": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "resolve_gate": "succeeded",
+        "commit": "succeeded",
+        "begin_check": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "plan": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"find\",\"item\":\"相机\"}]}",
+      "planner_text": "{\"suggestion\":\"档案显示相机上次放在蓝色背包里，建议先检查蓝色背包及其周围，再回想最后一次用相机的场景。\",\"question\":\"你最后一次用相机是什么时候、在哪里？之后蓝色背包放在哪了？\",\"next_location\":\"蓝色背包\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_a4845271a70a486e8292b0c7e2a519fd\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "\n### 寻物案 LF-5DDE62｜调查中\n\n**物品：** 相机\n\n**上次位置：** 蓝色背包（2026-11-13 21:32 的记录，当前位置待确认）\n\n**已排查：** 暂无\n\n**下一步建议（未确认）：** 档案显示相机上次放在蓝色背包里，建议先检查蓝色背包及其周围，再回想最后一次用相机的场景。\n\n**继续调查：** 你最后一次用相机是什么时候、在哪里？之后蓝色背包放在哪了？\n\n— 档案已同步 · 版本 2 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_4ac8bf4dbd134c87ae6da5099fa4eefe",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 2,
+        "focus": [
+          "case",
+          "LF-5DDE62"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "蓝色背包",
+                "at": "2026-11-13T21:32:08+08:00"
+              },
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "missing",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "needs_charge",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "open",
+              "checked": [],
+              "clues": [],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": null
+            }
+          },
+          "trips": {},
+          "pending": {
+            "kind": "investigate",
+            "case_id": "LF-5DDE62",
+            "conversation_id": "77d4d2de-8f36-4def-9c66-85e837295e3f",
+            "locations": [
+              "蓝色背包"
+            ],
+            "at": "2026-11-13T21:32:14+08:00"
+          },
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": null,
+          "seq": 2
+        },
+        "evidence_ids": [
+          "art_a4845271a70a486e8292b0c7e2a519fd"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 1984,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 109,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 2093,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.1356634799958556
+      }
+    },
+    {
+      "label": "checked_no_match",
+      "query": "蓝色背包找过了，没有相机。",
+      "answer": "已记录排查反馈。\n\n\n### 寻物案 LF-5DDE62｜调查中\n\n**物品：** 相机\n\n**上次位置：** 蓝色背包（2026-11-13 21:32 的记录，当前位置待确认）\n\n**已排查：** 蓝色背包\n\n**继续调查：** 最后一次看到或使用它是在什么时候、什么场景？\n\n— 档案已同步 · 版本 3 · 换新对话可继续",
+      "conversation_id": "77d4d2de-8f36-4def-9c66-85e837295e3f",
+      "message_id": "bb101728-1c5c-4816-874b-769276dfe61e",
+      "workflow_run_id": "47217c7b-c895-45be-b272-6a97c0fe5e7a",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3638,
+      "node_statuses": {
+        "resolve_gate": "succeeded",
+        "commit": "succeeded",
+        "begin_check": "succeeded",
+        "intent_check": "succeeded",
+        "begin": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "prepare": "succeeded",
+        "begin_gate": "succeeded",
+        "start": "succeeded",
+        "intent_gate": "succeeded",
+        "resolve_check": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded",
+        "plan": "succeeded",
+        "commit_check": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"checked\",\"item\":\"相机\",\"locations\":[\"蓝色背包\"]}]}",
+      "planner_text": "{\"suggestion\":\"蓝色背包已排除。回想相机最后一次使用的时间和场景，比如是否拍完照放在别处；也可看看平时放相机的位置或常背的其他包。\",\"question\":\"你最后一次用相机是什么时候、在哪儿？之后把它放回哪里了？\",\"next_location\":\"\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_a4845271a70a486e8292b0c7e2a519fd\",\"art_4ac8bf4dbd134c87ae6da5099fa4eefe\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "已记录排查反馈。\n\n\n### 寻物案 LF-5DDE62｜调查中\n\n**物品：** 相机\n\n**上次位置：** 蓝色背包（2026-11-13 21:32 的记录，当前位置待确认）\n\n**已排查：** 蓝色背包\n\n**继续调查：** 最后一次看到或使用它是在什么时候、什么场景？\n\n— 档案已同步 · 版本 3 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_6e357f532337496a8efaa417701dabc0",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 3,
+        "focus": [
+          "case",
+          "LF-5DDE62"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "蓝色背包",
+                "at": "2026-11-13T21:32:08+08:00"
+              },
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "missing",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "needs_charge",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "open",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": null
+            }
+          },
+          "trips": {},
+          "pending": {
+            "kind": "investigate",
+            "case_id": "LF-5DDE62",
+            "conversation_id": "77d4d2de-8f36-4def-9c66-85e837295e3f",
+            "locations": [],
+            "at": "2026-11-13T21:32:18+08:00"
+          },
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": null,
+          "seq": 3
+        },
+        "evidence_ids": [
+          "art_a4845271a70a486e8292b0c7e2a519fd",
+          "art_4ac8bf4dbd134c87ae6da5099fa4eefe"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 2404,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 144,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 2548,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.5264434660020925
+      }
+    },
+    {
+      "label": "new_clue",
+      "query": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+      "answer": "已补充调查线索。\n\n\n### 寻物案 LF-5DDE62｜调查中\n\n**物品：** 相机\n\n**上次位置：** 蓝色背包（2026-11-13 21:32 的记录，当前位置待确认）\n\n**已排查：** 蓝色背包\n\n**近期线索：** 昨天换成黑色相机包去拍照了，可能忘在里面。\n\n**下一步建议（未确认）：** 蓝色背包已查过，别重复。新线索指向黑色相机包，建议先翻黑色相机包各隔层和侧袋，再回想拍照后是否放回原处。\n\n**继续调查：** 黑色相机包现在放在哪里？昨天拍照结束后你把它搁在哪儿了？\n\n— 档案已同步 · 版本 4 · 换新对话可继续",
+      "conversation_id": "77d4d2de-8f36-4def-9c66-85e837295e3f",
+      "message_id": "6c46ef92-e9ce-46ea-9f20-d367b82ee25b",
+      "workflow_run_id": "5d45a6db-cc44-4f9d-a010-d64f7a34ea07",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3526,
+      "node_statuses": {
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "begin": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "resolve_gate": "succeeded",
+        "prepare": "succeeded",
+        "result": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "plan": "succeeded",
+        "commit_check": "succeeded",
+        "plan_check": "succeeded",
+        "commit": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"clue\",\"item\":\"相机\",\"note\":\"昨天换成黑色相机包去拍照了，可能忘在里面。\"}]}",
+      "planner_text": "{\"suggestion\":\"蓝色背包已查过，别重复。新线索指向黑色相机包，建议先翻黑色相机包各隔层和侧袋，再回想拍照后是否放回原处。\",\"question\":\"黑色相机包现在放在哪里？昨天拍照结束后你把它搁在哪儿了？\",\"next_location\":\"黑色相机包\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_a4845271a70a486e8292b0c7e2a519fd\",\"art_4ac8bf4dbd134c87ae6da5099fa4eefe\",\"art_6e357f532337496a8efaa417701dabc0\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "已补充调查线索。\n\n\n### 寻物案 LF-5DDE62｜调查中\n\n**物品：** 相机\n\n**上次位置：** 蓝色背包（2026-11-13 21:32 的记录，当前位置待确认）\n\n**已排查：** 蓝色背包\n\n**近期线索：** 昨天换成黑色相机包去拍照了，可能忘在里面。\n\n**下一步建议（未确认）：** 蓝色背包已查过，别重复。新线索指向黑色相机包，建议先翻黑色相机包各隔层和侧袋，再回想拍照后是否放回原处。\n\n**继续调查：** 黑色相机包现在放在哪里？昨天拍照结束后你把它搁在哪儿了？\n\n— 档案已同步 · 版本 4 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_7e3a78c511064b4fb88664d368a95fda",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 4,
+        "focus": [
+          "case",
+          "LF-5DDE62"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "蓝色背包",
+                "at": "2026-11-13T21:32:08+08:00"
+              },
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "missing",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "needs_charge",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "open",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": null
+            }
+          },
+          "trips": {},
+          "pending": {
+            "kind": "investigate",
+            "case_id": "LF-5DDE62",
+            "conversation_id": "77d4d2de-8f36-4def-9c66-85e837295e3f",
+            "locations": [
+              "黑色相机包"
+            ],
+            "at": "2026-11-13T21:32:21+08:00"
+          },
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": null,
+          "seq": 4
+        },
+        "evidence_ids": [
+          "art_a4845271a70a486e8292b0c7e2a519fd",
+          "art_4ac8bf4dbd134c87ae6da5099fa4eefe",
+          "art_6e357f532337496a8efaa417701dabc0"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 2520,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 182,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 2702,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.2723130770027637
+      }
+    },
+    {
+      "label": "resume_new_conversation",
+      "query": "继续办案",
+      "answer": "\n### 寻物案 LF-5DDE62｜调查中\n\n**物品：** 相机\n\n**上次位置：** 蓝色背包（2026-11-13 21:32 的记录，当前位置待确认）\n\n**已排查：** 蓝色背包\n\n**近期线索：** 昨天换成黑色相机包去拍照了，可能忘在里面。\n\n**下一步建议（未确认）：** 蓝色背包已查过没有相机，新线索指向黑色相机包，建议先检查这个包，再回忆昨天拍照后是否把相机放回原处。\n\n**继续调查：** 昨天拍照结束后，相机是直接装进黑色相机包，还是拿在手上或放在别处？\n\n— 档案已同步 · 版本 5 · 换新对话可继续",
+      "conversation_id": "e7e586a3-8630-486d-b369-e12d47acf4af",
+      "message_id": "b014997a-e162-4f25-8798-6b8df9dc5a5c",
+      "workflow_run_id": "dd7cf8fe-d274-4770-84f7-82aa232b4c42",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3370,
+      "node_statuses": {
+        "intent_check": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "commit_check": "succeeded",
+        "prepare": "succeeded",
+        "resolve_check": "succeeded",
+        "plan_check": "succeeded",
+        "begin": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "resolve_gate": "succeeded",
+        "commit": "succeeded",
+        "plan": "succeeded",
+        "result": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"continue\",\"item\":\"相机\"}]}",
+      "planner_text": "{\"suggestion\":\"蓝色背包已查过没有相机，新线索指向黑色相机包，建议先检查这个包，再回忆昨天拍照后是否把相机放回原处。\",\"question\":\"昨天拍照结束后，相机是直接装进黑色相机包，还是拿在手上或放在别处？\",\"next_location\":\"黑色相机包\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_a4845271a70a486e8292b0c7e2a519fd\",\"art_6e357f532337496a8efaa417701dabc0\",\"art_7e3a78c511064b4fb88664d368a95fda\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "\n### 寻物案 LF-5DDE62｜调查中\n\n**物品：** 相机\n\n**上次位置：** 蓝色背包（2026-11-13 21:32 的记录，当前位置待确认）\n\n**已排查：** 蓝色背包\n\n**近期线索：** 昨天换成黑色相机包去拍照了，可能忘在里面。\n\n**下一步建议（未确认）：** 蓝色背包已查过没有相机，新线索指向黑色相机包，建议先检查这个包，再回忆昨天拍照后是否把相机放回原处。\n\n**继续调查：** 昨天拍照结束后，相机是直接装进黑色相机包，还是拿在手上或放在别处？\n\n— 档案已同步 · 版本 5 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_52cf3f69ac6f4c4f900dfe0291743377",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 5,
+        "focus": [
+          "case",
+          "LF-5DDE62"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "蓝色背包",
+                "at": "2026-11-13T21:32:08+08:00"
+              },
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "missing",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "needs_charge",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "open",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": null
+            }
+          },
+          "trips": {},
+          "pending": {
+            "kind": "investigate",
+            "case_id": "LF-5DDE62",
+            "conversation_id": "e7e586a3-8630-486d-b369-e12d47acf4af",
+            "locations": [
+              "黑色相机包"
+            ],
+            "at": "2026-11-13T21:32:25+08:00"
+          },
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": null,
+          "seq": 5
+        },
+        "evidence_ids": [
+          "art_a4845271a70a486e8292b0c7e2a519fd",
+          "art_4ac8bf4dbd134c87ae6da5099fa4eefe",
+          "art_6e357f532337496a8efaa417701dabc0",
+          "art_7e3a78c511064b4fb88664d368a95fda"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 2639,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 166,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 2805,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.1354901349986903
+      }
+    },
+    {
+      "label": "found_and_close",
+      "query": "相机找到了，在黑色相机包里。",
+      "answer": "本案已结，欢迎相机归队。\n\n\n### 寻物案 LF-5DDE62｜已结案\n\n**物品：** 相机\n\n**本次找到：** 黑色相机包\n\n找到的位置不会自动变成常用位置。你现在把它放在哪里？需要设为常用位置吗？\n\n— 档案已同步 · 版本 6 · 换新对话可继续",
+      "conversation_id": "e7e586a3-8630-486d-b369-e12d47acf4af",
+      "message_id": "27158883-1a2b-4de2-93a9-95cfec4c8d76",
+      "workflow_run_id": "b4709986-0553-48dc-9188-c2355c0bb4d0",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3366,
+      "node_statuses": {
+        "intent_gate": "succeeded",
+        "begin_gate": "succeeded",
+        "understand": "succeeded",
+        "prepare": "succeeded",
+        "result": "succeeded",
+        "begin": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "resolve": "succeeded",
+        "plan": "succeeded",
+        "commit_check": "succeeded",
+        "resolve_gate": "succeeded",
+        "commit": "succeeded",
+        "plan_check": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"found\",\"item\":\"相机\",\"location\":\"黑色相机包\"}]}",
+      "planner_text": "{\"suggestion\":\"相机已确认在黑色相机包内，寻物部分可以收尾。接下来可以顺便确认电池是否需要充电、三脚架是否已从小张处取回，方便下次拍照。\",\"question\":\"需要我帮你把电池充电和取回三脚架也一并登记为待办吗？\",\"next_location\":\"\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_a4845271a70a486e8292b0c7e2a519fd\",\"art_7e3a78c511064b4fb88664d368a95fda\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "本案已结，欢迎相机归队。\n\n\n### 寻物案 LF-5DDE62｜已结案\n\n**物品：** 相机\n\n**本次找到：** 黑色相机包\n\n找到的位置不会自动变成常用位置。你现在把它放在哪里？需要设为常用位置吗？\n\n— 档案已同步 · 版本 6 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_5260ff0e19c24e09885614e8aa447957",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 6,
+        "focus": [
+          "case",
+          "LF-5DDE62"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "黑色相机包",
+                "at": "2026-11-13T21:32:28+08:00"
+              },
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "known",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "needs_charge",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            }
+          },
+          "trips": {},
+          "pending": {
+            "kind": "storage",
+            "case_id": "LF-5DDE62",
+            "conversation_id": "e7e586a3-8630-486d-b369-e12d47acf4af",
+            "locations": [
+              "黑色相机包"
+            ],
+            "at": "2026-11-13T21:32:28+08:00"
+          },
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": null,
+          "seq": 6
+        },
+        "evidence_ids": [
+          "art_a4845271a70a486e8292b0c7e2a519fd",
+          "art_4ac8bf4dbd134c87ae6da5099fa4eefe",
+          "art_6e357f532337496a8efaa417701dabc0",
+          "art_7e3a78c511064b4fb88664d368a95fda",
+          "art_52cf3f69ac6f4c4f900dfe0291743377"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 2733,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 153,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 2886,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.129205966997688
+      }
+    },
+    {
+      "label": "set_current_and_usual",
+      "query": "现在把相机放在书桌右侧抽屉，以后也固定放这里。",
+      "answer": "已更新物品档案：相机\n\n\n### 物品档案｜相机\n\n上次位置：书桌右侧抽屉\n\n常用位置：书桌右侧抽屉\n\n— 档案已同步 · 版本 7 · 换新对话可继续",
+      "conversation_id": "e7e586a3-8630-486d-b369-e12d47acf4af",
+      "message_id": "2e001698-4a78-45d0-9f00-d5ec09ee6c01",
+      "workflow_run_id": "22d7e4de-6a86-40a0-9568-1a47dcb4c906",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3765,
+      "node_statuses": {
+        "intent_check": "succeeded",
+        "begin": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "resolve_gate": "succeeded",
+        "commit": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "plan": "succeeded",
+        "prepare": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "resolve_check": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded",
+        "commit_check": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"record\",\"item\":\"相机\",\"location\":\"书桌右侧抽屉\",\"location_kind\":\"both\",\"condition\":\"unknown\",\"borrower\":\"\",\"returned\":false}]}",
+      "planner_text": "{\"suggestion\":\"已记录相机固定放在书桌右侧抽屉。建议顺手确认电池是否已充电，并留意三脚架是否已从小张处取回。\",\"question\":\"需要我把电池充电和三脚架取回也加入待办吗？\",\"next_location\":\"书桌右侧抽屉\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_a4845271a70a486e8292b0c7e2a519fd\",\"art_5260ff0e19c24e09885614e8aa447957\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "已更新物品档案：相机\n\n\n### 物品档案｜相机\n\n上次位置：书桌右侧抽屉\n\n常用位置：书桌右侧抽屉\n\n— 档案已同步 · 版本 7 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_2443f71b60044ab7a7c6b37aed8b5ecf",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 7,
+        "focus": [
+          "item",
+          "item_63323d561b"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "known",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "needs_charge",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            }
+          },
+          "trips": {},
+          "pending": {
+            "kind": "storage",
+            "case_id": "LF-5DDE62",
+            "conversation_id": "e7e586a3-8630-486d-b369-e12d47acf4af",
+            "locations": [
+              "黑色相机包"
+            ],
+            "at": "2026-11-13T21:32:28+08:00"
+          },
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": null,
+          "seq": 7
+        },
+        "evidence_ids": [
+          "art_a4845271a70a486e8292b0c7e2a519fd",
+          "art_4ac8bf4dbd134c87ae6da5099fa4eefe",
+          "art_6e357f532337496a8efaa417701dabc0",
+          "art_7e3a78c511064b4fb88664d368a95fda",
+          "art_52cf3f69ac6f4c4f900dfe0291743377",
+          "art_5260ff0e19c24e09885614e8aa447957"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 2908,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 162,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 3070,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.5020035739980813
+      }
+    },
+    {
+      "label": "create_trip",
+      "query": "明天出去拍照，只核对相机、电池、三脚架，做出门检查。",
+      "answer": "\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 待处理 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 待处理 | 上次位置：未登记 |\n| 电池 | 装包 | 待处理 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 相机·装包、电池·充电、电池·装包、三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 8 · 换新对话可继续",
+      "conversation_id": "461ec86c-05c3-4cc9-aacc-cbdf47f51b2b",
+      "message_id": "b3f7d5e5-038e-42b3-a9e9-33df57cc59e8",
+      "workflow_run_id": "f0d91a46-5399-4b0a-ad5b-3cbf9eecd6f7",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3290,
+      "node_statuses": {
+        "begin": "succeeded",
+        "resolve_gate": "succeeded",
+        "prepare": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "plan": "succeeded",
+        "plan_check": "succeeded",
+        "commit": "succeeded",
+        "commit_check": "succeeded",
+        "result": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"trip\",\"activity\":\"拍照\",\"items\":[\"相机\",\"电池\",\"三脚架\"]}]}",
+      "planner_text": "{\"suggestion\":\"出门前按清单逐项核对：相机在书桌右侧抽屉，电池需充电，三脚架已借给小张，建议先联系小张取回。\",\"question\":\"三脚架明天出门前能从小张那里取回吗？电池今晚需要先充电吗？\",\"next_location\":\"书桌右侧抽屉\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_a4845271a70a486e8292b0c7e2a519fd\",\"art_2443f71b60044ab7a7c6b37aed8b5ecf\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 待处理 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 待处理 | 上次位置：未登记 |\n| 电池 | 装包 | 待处理 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 相机·装包、电池·充电、电池·装包、三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 8 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_67f3ca80988e41ed8fcbe5293db4ce82",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 8,
+        "focus": [
+          "trip",
+          "TR-315832"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "known",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "needs_charge",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            }
+          },
+          "trips": {
+            "TR-315832": {
+              "id": "TR-315832",
+              "activity": "拍照",
+              "date": "2026-11-14",
+              "checks": [
+                {
+                  "id": "check_def737d3",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_1fe42cb4",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_b5647ddd",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_c623e38f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_88dd463f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                }
+              ],
+              "created_at": "2026-11-13T21:32:35+08:00"
+            }
+          },
+          "pending": null,
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": "TR-315832",
+          "seq": 8
+        },
+        "evidence_ids": [
+          "art_a4845271a70a486e8292b0c7e2a519fd",
+          "art_4ac8bf4dbd134c87ae6da5099fa4eefe",
+          "art_6e357f532337496a8efaa417701dabc0",
+          "art_7e3a78c511064b4fb88664d368a95fda",
+          "art_52cf3f69ac6f4c4f900dfe0291743377",
+          "art_5260ff0e19c24e09885614e8aa447957",
+          "art_2443f71b60044ab7a7c6b37aed8b5ecf"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 3055,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 163,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 3218,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.016242945999693
+      }
+    },
+    {
+      "label": "charge_is_not_packed",
+      "query": "电池充好了，但还没装包。",
+      "answer": "已更新本次出门清单：电池\n\n\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 待处理 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 已确认 | 上次位置：未登记 |\n| 电池 | 装包 | 待处理 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 相机·装包、电池·装包、三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 9 · 换新对话可继续",
+      "conversation_id": "461ec86c-05c3-4cc9-aacc-cbdf47f51b2b",
+      "message_id": "41654bbd-25bc-46c8-a8ac-5b4b59dde839",
+      "workflow_run_id": "8cb4e93e-bcd7-41b0-9ae2-7083c9ca1666",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3294,
+      "node_statuses": {
+        "begin_gate": "succeeded",
+        "prepare": "succeeded",
+        "start": "succeeded",
+        "begin": "succeeded",
+        "begin_check": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "plan_check": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "plan": "succeeded",
+        "commit_check": "succeeded",
+        "intent_gate": "succeeded",
+        "resolve_gate": "succeeded",
+        "commit": "succeeded",
+        "result": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"trip_update\",\"item\":\"电池\",\"task\":\"充电\",\"status\":\"done\"},{\"type\":\"trip_update\",\"item\":\"电池\",\"task\":\"装包\",\"status\":\"pending\"}]}",
+      "planner_text": "{\"suggestion\":\"电池已充好，接下来把它装进相机包即可。三脚架还在小张那里，出门前记得先取回。相机平时放在书桌右侧抽屉，装包时一并带上。\",\"question\":\"三脚架打算什么时候从小张那里取回？需要我把它加进出门前的提醒吗？\",\"next_location\":\"\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_2443f71b60044ab7a7c6b37aed8b5ecf\",\"art_67f3ca80988e41ed8fcbe5293db4ce82\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "已更新本次出门清单：电池\n\n\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 待处理 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 已确认 | 上次位置：未登记 |\n| 电池 | 装包 | 待处理 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 相机·装包、电池·装包、三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 9 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_b9f14355a6a546b2aaabb1b762edfd61",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 9,
+        "focus": [
+          "trip",
+          "TR-315832"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "known",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "charged",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            }
+          },
+          "trips": {
+            "TR-315832": {
+              "id": "TR-315832",
+              "activity": "拍照",
+              "date": "2026-11-14",
+              "checks": [
+                {
+                  "id": "check_def737d3",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_1fe42cb4",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00",
+                  "confirmed_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_b5647ddd",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_c623e38f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_88dd463f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                }
+              ],
+              "created_at": "2026-11-13T21:32:35+08:00"
+            }
+          },
+          "pending": null,
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": "TR-315832",
+          "seq": 9
+        },
+        "evidence_ids": [
+          "art_a4845271a70a486e8292b0c7e2a519fd",
+          "art_4ac8bf4dbd134c87ae6da5099fa4eefe",
+          "art_6e357f532337496a8efaa417701dabc0",
+          "art_7e3a78c511064b4fb88664d368a95fda",
+          "art_52cf3f69ac6f4c4f900dfe0291743377",
+          "art_5260ff0e19c24e09885614e8aa447957",
+          "art_2443f71b60044ab7a7c6b37aed8b5ecf",
+          "art_67f3ca80988e41ed8fcbe5293db4ce82"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 3628,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 183,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 3811,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.062917738003307
+      }
+    },
+    {
+      "label": "negative_not_marked_done",
+      "query": "相机还没装包。",
+      "answer": "已更新本次出门清单：相机\n\n\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 待处理 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 已确认 | 上次位置：未登记 |\n| 电池 | 装包 | 待处理 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 相机·装包、电池·装包、三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 10 · 换新对话可继续",
+      "conversation_id": "461ec86c-05c3-4cc9-aacc-cbdf47f51b2b",
+      "message_id": "983b0982-f998-4265-8807-cacd577e297f",
+      "workflow_run_id": "88a3b280-a169-4146-9064-1cc03e349783",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3761,
+      "node_statuses": {
+        "prepare": "succeeded",
+        "start": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "begin": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "resolve_gate": "succeeded",
+        "begin_check": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "plan": "succeeded",
+        "commit_check": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded",
+        "commit": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"trip_update\",\"item\":\"相机\",\"task\":\"装包\",\"status\":\"pending\"}]}",
+      "planner_text": "{\"suggestion\":\"相机固定放在书桌右侧抽屉，建议先去那里取出并装进相机包；电池已充好也一并装包，三脚架还在小张处需取回。\",\"question\":\"相机现在是在书桌右侧抽屉里吗？需要我帮你把电池和三脚架也一起列入装包核对吗？\",\"next_location\":\"书桌右侧抽屉\",\"checklist\":[\"相机\",\"电池\",\"三脚架\",\"相机包\"],\"evidence_ids\":[\"art_2443f71b60044ab7a7c6b37aed8b5ecf\",\"art_b9f14355a6a546b2aaabb1b762edfd61\",\"art_67f3ca80988e41ed8fcbe5293db4ce82\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "已更新本次出门清单：相机\n\n\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 待处理 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 已确认 | 上次位置：未登记 |\n| 电池 | 装包 | 待处理 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 相机·装包、电池·装包、三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 10 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_f38a481ca4df4e9ca662a400eac23a43",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 10,
+        "focus": [
+          "trip",
+          "TR-315832"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "known",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "charged",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            }
+          },
+          "trips": {
+            "TR-315832": {
+              "id": "TR-315832",
+              "activity": "拍照",
+              "date": "2026-11-14",
+              "checks": [
+                {
+                  "id": "check_def737d3",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:42+08:00"
+                },
+                {
+                  "id": "check_1fe42cb4",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00",
+                  "confirmed_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_b5647ddd",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_c623e38f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_88dd463f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                }
+              ],
+              "created_at": "2026-11-13T21:32:35+08:00"
+            }
+          },
+          "pending": null,
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": "TR-315832",
+          "seq": 10
+        },
+        "evidence_ids": [
+          "art_4ac8bf4dbd134c87ae6da5099fa4eefe",
+          "art_6e357f532337496a8efaa417701dabc0",
+          "art_7e3a78c511064b4fb88664d368a95fda",
+          "art_52cf3f69ac6f4c4f900dfe0291743377",
+          "art_5260ff0e19c24e09885614e8aa447957",
+          "art_2443f71b60044ab7a7c6b37aed8b5ecf",
+          "art_67f3ca80988e41ed8fcbe5293db4ce82",
+          "art_b9f14355a6a546b2aaabb1b762edfd61"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 3713,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 193,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 3906,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.56716035700083
+      }
+    },
+    {
+      "label": "pack_two_items",
+      "query": "相机已装包，电池也装包了。",
+      "answer": "已更新本次出门清单：相机\n\n已更新本次出门清单：电池\n\n\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 已确认 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 已确认 | 上次位置：未登记 |\n| 电池 | 装包 | 已确认 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 11 · 换新对话可继续",
+      "conversation_id": "461ec86c-05c3-4cc9-aacc-cbdf47f51b2b",
+      "message_id": "6e479980-fbd4-442e-b96c-180e406d65a4",
+      "workflow_run_id": "6de58f93-f81f-4c67-a0c8-c8e17abe59c1",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 4104,
+      "node_statuses": {
+        "begin": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "resolve_gate": "succeeded",
+        "commit": "succeeded",
+        "commit_check": "succeeded",
+        "prepare": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "plan": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"trip_update\",\"item\":\"相机\",\"task\":\"装包\",\"status\":\"done\"},{\"type\":\"trip_update\",\"item\":\"电池\",\"task\":\"装包\",\"status\":\"done\"}]}",
+      "planner_text": "{\"suggestion\":\"相机和电池已确认装包。出门前还剩三脚架要取回并装包，它目前借给小张，建议先联系小张取回。\",\"question\":\"三脚架还在小张那里吗？方便什么时候取回？\",\"next_location\":\"\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_67f3ca80988e41ed8fcbe5293db4ce82\",\"art_b9f14355a6a546b2aaabb1b762edfd61\",\"art_f38a481ca4df4e9ca662a400eac23a43\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "已更新本次出门清单：相机\n\n已更新本次出门清单：电池\n\n\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 已确认 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 已确认 | 上次位置：未登记 |\n| 电池 | 装包 | 已确认 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 11 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_5461029167d84012aaaa810cef5b7de5",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 11,
+        "focus": [
+          "trip",
+          "TR-315832"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "known",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "charged",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            }
+          },
+          "trips": {
+            "TR-315832": {
+              "id": "TR-315832",
+              "activity": "拍照",
+              "date": "2026-11-14",
+              "checks": [
+                {
+                  "id": "check_def737d3",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:46+08:00",
+                  "confirmed_at": "2026-11-13T21:32:46+08:00"
+                },
+                {
+                  "id": "check_1fe42cb4",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00",
+                  "confirmed_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_b5647ddd",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:46+08:00",
+                  "confirmed_at": "2026-11-13T21:32:46+08:00"
+                },
+                {
+                  "id": "check_c623e38f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_88dd463f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                }
+              ],
+              "created_at": "2026-11-13T21:32:35+08:00"
+            }
+          },
+          "pending": null,
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": "TR-315832",
+          "seq": 11
+        },
+        "evidence_ids": [
+          "art_6e357f532337496a8efaa417701dabc0",
+          "art_7e3a78c511064b4fb88664d368a95fda",
+          "art_52cf3f69ac6f4c4f900dfe0291743377",
+          "art_5260ff0e19c24e09885614e8aa447957",
+          "art_2443f71b60044ab7a7c6b37aed8b5ecf",
+          "art_67f3ca80988e41ed8fcbe5293db4ce82",
+          "art_b9f14355a6a546b2aaabb1b762edfd61",
+          "art_f38a481ca4df4e9ca662a400eac23a43"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 3786,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 187,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 3973,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.5414492880008765
+      }
+    },
+    {
+      "label": "retract_packed_state",
+      "query": "相机从包里拿出来了，还没重新装包。",
+      "answer": "已更新本次出门清单：相机\n\n\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 待处理 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 已确认 | 上次位置：未登记 |\n| 电池 | 装包 | 已确认 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 相机·装包、三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 12 · 换新对话可继续",
+      "conversation_id": "461ec86c-05c3-4cc9-aacc-cbdf47f51b2b",
+      "message_id": "8c63767e-b6da-49c6-9772-6c8d0e6b847b",
+      "workflow_run_id": "e88f2fe1-19d4-498b-9c81-2250e5a510af",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3467,
+      "node_statuses": {
+        "intent_gate": "succeeded",
+        "prepare": "succeeded",
+        "begin_gate": "succeeded",
+        "begin": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "resolve_gate": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "plan": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded",
+        "commit": "succeeded",
+        "commit_check": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"trip_update\",\"item\":\"相机\",\"task\":\"装包\",\"status\":\"pending\"}]}",
+      "planner_text": "{\"suggestion\":\"相机已从包里取出，请先确认它现在放在哪里，再放回黑色相机包；三脚架还在小张处，记得取回后一并装包。\",\"question\":\"相机现在放在哪个位置？三脚架打算什么时候从小张那里取回？\",\"next_location\":\"书桌右侧抽屉\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_2443f71b60044ab7a7c6b37aed8b5ecf\",\"art_67f3ca80988e41ed8fcbe5293db4ce82\",\"art_5461029167d84012aaaa810cef5b7de5\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "已更新本次出门清单：相机\n\n\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 待处理 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 已确认 | 上次位置：未登记 |\n| 电池 | 装包 | 已确认 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 相机·装包、三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 12 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_e620f23d4bfc4dfb8eeb3b433f663324",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 12,
+        "focus": [
+          "trip",
+          "TR-315832"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "known",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "charged",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            }
+          },
+          "trips": {
+            "TR-315832": {
+              "id": "TR-315832",
+              "activity": "拍照",
+              "date": "2026-11-14",
+              "checks": [
+                {
+                  "id": "check_def737d3",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:50+08:00"
+                },
+                {
+                  "id": "check_1fe42cb4",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00",
+                  "confirmed_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_b5647ddd",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:46+08:00",
+                  "confirmed_at": "2026-11-13T21:32:46+08:00"
+                },
+                {
+                  "id": "check_c623e38f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_88dd463f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                }
+              ],
+              "created_at": "2026-11-13T21:32:35+08:00"
+            }
+          },
+          "pending": null,
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": "TR-315832",
+          "seq": 12
+        },
+        "evidence_ids": [
+          "art_7e3a78c511064b4fb88664d368a95fda",
+          "art_52cf3f69ac6f4c4f900dfe0291743377",
+          "art_5260ff0e19c24e09885614e8aa447957",
+          "art_2443f71b60044ab7a7c6b37aed8b5ecf",
+          "art_67f3ca80988e41ed8fcbe5293db4ce82",
+          "art_b9f14355a6a546b2aaabb1b762edfd61",
+          "art_f38a481ca4df4e9ca662a400eac23a43",
+          "art_5461029167d84012aaaa810cef5b7de5"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 3843,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 178,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 4021,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.248566121001204
+      }
+    },
+    {
+      "label": "pack_again_after_retraction",
+      "query": "相机已经重新装包了。",
+      "answer": "已更新本次出门清单：相机\n\n\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 已确认 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 已确认 | 上次位置：未登记 |\n| 电池 | 装包 | 已确认 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 13 · 换新对话可继续",
+      "conversation_id": "461ec86c-05c3-4cc9-aacc-cbdf47f51b2b",
+      "message_id": "4e0c01c4-8b37-4006-b141-e70fbd4aa9a3",
+      "workflow_run_id": "6e9acf64-8bde-4dc6-9c2d-440903ccaf7d",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3358,
+      "node_statuses": {
+        "resolve_gate": "succeeded",
+        "begin": "succeeded",
+        "prepare": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "plan": "succeeded",
+        "commit_check": "succeeded",
+        "commit": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"trip_update\",\"item\":\"相机\",\"task\":\"装包\",\"status\":\"done\"}]}",
+      "planner_text": "{\"suggestion\":\"相机已重新装包，接下来确认三脚架是否已从小张处取回并装包，这是出门前最后一项待办。\",\"question\":\"三脚架从小张那里取回来了吗？取回后记得也放进包里。\",\"next_location\":\"\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_5461029167d84012aaaa810cef5b7de5\",\"art_67f3ca80988e41ed8fcbe5293db4ce82\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "已更新本次出门清单：相机\n\n\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 已确认 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 已确认 | 上次位置：未登记 |\n| 电池 | 装包 | 已确认 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 13 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_c656e2e854da4fbe9babc156e7237407",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 13,
+        "focus": [
+          "trip",
+          "TR-315832"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "known",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "charged",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            }
+          },
+          "trips": {
+            "TR-315832": {
+              "id": "TR-315832",
+              "activity": "拍照",
+              "date": "2026-11-14",
+              "checks": [
+                {
+                  "id": "check_def737d3",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:53+08:00",
+                  "confirmed_at": "2026-11-13T21:32:53+08:00"
+                },
+                {
+                  "id": "check_1fe42cb4",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00",
+                  "confirmed_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_b5647ddd",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:46+08:00",
+                  "confirmed_at": "2026-11-13T21:32:46+08:00"
+                },
+                {
+                  "id": "check_c623e38f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_88dd463f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                }
+              ],
+              "created_at": "2026-11-13T21:32:35+08:00"
+            }
+          },
+          "pending": null,
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": "TR-315832",
+          "seq": 13
+        },
+        "evidence_ids": [
+          "art_52cf3f69ac6f4c4f900dfe0291743377",
+          "art_5260ff0e19c24e09885614e8aa447957",
+          "art_2443f71b60044ab7a7c6b37aed8b5ecf",
+          "art_67f3ca80988e41ed8fcbe5293db4ce82",
+          "art_b9f14355a6a546b2aaabb1b762edfd61",
+          "art_f38a481ca4df4e9ca662a400eac23a43",
+          "art_5461029167d84012aaaa810cef5b7de5",
+          "art_e620f23d4bfc4dfb8eeb3b433f663324"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 3788,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 143,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 3931,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.2762373719961033
+      }
+    },
+    {
+      "label": "exclude_borrowed_item",
+      "query": "这次不带三脚架。",
+      "answer": "已更新本次出门清单：三脚架\n\n\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 已确认 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 已确认 | 上次位置：未登记 |\n| 电池 | 装包 | 已确认 | 上次位置：未登记 |\n| 三脚架 | 取回 | 本次不需要 | 仍借给小张 |\n| 三脚架 | 装包 | 本次不需要 | 仍借给小张 |\n\n**还差：** 本次清单已逐项确认；出发前请核对实际携带情况。\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 14 · 换新对话可继续",
+      "conversation_id": "461ec86c-05c3-4cc9-aacc-cbdf47f51b2b",
+      "message_id": "026b0633-7410-44dd-b98d-58bf0af28202",
+      "workflow_run_id": "6e1ffb48-37ff-4b13-a5f0-2f1221c7e00e",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 2959,
+      "node_statuses": {
+        "begin": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "resolve_gate": "succeeded",
+        "intent_check": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "prepare": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "resolve_check": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded",
+        "plan": "succeeded",
+        "commit_check": "succeeded",
+        "commit": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"trip_update\",\"item\":\"三脚架\",\"task\":\"装包\",\"status\":\"excluded\"},{\"type\":\"trip_update\",\"item\":\"三脚架\",\"task\":\"取回\",\"status\":\"excluded\"}]}",
+      "planner_text": "{\"suggestion\":\"已按你的意思把三脚架从本次出门清单中排除，取回和装包都不用管了。相机和电池都已装包，出发前再确认一下包就行。\",\"question\":\"要不要顺便确认一下黑色相机包里的相机和电池都在？\",\"next_location\":\"\",\"checklist\":[\"相机\",\"电池\"],\"evidence_ids\":[\"art_5260ff0e19c24e09885614e8aa447957\",\"art_5461029167d84012aaaa810cef5b7de5\",\"art_c656e2e854da4fbe9babc156e7237407\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "已更新本次出门清单：三脚架\n\n\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 已确认 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 已确认 | 上次位置：未登记 |\n| 电池 | 装包 | 已确认 | 上次位置：未登记 |\n| 三脚架 | 取回 | 本次不需要 | 仍借给小张 |\n| 三脚架 | 装包 | 本次不需要 | 仍借给小张 |\n\n**还差：** 本次清单已逐项确认；出发前请核对实际携带情况。\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 14 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_eac19fd06dfc40659dae7eb1716795d7",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 14,
+        "focus": [
+          "trip",
+          "TR-315832"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "known",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "charged",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            }
+          },
+          "trips": {
+            "TR-315832": {
+              "id": "TR-315832",
+              "activity": "拍照",
+              "date": "2026-11-14",
+              "checks": [
+                {
+                  "id": "check_def737d3",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:53+08:00",
+                  "confirmed_at": "2026-11-13T21:32:53+08:00"
+                },
+                {
+                  "id": "check_1fe42cb4",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00",
+                  "confirmed_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_b5647ddd",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:46+08:00",
+                  "confirmed_at": "2026-11-13T21:32:46+08:00"
+                },
+                {
+                  "id": "check_c623e38f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                },
+                {
+                  "id": "check_88dd463f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                }
+              ],
+              "created_at": "2026-11-13T21:32:35+08:00"
+            }
+          },
+          "pending": null,
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": "TR-315832",
+          "seq": 14
+        },
+        "evidence_ids": [
+          "art_5260ff0e19c24e09885614e8aa447957",
+          "art_2443f71b60044ab7a7c6b37aed8b5ecf",
+          "art_67f3ca80988e41ed8fcbe5293db4ce82",
+          "art_b9f14355a6a546b2aaabb1b762edfd61",
+          "art_f38a481ca4df4e9ca662a400eac23a43",
+          "art_5461029167d84012aaaa810cef5b7de5",
+          "art_e620f23d4bfc4dfb8eeb3b433f663324",
+          "art_c656e2e854da4fbe9babc156e7237407"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 3865,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 188,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 4053,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 1.784752416999254
+      }
+    },
+    {
+      "label": "trip_new_conversation",
+      "query": "查看我这次的出门清单，还差什么？",
+      "answer": "\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 已确认 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 已确认 | 上次位置：未登记 |\n| 电池 | 装包 | 已确认 | 上次位置：未登记 |\n| 三脚架 | 取回 | 本次不需要 | 仍借给小张 |\n| 三脚架 | 装包 | 本次不需要 | 仍借给小张 |\n\n**还差：** 本次清单已逐项确认；出发前请核对实际携带情况。\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。",
+      "conversation_id": "b5a0b36f-f63d-49fc-9256-32dce94d43da",
+      "message_id": "b36c0e01-1c78-4dbe-9f68-ab4217f5838e",
+      "workflow_run_id": "8c41765c-6897-4dca-96c8-d283ec7b1eb3",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3221,
+      "node_statuses": {
+        "begin_gate": "succeeded",
+        "prepare": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "begin": "succeeded",
+        "intent_gate": "succeeded",
+        "resolve_gate": "succeeded",
+        "commit": "succeeded",
+        "plan": "succeeded",
+        "commit_check": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"trip_status\",\"activity\":\"拍照\"}]}",
+      "planner_text": "{\"suggestion\":\"相机和电池都已装包，三脚架这次不带，清单已齐。出门前可再确认相机在包内、电池有电。\",\"question\":\"需要我帮你把这次清单标记为全部完成吗？\",\"next_location\":\"\",\"checklist\":[\"相机\",\"电池\"],\"evidence_ids\":[\"art_c656e2e854da4fbe9babc156e7237407\",\"art_5461029167d84012aaaa810cef5b7de5\",\"art_eac19fd06dfc40659dae7eb1716795d7\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "\n### 出门检查｜拍照｜2026-11-14\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 已确认 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 已确认 | 上次位置：未登记 |\n| 电池 | 装包 | 已确认 | 上次位置：未登记 |\n| 三脚架 | 取回 | 本次不需要 | 仍借给小张 |\n| 三脚架 | 装包 | 本次不需要 | 仍借给小张 |\n\n**还差：** 本次清单已逐项确认；出发前请核对实际携带情况。\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。",
+        "mutated": false,
+        "memory_id": null,
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 14,
+        "focus": [
+          "trip",
+          "TR-315832"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "known",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "charged",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            }
+          },
+          "trips": {
+            "TR-315832": {
+              "id": "TR-315832",
+              "activity": "拍照",
+              "date": "2026-11-14",
+              "checks": [
+                {
+                  "id": "check_def737d3",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:53+08:00",
+                  "confirmed_at": "2026-11-13T21:32:53+08:00"
+                },
+                {
+                  "id": "check_1fe42cb4",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00",
+                  "confirmed_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_b5647ddd",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:46+08:00",
+                  "confirmed_at": "2026-11-13T21:32:46+08:00"
+                },
+                {
+                  "id": "check_c623e38f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                },
+                {
+                  "id": "check_88dd463f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                }
+              ],
+              "created_at": "2026-11-13T21:32:35+08:00"
+            }
+          },
+          "pending": null,
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": "TR-315832",
+          "seq": 14
+        },
+        "evidence_ids": [
+          "art_2443f71b60044ab7a7c6b37aed8b5ecf",
+          "art_67f3ca80988e41ed8fcbe5293db4ce82",
+          "art_b9f14355a6a546b2aaabb1b762edfd61",
+          "art_f38a481ca4df4e9ca662a400eac23a43",
+          "art_5461029167d84012aaaa810cef5b7de5",
+          "art_e620f23d4bfc4dfb8eeb3b433f663324",
+          "art_c656e2e854da4fbe9babc156e7237407",
+          "art_eac19fd06dfc40659dae7eb1716795d7"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 4003,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 144,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 4147,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 1.979182030998345
+      }
+    },
+    {
+      "label": "new_trip_resets_progress",
+      "query": "后天出去拍照，重新做一份出门检查，只核对相机、电池、三脚架。",
+      "answer": "\n### 出门检查｜拍照｜2026-11-15\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 待处理 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 待处理 | 上次位置：未登记 |\n| 电池 | 装包 | 待处理 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 相机·装包、电池·充电、电池·装包、三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 15 · 换新对话可继续",
+      "conversation_id": "3f6d1d6f-76e6-4e48-982c-1a74fbe6f8e4",
+      "message_id": "726c784a-0931-43d5-80ae-9432897b146e",
+      "workflow_run_id": "3340b675-7b63-463d-b82b-624b9b93cd7f",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3784,
+      "node_statuses": {
+        "prepare": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "understand": "succeeded",
+        "begin": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "resolve": "succeeded",
+        "commit_check": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded",
+        "resolve_gate": "succeeded",
+        "commit": "succeeded",
+        "plan": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"trip\",\"activity\":\"拍照\",\"items\":[\"相机\",\"电池\",\"三脚架\"]}]}",
+      "planner_text": "{\"suggestion\":\"相机和电池已确认装包，三脚架本轮已排除。出门前只需再核对相机、电池是否仍在包内，不必重复处理三脚架。\",\"question\":\"后天拍照的出发时间和地点定了吗？出发前想再核对一次相机和电池吗？\",\"next_location\":\"\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_c656e2e854da4fbe9babc156e7237407\",\"art_5461029167d84012aaaa810cef5b7de5\",\"art_eac19fd06dfc40659dae7eb1716795d7\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "\n### 出门检查｜拍照｜2026-11-15\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 待处理 | 上次位置：书桌右侧抽屉 |\n| 电池 | 充电 | 待处理 | 上次位置：未登记 |\n| 电池 | 装包 | 待处理 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 相机·装包、电池·充电、电池·装包、三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。\n\n— 档案已同步 · 版本 15 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_ee472a13a61e4fd3a6228784de94fedd",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 15,
+        "focus": [
+          "trip",
+          "TR-7108A1"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "known",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "charged",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            }
+          },
+          "trips": {
+            "TR-315832": {
+              "id": "TR-315832",
+              "activity": "拍照",
+              "date": "2026-11-14",
+              "checks": [
+                {
+                  "id": "check_def737d3",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:53+08:00",
+                  "confirmed_at": "2026-11-13T21:32:53+08:00"
+                },
+                {
+                  "id": "check_1fe42cb4",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00",
+                  "confirmed_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_b5647ddd",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:46+08:00",
+                  "confirmed_at": "2026-11-13T21:32:46+08:00"
+                },
+                {
+                  "id": "check_c623e38f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                },
+                {
+                  "id": "check_88dd463f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                }
+              ],
+              "created_at": "2026-11-13T21:32:35+08:00"
+            },
+            "TR-7108A1": {
+              "id": "TR-7108A1",
+              "activity": "拍照",
+              "date": "2026-11-15",
+              "checks": [
+                {
+                  "id": "check_097cfcf6",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_355b4d1a",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_6d71b1fe",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_25a8e090",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_fed63b34",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                }
+              ],
+              "created_at": "2026-11-13T21:33:03+08:00"
+            }
+          },
+          "pending": null,
+          "last_item": "item_63323d561b",
+          "last_case": "LF-5DDE62",
+          "last_trip": "TR-7108A1",
+          "seq": 15
+        },
+        "evidence_ids": [
+          "art_2443f71b60044ab7a7c6b37aed8b5ecf",
+          "art_67f3ca80988e41ed8fcbe5293db4ce82",
+          "art_b9f14355a6a546b2aaabb1b762edfd61",
+          "art_f38a481ca4df4e9ca662a400eac23a43",
+          "art_5461029167d84012aaaa810cef5b7de5",
+          "art_e620f23d4bfc4dfb8eeb3b433f663324",
+          "art_c656e2e854da4fbe9babc156e7237407",
+          "art_eac19fd06dfc40659dae7eb1716795d7"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 4049,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 170,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 4219,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.44099943800029
+      }
+    },
+    {
+      "label": "second_investigation_camera",
+      "query": "相机又找不到了",
+      "answer": "\n### 寻物案 LF-2AEA22｜调查中\n\n**物品：** 相机\n\n**上次位置：** 书桌右侧抽屉（2026-11-13 21:32 的记录，当前位置待确认）\n\n**已排查：** 暂无\n\n**下一步建议（未确认）：** 先检查上次登记的位置：书桌右侧抽屉\n\n**继续调查：** 这里检查过了吗？你可以回复“找到了”或“没有”。\n\n— 档案已同步 · 版本 16 · 换新对话可继续",
+      "conversation_id": "4c121ae5-4e46-4acd-9889-9788a4c1f608",
+      "message_id": "919d5bd5-10a2-46b0-890b-5f28507dfb8e",
+      "workflow_run_id": "2486069b-3422-4c63-b931-1d5c1613eb7d",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3214,
+      "node_statuses": {
+        "resolve_check": "succeeded",
+        "prepare": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "intent_check": "succeeded",
+        "begin": "succeeded",
+        "resolve_gate": "succeeded",
+        "commit": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "commit_check": "succeeded",
+        "plan": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"find\",\"item\":\"相机\"}]}",
+      "planner_text": "{\"suggestion\":\"上次相机在黑色相机包找到，蓝色背包已查过。先看黑色相机包，再回想这次从包里拿出来后放哪了。\",\"question\":\"这次出门前你最后一次用相机是在哪、什么场景？\",\"next_location\":\"黑色相机包\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_e620f23d4bfc4dfb8eeb3b433f663324\",\"art_c656e2e854da4fbe9babc156e7237407\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "\n### 寻物案 LF-2AEA22｜调查中\n\n**物品：** 相机\n\n**上次位置：** 书桌右侧抽屉（2026-11-13 21:32 的记录，当前位置待确认）\n\n**已排查：** 暂无\n\n**下一步建议（未确认）：** 先检查上次登记的位置：书桌右侧抽屉\n\n**继续调查：** 这里检查过了吗？你可以回复“找到了”或“没有”。\n\n— 档案已同步 · 版本 16 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_2246a7041fc94f05bcfb1dbd640c45eb",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 16,
+        "focus": [
+          "case",
+          "LF-2AEA22"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "missing",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "charged",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            },
+            "LF-2AEA22": {
+              "id": "LF-2AEA22",
+              "item_id": "item_63323d561b",
+              "status": "open",
+              "checked": [],
+              "clues": [],
+              "opened_at": "2026-11-13T21:33:06+08:00",
+              "found_location": null
+            }
+          },
+          "trips": {
+            "TR-315832": {
+              "id": "TR-315832",
+              "activity": "拍照",
+              "date": "2026-11-14",
+              "checks": [
+                {
+                  "id": "check_def737d3",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:33:06+08:00"
+                },
+                {
+                  "id": "check_1fe42cb4",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00",
+                  "confirmed_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_b5647ddd",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:46+08:00",
+                  "confirmed_at": "2026-11-13T21:32:46+08:00"
+                },
+                {
+                  "id": "check_c623e38f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                },
+                {
+                  "id": "check_88dd463f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                }
+              ],
+              "created_at": "2026-11-13T21:32:35+08:00"
+            },
+            "TR-7108A1": {
+              "id": "TR-7108A1",
+              "activity": "拍照",
+              "date": "2026-11-15",
+              "checks": [
+                {
+                  "id": "check_097cfcf6",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_355b4d1a",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_6d71b1fe",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_25a8e090",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_fed63b34",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                }
+              ],
+              "created_at": "2026-11-13T21:33:03+08:00"
+            }
+          },
+          "pending": {
+            "kind": "investigate",
+            "case_id": "LF-2AEA22",
+            "conversation_id": "4c121ae5-4e46-4acd-9889-9788a4c1f608",
+            "locations": [
+              "书桌右侧抽屉"
+            ],
+            "at": "2026-11-13T21:33:06+08:00"
+          },
+          "last_item": "item_63323d561b",
+          "last_case": "LF-2AEA22",
+          "last_trip": "TR-7108A1",
+          "seq": 16
+        },
+        "evidence_ids": [
+          "art_67f3ca80988e41ed8fcbe5293db4ce82",
+          "art_b9f14355a6a546b2aaabb1b762edfd61",
+          "art_f38a481ca4df4e9ca662a400eac23a43",
+          "art_5461029167d84012aaaa810cef5b7de5",
+          "art_e620f23d4bfc4dfb8eeb3b433f663324",
+          "art_c656e2e854da4fbe9babc156e7237407",
+          "art_eac19fd06dfc40659dae7eb1716795d7",
+          "art_ee472a13a61e4fd3a6228784de94fedd"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 4628,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 133,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 4761,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 1.9294204590005393
+      }
+    },
+    {
+      "label": "second_investigation_keys",
+      "query": "钥匙也找不到了",
+      "answer": "\n### 寻物案 LF-ABBC04｜调查中\n\n**物品：** 钥匙\n\n**历史位置：** 暂无记录，需要你补充线索。\n\n**已排查：** 暂无\n\n**下一步建议（未确认）：** 钥匙是新线索，先想想最后一次用钥匙的时间和场景，比如进门、出门或换包时。书桌右侧抽屉已排查过，不必重复。\n\n**继续调查：** 你最后一次用钥匙是什么时候、在哪儿？当时穿的外套或背的包是哪个？\n\n— 档案已同步 · 版本 17 · 换新对话可继续",
+      "conversation_id": "14219e70-4dc0-4e53-807b-ca081d6a1260",
+      "message_id": "c7557243-3561-40f2-b9db-3a38fcfb5a05",
+      "workflow_run_id": "d1b018d2-de71-43c4-a30a-2c6733483a83",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3551,
+      "node_statuses": {
+        "begin_gate": "succeeded",
+        "begin": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "plan": "succeeded",
+        "prepare": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "plan_check": "succeeded",
+        "intent_gate": "succeeded",
+        "resolve_gate": "succeeded",
+        "commit": "succeeded",
+        "commit_check": "succeeded",
+        "result": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"find\",\"item\":\"钥匙\"}]}",
+      "planner_text": "{\"suggestion\":\"钥匙是新线索，先想想最后一次用钥匙的时间和场景，比如进门、出门或换包时。书桌右侧抽屉已排查过，不必重复。\",\"question\":\"你最后一次用钥匙是什么时候、在哪儿？当时穿的外套或背的包是哪个？\",\"next_location\":\"\",\"checklist\":[\"钥匙\"],\"evidence_ids\":[]}",
+      "commit": {
+        "ok": true,
+        "answer": "\n### 寻物案 LF-ABBC04｜调查中\n\n**物品：** 钥匙\n\n**历史位置：** 暂无记录，需要你补充线索。\n\n**已排查：** 暂无\n\n**下一步建议（未确认）：** 钥匙是新线索，先想想最后一次用钥匙的时间和场景，比如进门、出门或换包时。书桌右侧抽屉已排查过，不必重复。\n\n**继续调查：** 你最后一次用钥匙是什么时候、在哪儿？当时穿的外套或背的包是哪个？\n\n— 档案已同步 · 版本 17 · 换新对话可继续",
+        "mutated": true,
+        "memory_id": "art_44738dec15c043299681758cbe97db67",
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 17,
+        "focus": [
+          "case",
+          "LF-ABBC04"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "missing",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "charged",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_612a6dc9a0": {
+              "id": "item_612a6dc9a0",
+              "name": "钥匙",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "missing",
+              "updated_at": "2026-11-13T21:33:10+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            },
+            "LF-2AEA22": {
+              "id": "LF-2AEA22",
+              "item_id": "item_63323d561b",
+              "status": "open",
+              "checked": [],
+              "clues": [],
+              "opened_at": "2026-11-13T21:33:06+08:00",
+              "found_location": null
+            },
+            "LF-ABBC04": {
+              "id": "LF-ABBC04",
+              "item_id": "item_612a6dc9a0",
+              "status": "open",
+              "checked": [],
+              "clues": [],
+              "opened_at": "2026-11-13T21:33:10+08:00",
+              "found_location": null
+            }
+          },
+          "trips": {
+            "TR-315832": {
+              "id": "TR-315832",
+              "activity": "拍照",
+              "date": "2026-11-14",
+              "checks": [
+                {
+                  "id": "check_def737d3",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:33:06+08:00"
+                },
+                {
+                  "id": "check_1fe42cb4",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00",
+                  "confirmed_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_b5647ddd",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:46+08:00",
+                  "confirmed_at": "2026-11-13T21:32:46+08:00"
+                },
+                {
+                  "id": "check_c623e38f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                },
+                {
+                  "id": "check_88dd463f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                }
+              ],
+              "created_at": "2026-11-13T21:32:35+08:00"
+            },
+            "TR-7108A1": {
+              "id": "TR-7108A1",
+              "activity": "拍照",
+              "date": "2026-11-15",
+              "checks": [
+                {
+                  "id": "check_097cfcf6",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_355b4d1a",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_6d71b1fe",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_25a8e090",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_fed63b34",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                }
+              ],
+              "created_at": "2026-11-13T21:33:03+08:00"
+            }
+          },
+          "pending": {
+            "kind": "investigate",
+            "case_id": "LF-ABBC04",
+            "conversation_id": "14219e70-4dc0-4e53-807b-ca081d6a1260",
+            "locations": [],
+            "at": "2026-11-13T21:33:10+08:00"
+          },
+          "last_item": "item_612a6dc9a0",
+          "last_case": "LF-ABBC04",
+          "last_trip": "TR-7108A1",
+          "seq": 17
+        },
+        "evidence_ids": [
+          "art_b9f14355a6a546b2aaabb1b762edfd61",
+          "art_f38a481ca4df4e9ca662a400eac23a43",
+          "art_5461029167d84012aaaa810cef5b7de5",
+          "art_e620f23d4bfc4dfb8eeb3b433f663324",
+          "art_c656e2e854da4fbe9babc156e7237407",
+          "art_eac19fd06dfc40659dae7eb1716795d7",
+          "art_ee472a13a61e4fd3a6228784de94fedd",
+          "art_2246a7041fc94f05bcfb1dbd640c45eb"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 4884,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 91,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 4975,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.070641287999024
+      }
+    },
+    {
+      "label": "multi_case_clarification",
+      "query": "继续办案",
+      "answer": "同时有多个未结案件：相机、钥匙。请明确本轮要继续哪件物品。",
+      "conversation_id": "d416b4a2-e726-4c73-9336-b2476e5cd31c",
+      "message_id": "e4193dc6-e0d7-400b-a702-cf5236978566",
+      "workflow_run_id": "6026de3c-9c2f-4f7b-9d87-4f24eb058a09",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 2815,
+      "node_statuses": {
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "begin": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "plan": "succeeded",
+        "commit_check": "succeeded",
+        "prepare": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded",
+        "resolve_gate": "succeeded",
+        "commit": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"clarify\"}]}",
+      "planner_text": "{\"suggestion\":\"钥匙案目前没有线索，先回想最后一次用钥匙的时间和当时场景，比如回家开门或出门锁门，再据此排查周边。\",\"question\":\"你最后一次用钥匙是什么时候、在哪个场景？\",\"next_location\":\"\",\"checklist\":[\"钥匙\"],\"evidence_ids\":[\"art_44738dec15c043299681758cbe97db67\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "同时有多个未结案件：相机、钥匙。请明确本轮要继续哪件物品。",
+        "mutated": false,
+        "memory_id": null,
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 17,
+        "focus": [
+          "clarify",
+          null
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "missing",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "charged",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_612a6dc9a0": {
+              "id": "item_612a6dc9a0",
+              "name": "钥匙",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "missing",
+              "updated_at": "2026-11-13T21:33:10+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            },
+            "LF-2AEA22": {
+              "id": "LF-2AEA22",
+              "item_id": "item_63323d561b",
+              "status": "open",
+              "checked": [],
+              "clues": [],
+              "opened_at": "2026-11-13T21:33:06+08:00",
+              "found_location": null
+            },
+            "LF-ABBC04": {
+              "id": "LF-ABBC04",
+              "item_id": "item_612a6dc9a0",
+              "status": "open",
+              "checked": [],
+              "clues": [],
+              "opened_at": "2026-11-13T21:33:10+08:00",
+              "found_location": null
+            }
+          },
+          "trips": {
+            "TR-315832": {
+              "id": "TR-315832",
+              "activity": "拍照",
+              "date": "2026-11-14",
+              "checks": [
+                {
+                  "id": "check_def737d3",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:33:06+08:00"
+                },
+                {
+                  "id": "check_1fe42cb4",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00",
+                  "confirmed_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_b5647ddd",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:46+08:00",
+                  "confirmed_at": "2026-11-13T21:32:46+08:00"
+                },
+                {
+                  "id": "check_c623e38f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                },
+                {
+                  "id": "check_88dd463f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                }
+              ],
+              "created_at": "2026-11-13T21:32:35+08:00"
+            },
+            "TR-7108A1": {
+              "id": "TR-7108A1",
+              "activity": "拍照",
+              "date": "2026-11-15",
+              "checks": [
+                {
+                  "id": "check_097cfcf6",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_355b4d1a",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_6d71b1fe",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_25a8e090",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_fed63b34",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                }
+              ],
+              "created_at": "2026-11-13T21:33:03+08:00"
+            }
+          },
+          "pending": {
+            "kind": "investigate",
+            "case_id": "LF-ABBC04",
+            "conversation_id": "14219e70-4dc0-4e53-807b-ca081d6a1260",
+            "locations": [],
+            "at": "2026-11-13T21:33:10+08:00"
+          },
+          "last_item": "item_612a6dc9a0",
+          "last_case": "LF-ABBC04",
+          "last_trip": "TR-7108A1",
+          "seq": 17
+        },
+        "evidence_ids": [
+          "art_f38a481ca4df4e9ca662a400eac23a43",
+          "art_5461029167d84012aaaa810cef5b7de5",
+          "art_e620f23d4bfc4dfb8eeb3b433f663324",
+          "art_c656e2e854da4fbe9babc156e7237407",
+          "art_eac19fd06dfc40659dae7eb1716795d7",
+          "art_ee472a13a61e4fd3a6228784de94fedd",
+          "art_2246a7041fc94f05bcfb1dbd640c45eb",
+          "art_44738dec15c043299681758cbe97db67"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 5167,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 91,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 5258,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 1.8049203109985683
+      }
+    },
+    {
+      "label": "different_user_isolated",
+      "query": "我上次把相机放在哪里？",
+      "answer": "请说明是哪件物品；我还没有足够的物品记录。",
+      "conversation_id": "d656c833-58fc-4adc-8fe6-4d1b74ce0799",
+      "message_id": "11d7cd94-52c1-4d70-9365-06321f298ebb",
+      "workflow_run_id": "7c57e100-39b0-461d-bd07-add71a0becb8",
+      "user_id": "001eb44f-9725-44b0-8600-3f860494246c",
+      "latency_ms": 3225,
+      "node_statuses": {
+        "intent_check": "succeeded",
+        "begin": "succeeded",
+        "resolve_gate": "succeeded",
+        "prepare": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "plan": "succeeded",
+        "commit_check": "succeeded",
+        "resolve_check": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded",
+        "commit": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"recall\",\"item\":\"相机\"}]}",
+      "planner_text": "{\"suggestion\":\"档案里暂时没有相机的存放记录。建议回想最后一次使用相机的场景，比如是否拍完照后放在书桌、客厅或包里，再告诉我具体位置。\",\"question\":\"你最后一次用相机是什么时候、在哪个场景？之后可能顺手放在哪里？\",\"next_location\":\"\",\"checklist\":[\"相机\",\"电池\",\"相机包\"],\"evidence_ids\":[]}",
+      "commit": {
+        "ok": true,
+        "answer": "请说明是哪件物品；我还没有足够的物品记录。",
+        "mutated": false,
+        "memory_id": null,
+        "scope_id": "scp_02s2yezgq07251nst9hkkdn2ws",
+        "version": 0,
+        "focus": [
+          "clarify",
+          null
+        ],
+        "state": {
+          "items": {},
+          "cases": {},
+          "trips": {},
+          "pending": null,
+          "last_item": null,
+          "last_case": null,
+          "last_trip": null,
+          "seq": 0
+        },
+        "evidence_ids": [],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 1283,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 97,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 1380,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.1596917499991832
+      }
+    },
+    {
+      "label": "model_unavailable_no_fake_success",
+      "query": "故障测试物品放在红色抽屉。",
+      "answer": "模型这轮没有返回可执行的理解结果，档案尚未修改。请明确说明，例如“相机找不到了”。",
+      "conversation_id": "cb94eb5a-1a02-4340-8a09-ef9a97d061d4",
+      "message_id": "c024621a-d480-432d-8462-25e72148931d",
+      "workflow_run_id": "6167736d-3903-4b1d-8d8a-3ee59c549f79",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 864,
+      "node_statuses": {
+        "understand": "exception",
+        "prepare": "succeeded",
+        "intent_check": "succeeded",
+        "begin": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "intent_failed": "succeeded"
+      },
+      "intent_text": "{}",
+      "planner_text": null,
+      "commit": null,
+      "usage": {
+        "prompt_tokens": 0,
+        "prompt_unit_price": "0.0",
+        "prompt_price_unit": "0.0",
+        "prompt_price": "0.0",
+        "completion_tokens": 0,
+        "completion_unit_price": "0.0",
+        "completion_price_unit": "0.0",
+        "completion_price": "0.0",
+        "total_tokens": 0,
+        "total_price": "0.0",
+        "currency": "USD",
+        "latency": 0.0
+      }
+    },
+    {
+      "label": "memory_unavailable_no_fake_success",
+      "query": "故障测试物品放在红色抽屉。",
+      "answer": "档案服务暂时无法读取，这轮没有开始登记或办案。请稍后再试。",
+      "conversation_id": "8d981ed3-cbeb-4a39-9b27-d85ac8564897",
+      "message_id": "935d07ad-3b24-4a41-8642-dc1e17737a25",
+      "workflow_run_id": "55795395-8d9d-477b-8761-2bc0186b0198",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 1115,
+      "node_statuses": {
+        "begin_check": "succeeded",
+        "begin_gate": "succeeded",
+        "prepare": "succeeded",
+        "start": "succeeded",
+        "begin": "exception",
+        "begin_failed": "succeeded"
+      },
+      "intent_text": null,
+      "planner_text": null,
+      "commit": null,
+      "usage": {
+        "prompt_tokens": 0,
+        "prompt_unit_price": "0.0",
+        "prompt_price_unit": "0.0",
+        "prompt_price": "0.0",
+        "completion_tokens": 0,
+        "completion_unit_price": "0.0",
+        "completion_price_unit": "0.0",
+        "completion_price": "0.0",
+        "total_tokens": 0,
+        "total_price": "0.0",
+        "currency": "USD",
+        "latency": 0.0
+      }
+    },
+    {
+      "label": "recreated_containers_restore_memory",
+      "query": "查看我这次的出门清单，还差什么？",
+      "answer": "\n### 出门检查｜拍照｜2026-11-15\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 待处理 | 仍有未结寻物案 |\n| 电池 | 充电 | 待处理 | 上次位置：未登记 |\n| 电池 | 装包 | 待处理 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 相机·装包、电池·充电、电池·装包、三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。",
+      "conversation_id": "8ca3b3f0-f22d-4fd7-8452-76f18ac89204",
+      "message_id": "5ead13f5-ac16-4413-b684-55c567ce2091",
+      "workflow_run_id": "202509a8-bd9e-4a27-89bc-3cfcb5bfd496",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3114,
+      "node_statuses": {
+        "resolve_check": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "prepare": "succeeded",
+        "intent_check": "succeeded",
+        "begin": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "resolve_gate": "succeeded",
+        "commit": "succeeded",
+        "plan": "succeeded",
+        "commit_check": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"trip_status\",\"activity\":\"拍照\"}]}",
+      "planner_text": "{\"suggestion\":\"这次拍照清单里，相机还没装包，电池需要充电并装包；三脚架已借给小张，需要先取回。相机目前还没找到，建议先确认它在哪。\",\"question\":\"相机上次从黑色相机包拿出来后，放在哪里了？\",\"next_location\":\"黑色相机包\",\"checklist\":[\"相机\",\"电池\",\"三脚架\"],\"evidence_ids\":[\"art_2246a7041fc94f05bcfb1dbd640c45eb\",\"art_ee472a13a61e4fd3a6228784de94fedd\",\"art_eac19fd06dfc40659dae7eb1716795d7\"]}",
+      "commit": {
+        "ok": true,
+        "answer": "\n### 出门检查｜拍照｜2026-11-15\n\n| 物品 | 本次事项 | 状态 | 已有记录 |\n|---|---|---|---|\n| 相机 | 装包 | 待处理 | 仍有未结寻物案 |\n| 电池 | 充电 | 待处理 | 上次位置：未登记 |\n| 电池 | 装包 | 待处理 | 上次位置：未登记 |\n| 三脚架 | 取回 | 待处理 | 仍借给小张 |\n| 三脚架 | 装包 | 待处理 | 仍借给小张 |\n\n**还差：** 相机·装包、电池·充电、电池·装包、三脚架·取回、三脚架·装包\n\n可以回复“电池充好了”“相机已装包”或“这次不带三脚架”。充好电不会自动标记已装包。",
+        "mutated": false,
+        "memory_id": null,
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 17,
+        "focus": [
+          "trip",
+          "TR-7108A1"
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "missing",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "charged",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_612a6dc9a0": {
+              "id": "item_612a6dc9a0",
+              "name": "钥匙",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "missing",
+              "updated_at": "2026-11-13T21:33:10+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            },
+            "LF-2AEA22": {
+              "id": "LF-2AEA22",
+              "item_id": "item_63323d561b",
+              "status": "open",
+              "checked": [],
+              "clues": [],
+              "opened_at": "2026-11-13T21:33:06+08:00",
+              "found_location": null
+            },
+            "LF-ABBC04": {
+              "id": "LF-ABBC04",
+              "item_id": "item_612a6dc9a0",
+              "status": "open",
+              "checked": [],
+              "clues": [],
+              "opened_at": "2026-11-13T21:33:10+08:00",
+              "found_location": null
+            }
+          },
+          "trips": {
+            "TR-315832": {
+              "id": "TR-315832",
+              "activity": "拍照",
+              "date": "2026-11-14",
+              "checks": [
+                {
+                  "id": "check_def737d3",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:33:06+08:00"
+                },
+                {
+                  "id": "check_1fe42cb4",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00",
+                  "confirmed_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_b5647ddd",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:46+08:00",
+                  "confirmed_at": "2026-11-13T21:32:46+08:00"
+                },
+                {
+                  "id": "check_c623e38f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                },
+                {
+                  "id": "check_88dd463f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                }
+              ],
+              "created_at": "2026-11-13T21:32:35+08:00"
+            },
+            "TR-7108A1": {
+              "id": "TR-7108A1",
+              "activity": "拍照",
+              "date": "2026-11-15",
+              "checks": [
+                {
+                  "id": "check_097cfcf6",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_355b4d1a",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_6d71b1fe",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_25a8e090",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_fed63b34",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                }
+              ],
+              "created_at": "2026-11-13T21:33:03+08:00"
+            }
+          },
+          "pending": {
+            "kind": "investigate",
+            "case_id": "LF-ABBC04",
+            "conversation_id": "14219e70-4dc0-4e53-807b-ca081d6a1260",
+            "locations": [],
+            "at": "2026-11-13T21:33:10+08:00"
+          },
+          "last_item": "item_612a6dc9a0",
+          "last_case": "LF-ABBC04",
+          "last_trip": "TR-7108A1",
+          "seq": 17
+        },
+        "evidence_ids": [
+          "art_f38a481ca4df4e9ca662a400eac23a43",
+          "art_5461029167d84012aaaa810cef5b7de5",
+          "art_e620f23d4bfc4dfb8eeb3b433f663324",
+          "art_c656e2e854da4fbe9babc156e7237407",
+          "art_eac19fd06dfc40659dae7eb1716795d7",
+          "art_ee472a13a61e4fd3a6228784de94fedd",
+          "art_2246a7041fc94f05bcfb1dbd640c45eb",
+          "art_44738dec15c043299681758cbe97db67"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 5199,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 166,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 5365,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.039487452002504
+      }
+    },
+    {
+      "label": "failed_turns_not_archived",
+      "query": "故障测试物品在哪里？",
+      "answer": "请说明是哪件物品；我还没有足够的物品记录。",
+      "conversation_id": "63b00bd2-2c2f-4531-9d70-7ab0f17f2e7f",
+      "message_id": "0532a3b5-99b8-4093-ad71-2d796c56a717",
+      "workflow_run_id": "a1d1deb3-7c8a-4330-b83e-01a8ed0ef269",
+      "user_id": "2b754bf4-fcd7-4a9c-b6c3-e3ceae9835b5",
+      "latency_ms": 3334,
+      "node_statuses": {
+        "begin": "succeeded",
+        "start": "succeeded",
+        "begin_check": "succeeded",
+        "understand": "succeeded",
+        "resolve": "succeeded",
+        "commit_check": "succeeded",
+        "prepare": "succeeded",
+        "intent_check": "succeeded",
+        "resolve_check": "succeeded",
+        "plan_check": "succeeded",
+        "result": "succeeded",
+        "begin_gate": "succeeded",
+        "intent_gate": "succeeded",
+        "resolve_gate": "succeeded",
+        "commit": "succeeded",
+        "plan": "succeeded"
+      },
+      "intent_text": "{\"actions\":[{\"type\":\"recall\",\"item\":\"故障测试物品\"}]}",
+      "planner_text": "{\"suggestion\":\"档案里没有叫“故障测试物品”的登记，暂时无法定位。请先确认它的真实名称，或回忆最后一次使用的时间和场景，我再帮你排查。\",\"question\":\"“故障测试物品”具体是什么东西？最后一次见到它是在什么时候、什么场景？\",\"next_location\":\"\",\"checklist\":[],\"evidence_ids\":[]}",
+      "commit": {
+        "ok": true,
+        "answer": "请说明是哪件物品；我还没有足够的物品记录。",
+        "mutated": false,
+        "memory_id": null,
+        "scope_id": "scp_64xee6zd1vzkr5d2newrzyk3cx",
+        "version": 17,
+        "focus": [
+          "clarify",
+          null
+        ],
+        "state": {
+          "items": {
+            "item_63323d561b": {
+              "id": "item_63323d561b",
+              "name": "相机",
+              "aliases": [],
+              "location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "usual_location": {
+                "text": "书桌右侧抽屉",
+                "at": "2026-11-13T21:32:32+08:00"
+              },
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "missing",
+              "updated_at": "2026-11-13T21:32:32+08:00"
+            },
+            "item_d22619a3c0": {
+              "id": "item_d22619a3c0",
+              "name": "电池",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "charged",
+              "borrower": null,
+              "availability": "unknown",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_92c2b01832": {
+              "id": "item_92c2b01832",
+              "name": "三脚架",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": "小张",
+              "availability": "lent",
+              "updated_at": "2026-11-13T21:32:08+08:00"
+            },
+            "item_612a6dc9a0": {
+              "id": "item_612a6dc9a0",
+              "name": "钥匙",
+              "aliases": [],
+              "location": null,
+              "usual_location": null,
+              "condition": "unknown",
+              "borrower": null,
+              "availability": "missing",
+              "updated_at": "2026-11-13T21:33:10+08:00"
+            }
+          },
+          "cases": {
+            "LF-5DDE62": {
+              "id": "LF-5DDE62",
+              "item_id": "item_63323d561b",
+              "status": "closed",
+              "checked": [
+                "蓝色背包"
+              ],
+              "clues": [
+                {
+                  "text": "昨天换成黑色相机包去拍照了，可能忘在里面。",
+                  "at": "2026-11-13T21:32:21+08:00"
+                }
+              ],
+              "opened_at": "2026-11-13T21:32:14+08:00",
+              "found_location": "黑色相机包",
+              "closed_at": "2026-11-13T21:32:28+08:00"
+            },
+            "LF-2AEA22": {
+              "id": "LF-2AEA22",
+              "item_id": "item_63323d561b",
+              "status": "open",
+              "checked": [],
+              "clues": [],
+              "opened_at": "2026-11-13T21:33:06+08:00",
+              "found_location": null
+            },
+            "LF-ABBC04": {
+              "id": "LF-ABBC04",
+              "item_id": "item_612a6dc9a0",
+              "status": "open",
+              "checked": [],
+              "clues": [],
+              "opened_at": "2026-11-13T21:33:10+08:00",
+              "found_location": null
+            }
+          },
+          "trips": {
+            "TR-315832": {
+              "id": "TR-315832",
+              "activity": "拍照",
+              "date": "2026-11-14",
+              "checks": [
+                {
+                  "id": "check_def737d3",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:33:06+08:00"
+                },
+                {
+                  "id": "check_1fe42cb4",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:39+08:00",
+                  "confirmed_at": "2026-11-13T21:32:39+08:00"
+                },
+                {
+                  "id": "check_b5647ddd",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "done",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:46+08:00",
+                  "confirmed_at": "2026-11-13T21:32:46+08:00"
+                },
+                {
+                  "id": "check_c623e38f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                },
+                {
+                  "id": "check_88dd463f",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "excluded",
+                  "owned": true,
+                  "updated_at": "2026-11-13T21:32:56+08:00",
+                  "confirmed_at": "2026-11-13T21:32:56+08:00"
+                }
+              ],
+              "created_at": "2026-11-13T21:32:35+08:00"
+            },
+            "TR-7108A1": {
+              "id": "TR-7108A1",
+              "activity": "拍照",
+              "date": "2026-11-15",
+              "checks": [
+                {
+                  "id": "check_097cfcf6",
+                  "item_id": "item_63323d561b",
+                  "item": "相机",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_355b4d1a",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "充电",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_6d71b1fe",
+                  "item_id": "item_d22619a3c0",
+                  "item": "电池",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_25a8e090",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "取回",
+                  "status": "pending",
+                  "owned": true
+                },
+                {
+                  "id": "check_fed63b34",
+                  "item_id": "item_92c2b01832",
+                  "item": "三脚架",
+                  "task": "装包",
+                  "status": "pending",
+                  "owned": true
+                }
+              ],
+              "created_at": "2026-11-13T21:33:03+08:00"
+            }
+          },
+          "pending": {
+            "kind": "investigate",
+            "case_id": "LF-ABBC04",
+            "conversation_id": "14219e70-4dc0-4e53-807b-ca081d6a1260",
+            "locations": [],
+            "at": "2026-11-13T21:33:10+08:00"
+          },
+          "last_item": "item_612a6dc9a0",
+          "last_case": "LF-ABBC04",
+          "last_trip": "TR-7108A1",
+          "seq": 17
+        },
+        "evidence_ids": [
+          "art_f38a481ca4df4e9ca662a400eac23a43",
+          "art_5461029167d84012aaaa810cef5b7de5",
+          "art_e620f23d4bfc4dfb8eeb3b433f663324",
+          "art_c656e2e854da4fbe9babc156e7237407",
+          "art_eac19fd06dfc40659dae7eb1716795d7",
+          "art_ee472a13a61e4fd3a6228784de94fedd",
+          "art_2246a7041fc94f05bcfb1dbd640c45eb",
+          "art_44738dec15c043299681758cbe97db67"
+        ],
+        "duplicate": false
+      },
+      "usage": {
+        "prompt_tokens": 5185,
+        "prompt_unit_price": "0",
+        "prompt_price_unit": "0",
+        "prompt_price": "0E-7",
+        "completion_tokens": 91,
+        "completion_unit_price": "0",
+        "completion_price_unit": "0",
+        "completion_price": "0E-7",
+        "total_tokens": 5276,
+        "total_price": "0E-7",
+        "currency": "USD",
+        "latency": 2.0695868200018595
+      }
+    }
+  ],
+  "passed": true,
+  "finished_at": "2026-11-13T13:33:48.063698+00:00"
+}

@@ -1,0 +1,60 @@
+{
+  "file_upload": {
+    "allowed_file_extensions": [
+      ".JPG",
+      ".JPEG",
+      ".PNG",
+      ".GIF",
+      ".WEBP",
+      ".SVG"
+    ],
+    "allowed_file_types": [
+      "image"
+    ],
+    "allowed_file_upload_methods": [
+      "local_file",
+      "remote_url"
+    ],
+    "enabled": false,
+    "fileUploadConfig": {
+      "audio_file_size_limit": 50,
+      "batch_count_limit": 5,
+      "file_size_limit": 15,
+      "image_file_size_limit": 10,
+      "video_file_size_limit": 100,
+      "workflow_file_upload_limit": 10
+    },
+    "image": {
+      "enabled": false,
+      "number_limits": 3,
+      "transfer_methods": [
+        "local_file",
+        "remote_url"
+      ]
+    },
+    "number_limits": 3
+  },
+  "opening_statement": "欢迎来到忘事管理局。用「存：」登记，用「查：」查询。换一个会话，档案依然在。",
+  "retriever_resource": {
+    "enabled": true
+  },
+  "sensitive_word_avoidance": {
+    "enabled": false
+  },
+  "speech_to_text": {
+    "enabled": false
+  },
+  "suggested_questions": [
+    "存：备用钥匙在玄关第二个抽屉",
+    "查：钥匙",
+    "你好"
+  ],
+  "suggested_questions_after_answer": {
+    "enabled": false
+  },
+  "text_to_speech": {
+    "enabled": false,
+    "language": "",
+    "voice": ""
+  }
+}

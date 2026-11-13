@@ -1,0 +1,29 @@
+{
+  "platform": "WSL Ubuntu-24.04 Linux amd64",
+  "dify": "0.15.3",
+  "powercontext": "1.4.1",
+  "model": "deepseek-flash",
+  "model_requests": 185,
+  "actual_models": [
+    "deepseek-flash"
+  ],
+  "prompt_tokens": 290110,
+  "completion_tokens": 13471,
+  "thinking_modes": [
+    "disabled"
+  ],
+  "runtime_source_sha256": {
+    "backend/memory_bridge.py": "578a6957fd8d97f95fda3ecb79336ec1b8ecbe0c8ef9386cb10669e79f5059f6",
+    "backend/bureau.py": "a7050fe2c2e9246c70d8cbd2bdd647438d53be96c82c262cee7ebe4c2a013693",
+    "backend/model_proxy.py": "fd274b79f88036a079d1805556a03be9889eedcaff736742d3eeb8ab935ab5ae",
+    "scripts/build_dsl.py": "7e99ef2732f32113dd8736076d1ae83e91dee8bc0418d6b9f00a958b51d29404",
+    "scripts/bootstrap_app.py": "8b9784114f40aaadc1c01103e56285d90aa4b1a90de88599976c0c9000b633ac",
+    "LostFound.yml": "1ded7ee542312afb78bd92fb172a61abf0d2fd9e84dd91dfb2091d0a9c15233d"
+  },
+  "audit_snapshot_utc": "2026-11-13T13:40:10.374476+00:00",
+  "running_container_sha256": {
+    "memory_bridge.py": "578a6957fd8d97f95fda3ecb79336ec1b8ecbe0c8ef9386cb10669e79f5059f6",
+    "bureau.py": "a7050fe2c2e9246c70d8cbd2bdd647438d53be96c82c262cee7ebe4c2a013693",
+    "model_proxy.py": "fd274b79f88036a079d1805556a03be9889eedcaff736742d3eeb8ab935ab5ae"
+  }
+}

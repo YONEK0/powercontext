@@ -1,0 +1,21 @@
+{
+  "services": [
+    "lostfound-dify-memory-bridge-1|Up 6 minutes (healthy)|lostfound-dify-memory-bridge",
+    "lostfound-dify-powercontext-1|Up 6 minutes (healthy)|lostfound-dify-powercontext",
+    "lostfound-dify-worker-1|Up 24 minutes|20a7c498bbbe",
+    "lostfound-dify-api-1|Up 2 hours|20a7c498bbbe",
+    "lostfound-dify-nginx-1|Up 2 hours|42c68eab6f7e",
+    "lostfound-dify-db-1|Up 2 hours (healthy)|fc41cfa8a90c",
+    "lostfound-dify-redis-1|Up 2 hours (healthy)|3f9c6e23ed6b",
+    "lostfound-dify-web-1|Up 2 hours|56d71486474e",
+    "lostfound-dify-weaviate-1|Up 2 hours|17a5238fcfc3",
+    "lostfound-dify-ssrf_proxy-1|Up 2 hours|6a097f68bae7",
+    "lostfound-dify-sandbox-1|Up 2 hours (healthy)|6c69b6e37925"
+  ],
+  "health": {
+    "ok": true,
+    "scope_id": "scp_6hngmff2z8s6g152x5b1h1gg60",
+    "memories": 7,
+    "version": "3.0.0"
+  }
+}

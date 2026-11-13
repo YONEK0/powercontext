@@ -1,0 +1,16 @@
+{
+  "at_utc": "2026-11-13T13:40:11.736128+00:00",
+  "passed": true,
+  "known_private_values_checked": 16,
+  "runtime_and_container_source_hashes_match": true,
+  "dsl_nodes": 19,
+  "dsl_edges": 18,
+  "native_llm_nodes": 2,
+  "original_archives_unchanged": true,
+  "excluded": [
+    ".env",
+    ".runtime",
+    "__pycache__",
+    "*.pyc"
+  ]
+}
